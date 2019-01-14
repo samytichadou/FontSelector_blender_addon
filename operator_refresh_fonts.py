@@ -3,6 +3,7 @@ import csv
 import os
 
 from .preferences import get_addon_preferences
+from .misc_functions import create_prefs_folder
 
 
 class FontSelectorRefresh(bpy.types.Operator):
@@ -21,7 +22,7 @@ class FontSelectorRefresh(bpy.types.Operator):
     
     def execute(self, context):
         #get addon prefs
-        dlist=bpy.data.fonts
+        dlist = bpy.data.fonts
         addon_preferences = get_addon_preferences()
         fplist = addon_preferences.font_folders
         prefs = addon_preferences.prefs_folderpath
@@ -37,9 +38,9 @@ class FontSelectorRefresh(bpy.types.Operator):
         filterlist=[]
         
         #get filters
-        if os.path.isdir(prefpath)==True:
-            if os.path.isfile(preffilter)==True:
-                with open(preffilter, 'r', newline='') as csvfile:
+        if os.path.isdir(prefpath) == True :
+            if os.path.isfile(preffilter) == True :
+                with open(preffilter, 'r', newline='') as csvfile :
                     line = csv.reader(csvfile, delimiter='\n')
                     for l in line:
                         l1=str(l).replace("[", "")
@@ -47,13 +48,13 @@ class FontSelectorRefresh(bpy.types.Operator):
                         l3=l2.replace("'", "")
                         l4=l3.replace('"', "")
                         filterlist.append(l4)
-  
-        if len(dlist)>0:
+
+        #clean unused
+        if len(dlist) > 0:
             bpy.ops.fontselector.remove_unused()
         
         #check if external folder exist and create it if not
-        if os.path.isdir(prefpath)==False:
-            os.makedirs(prefpath)
+        create_prefs_folder
         
         #clear list
         if len(fontlist)>=1:
