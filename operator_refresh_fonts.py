@@ -54,7 +54,7 @@ class FontSelectorRefresh(bpy.types.Operator):
             bpy.ops.fontselector.remove_unused()
         
         #check if external folder exist and create it if not
-        create_prefs_folder
+        create_prefs_folder()
         
         #clear list
         if len(fontlist)>=1:
