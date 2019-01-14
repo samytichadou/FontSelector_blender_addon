@@ -19,5 +19,6 @@ def menu_export_favorites(self, context) :
 
 # create pref folder if doesn't exist
 def create_prefs_folder() :
-    if os.path.isdir(get_addon_preferences().prefpath) == False :
-        os.makedirs(prefpath)
+        prefpath = get_addon_preferences().prefs_folderpath
+        if os.path.isdir(prefpath) == False :
+                os.makedirs(prefpath)
