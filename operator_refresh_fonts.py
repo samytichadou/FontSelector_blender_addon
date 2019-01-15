@@ -3,7 +3,7 @@ import csv
 import os
 
 from .preferences import get_addon_preferences
-from .misc_functions import create_prefs_folder, absolute_path
+from .misc_functions import create_prefs_folder, absolute_path, clear_collection
 
 from .global_variable import extensions
 
@@ -57,9 +57,7 @@ class FontSelectorRefresh(bpy.types.Operator):
         create_prefs_folder()
         
         #clear list
-        if len(fontlist)>=1:
-            for i in range(len(fontlist)-1,-1,-1):
-                fontlist.remove(i)
+        clear_collection(fontlist)
         
         #loop for subdir and total count
         chkdir = 0
