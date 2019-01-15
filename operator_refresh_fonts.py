@@ -3,8 +3,9 @@ import csv
 import os
 
 from .preferences import get_addon_preferences
-from .misc_functions import create_prefs_folder
+from .misc_functions import create_prefs_folder, absolute_path
 
+from .global_variable import extensions
 
 class FontSelectorRefresh(bpy.types.Operator):
     bl_idname = "fontselector.refresh"
@@ -32,7 +33,6 @@ class FontSelectorRefresh(bpy.types.Operator):
         preffilter = os.path.join(prefpath, "fontselector_filter")
         prefsubdir = os.path.join(prefpath, "fontselector_subdir")
         fontlist=bpy.data.window_managers['WinMan'].fontselector_list
-        extlist=[".otf", ".otc", ".ttf", ".ttc", ".tte", ".pfb", ".dfont", ".OTF", ".OTC", ".TTF", ".TTC", ".TTE", ".DFONT", ".PFB"]
         dupelist=[]
         subdir=[]
         filterlist=[]
@@ -61,78 +61,91 @@ class FontSelectorRefresh(bpy.types.Operator):
             for i in range(len(fontlist)-1,-1,-1):
                 fontlist.remove(i)
         
-        chk=0
-        chk2=0
-        for fp in fplist:
-            path=os.path.abspath(bpy.path.abspath(fp.folderpath))
-            if fp.folderpath!="":
-                if os.path.isdir(path)==True:
-                    chk=1
-                    nbfile=0
-                    nbft=0
+        #loop for subdir and total count
+        chkdir = 0
+        count_total = 0
+        for fp in fplist :
+            if fp.folderpath != "" :
+                path = absolute_path(fp.folderpath)
+                if os.path.isdir(path) :
+                    chkdir = 1
                     for dirpath, dirnames, files in os.walk(path):
+                        #count typo to treat
                         for f3 in files:
-                            exte=os.path.splitext(f3)[1]
-                            if any(exte==ext for ext in extlist):
-                                nbfile=nbfile+1
+                            exte = os.path.splitext(f3)[1]
+                            if any(exte == ext for ext in extensions):
+                                count_total += 1
+                        #memorize subdirs
                         for f2 in os.listdir(dirpath):
                             filename, file_extension = os.path.splitext(f2)
-                            if any(file_extension==ext for ext in extlist) and dirpath not in subdir:
+                            if any(file_extension==ext for ext in extensions) and dirpath not in subdir:
                                 subdir.append(dirpath)
-                    for d in subdir:
-                        for file in os.listdir(d):
-                            filename, file_extension = os.path.splitext(file)
-                            #mac exception for corrupted font
-                            if file not in filterlist:
-                                if any(file_extension==ext for ext in extlist):
-                                    chk2=1
-                                    chk3=0
-                                    for font in bpy.data.fonts:
-                                        fname=os.path.basename(os.path.abspath(bpy.path.abspath(font.filepath)))
-                                        if os.path.join(d, file)==os.path.abspath(bpy.path.abspath(font.filepath)) or file==fname:
-                                            chk3=1
-                                    if chk3==0:
-                                        try:
-                                            nbft=nbft+1
-                                            bpy.data.fonts.load(filepath=os.path.join(d, file))
-                                            print(str(nbft)+"/"+str(nbfile)+" fonts treated --- "+file+" imported")
-                                        except RuntimeError:
-                                            nbft=nbft+1
-                                            filterlist.append(file)
-                                            print(str(nbft)+"/"+str(nbfile)+" fonts treated --- "+file+" corrupted, filtered out")
-                            
-        if chk==1 and chk2==1:      
+        
+        chkfont = 0
+        count = 0
+        for d in subdir:
+            for file in os.listdir(d) :
+                filename, file_extension = os.path.splitext(file)
+                if any(file_extension == ext for ext in extensions):
+                    count += 1
+                    #try to load file
+                    if file in filterlist :
+                        print(str(count)+"/"+str(count_total)+" fonts treated --- "+file+" avoided")
+                    else :
+                        chkfont = 1
+                        chklocaldupe = 0
+                        for font in bpy.data.fonts:
+                            fname = os.path.basename(absolute_path(font.filepath))
+                            #check for dupe
+                            if os.path.join(d, file) == absolute_path(font.filepath) or file == fname:
+                                chklocaldupe = 1
+                                print(str(count)+"/"+str(count_total)+" fonts treated --- "+file+" avoided")
+                                break
+                        if chklocaldupe == 0:
+                            try:
+                                bpy.data.fonts.load(filepath=os.path.join(d, file))
+                                print(str(count)+"/"+str(count_total)+" fonts treated --- "+file+" imported")
+                            except RuntimeError:
+                                filterlist.append(file)
+                                print(str(count)+"/"+str(count_total)+" fonts treated --- "+file+" corrupted, filtered out")
+                          
+
+        if chkdir == 1 and chkfont == 1 :      
+
             nfile = open(prefflist, "w")
-            for f in bpy.data.fonts:
-                chkd=0
-                for d in dupelist:
-                    if os.path.abspath(bpy.path.abspath(f.filepath))==d:
-                        chkd=1
-                if chkd==0:
-                    nfpath=os.path.abspath(bpy.path.abspath(f.filepath))
+            for f in bpy.data.fonts :
+                chkdupe = 0
+                for d in dupelist :
+                    if absolute_path(f.filepath) == d:
+                        chkdupe = 1
+                        break
+                if chkdupe == 0 :
+                    nfpath = absolute_path(f.filepath)
                     nfile.write(f.name+" || "+nfpath+' || '+os.path.basename(os.path.dirname(nfpath))+"\n")
                     dupelist.append(nfpath)
                 if f.users==0:
                     bpy.data.fonts.remove(f, do_unlink=True)
             nfile.close()
-            if os.path.isfile(prefflist)==True:
+
+            if os.path.isfile(prefflist)==True :
                 bpy.ops.fontselector.load_fontlist()
                 info='Font Selector Warning : Font List refreshed'
-                print(info)
+                #print(info)
                 self.report({'INFO'}, info)
-            if os.path.isfile(preffav)==True:
+
+            if os.path.isfile(preffav)==True :
                 bpy.ops.fontselector.load_favorites()
 
-        elif chk==0:
+        elif chkdir == 0 :
             info = 'No valid Font Folder, check Preferences'
             self.report({'ERROR'}, info)  
             
-        elif chk2==0:
+        elif chkfont == 0 :
             info = 'No valid Font in Folders, check Preferences'
             self.report({'ERROR'}, info)
             
         #write filterlist
-        if len(filterlist)!=0:
+        if len(filterlist) != 0:
             if os.path.isdir(prefpath)==False:
                 os.makedirs(prefpath)
             nfile2 = open(preffilter, "w")
@@ -141,7 +154,7 @@ class FontSelectorRefresh(bpy.types.Operator):
             nfile2.close()
             
         #write subdir list
-        if len(subdir)!=0:
+        if len(subdir) != 0:
             if os.path.isdir(prefpath)==False:
                 os.makedirs(prefpath)
             nfile3 = open(prefsubdir, "w")
