@@ -1,0 +1,1 @@
+extensions = [".otf", ".otc", ".ttf", ".ttc", ".tte", ".pfb", ".dfont", ".OTF", ".OTC", ".TTF", ".TTC", ".TTE", ".DFONT", ".PFB"]        
