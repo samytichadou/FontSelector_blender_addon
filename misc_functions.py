@@ -22,3 +22,14 @@ def create_prefs_folder() :
         prefpath = get_addon_preferences().prefs_folderpath
         if os.path.isdir(prefpath) == False :
                 os.makedirs(prefpath)
+
+# clear collection
+def clear_collection(collection) :
+        if len(collection)>=1:
+            for i in range(len(collection)-1,-1,-1):
+                collection.remove(i)
+
+# absolute path
+def absolute_path(path) :
+        apath = os.path.abspath(bpy.path.abspath(path))
+        return apath
