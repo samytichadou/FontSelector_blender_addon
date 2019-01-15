@@ -1,9 +1,36 @@
 import bpy
+import os
 
+from .function_change_font import change_font
     
 #update change font
 def update_change_font(self, context):
-    bpy.ops.fontselector.change()
+    scn = bpy.context.scene
+    active = bpy.context.active_object
+    selected = []
+    chkerror = 0
+
+    fontlist = bpy.data.window_managers['WinMan'].fontselector_list
+    idx = active.data.fontselector_index
+    
+    try :
+        font = fontlist[idx]
+    except IndexError :
+        chkerror = 1
+
+    if chkerror == 0 :
+        #get selected
+        for obj in scn.objects :
+            if obj.select == True and obj.type == 'FONT' :
+                selected.append(obj)
+        
+        #blender font exception
+        if fontlist[idx].name == 'Bfont' :
+            for obj in selected :
+                obj.data.font = bpy.data.fonts['Bfont']
+        else :
+            for obj in selected :
+                change_font(obj, font)
     
 #update save favorites
 def update_save_favorites(self, context):
