@@ -27,7 +27,7 @@ class FontSelectorRefresh(bpy.types.Operator):
         addon_preferences = get_addon_preferences()
         fplist = addon_preferences.font_folders
         prefs = addon_preferences.prefs_folderpath
-        prefpath = os.path.abspath(bpy.path.abspath(prefs))
+        prefpath = absolute_path(prefs)
         preffav = os.path.join(prefpath, "fontselector_favorites")
         prefflist = os.path.join(prefpath, "fontselector_fontlist")
         preffilter = os.path.join(prefpath, "fontselector_filter")
