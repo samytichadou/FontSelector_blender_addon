@@ -2,35 +2,51 @@ import bpy
 import os
 
 from .function_change_font import change_font
+
+first_active_object = ""
     
 #update change font
 def update_change_font(self, context):
-    scn = bpy.context.scene
-    active = bpy.context.active_object
-    selected = []
-    chkerror = 0
+    global first_active_object
 
-    fontlist = bpy.data.window_managers['WinMan'].fontselector_list
-    idx = active.data.fontselector_index
-    
-    try :
-        font = fontlist[idx]
-    except IndexError :
-        chkerror = 1
+    #check if the loop is run through the active object or other selected ones
+    if first_active_object == "" :
 
-    if chkerror == 0 :
-        #get selected
-        for obj in scn.objects :
-            if obj.select == True and obj.type == 'FONT' :
-                selected.append(obj)
+        active = first_active_object = bpy.context.active_object
+        scn = bpy.context.scene
         
-        #blender font exception
-        if fontlist[idx].name == 'Bfont' :
-            for obj in selected :
-                obj.data.font = bpy.data.fonts['Bfont']
-        else :
-            for obj in selected :
-                change_font(obj, font)
+        selected = []
+        chkerror = 0
+
+        fontlist = bpy.data.window_managers['WinMan'].fontselector_list
+        idx = active.data.fontselector_index
+        
+        #error handling for not updated list
+        try :
+            font = fontlist[idx]
+        except IndexError :
+            chkerror = 1
+
+        if chkerror == 0 :
+            #get selected
+            for obj in scn.objects :
+                if obj.select == True and obj.type == 'FONT' :
+                    selected.append(obj)
+            
+            #blender font exception
+            if fontlist[idx].name == 'Bfont' :
+                for obj in selected :
+                    obj.data.font = bpy.data.fonts['Bfont']
+            #regular change of font
+            else :
+                for obj in selected :
+                    #check if font is already changed
+                    if font != obj.data.font :
+                        obj.data.fontselector_index = idx
+                        change_font(obj, font)
+
+            #reset global variable                        
+            first_active_object = ""
     
 #update save favorites
 def update_save_favorites(self, context):
