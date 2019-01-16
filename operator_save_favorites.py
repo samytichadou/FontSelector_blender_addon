@@ -4,7 +4,6 @@ import csv
 
 from .preferences import get_addon_preferences
 
-
 class FontSelectorSaveFavorites(bpy.types.Operator):
     bl_idname = "fontselector.save_favorites"
     bl_label = ""
