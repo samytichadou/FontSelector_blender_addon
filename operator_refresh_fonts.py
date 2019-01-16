@@ -3,9 +3,9 @@ import csv
 import os
 
 from .preferences import get_addon_preferences
-from .misc_functions import create_prefs_folder, absolute_path, clear_collection
+from .misc_functions import create_prefs_folder, absolute_path, clear_collection, get_size
 
-from .global_variable import extensions
+from .global_variable import *
 
 class FontSelectorRefresh(bpy.types.Operator):
     bl_idname = "fontselector.refresh"
@@ -28,10 +28,14 @@ class FontSelectorRefresh(bpy.types.Operator):
         fplist = addon_preferences.font_folders
         prefs = addon_preferences.prefs_folderpath
         prefpath = absolute_path(prefs)
-        preffav = os.path.join(prefpath, "fontselector_favorites")
-        prefflist = os.path.join(prefpath, "fontselector_fontlist")
-        preffilter = os.path.join(prefpath, "fontselector_filter")
-        prefsubdir = os.path.join(prefpath, "fontselector_subdir")
+
+        #define preference files
+        preffav = os.path.join(prefpath, fav_list)
+        prefflist = os.path.join(prefpath, font_list)
+        preffilter = os.path.join(prefpath, filter_list)
+        prefsubdir = os.path.join(prefpath, subdir_list)
+        size_file_output = os.path.join(prefpath, size_file)
+
         fontlist=bpy.data.window_managers['WinMan'].fontselector_list
         dupelist=[]
         subdir=[]
@@ -59,12 +63,14 @@ class FontSelectorRefresh(bpy.types.Operator):
         #clear list
         clear_collection(fontlist)
         
-        #loop for subdir and total count
+        #loop for subdir, total count and get size
         chkdir = 0
         count_total = 0
+        size_total = 0
         for fp in fplist :
             if fp.folderpath != "" :
                 path = absolute_path(fp.folderpath)
+                size_total += get_size(path)     
                 if os.path.isdir(path) :
                     chkdir = 1
                     for dirpath, dirnames, files in os.walk(path):
@@ -127,8 +133,8 @@ class FontSelectorRefresh(bpy.types.Operator):
 
             if os.path.isfile(prefflist)==True :
                 bpy.ops.fontselector.load_fontlist()
-                info='Font Selector Warning : Font List refreshed'
-                #print(info)
+                info='Font Selector : Font List refreshed'
+                #print(info)#
                 self.report({'INFO'}, info)
 
             if os.path.isfile(preffav)==True :
@@ -160,5 +166,12 @@ class FontSelectorRefresh(bpy.types.Operator):
                 nfile3.write(os.path.basename(d)+"\n")
             nfile3.close()
             bpy.ops.fontselector.load_fontsubs()
-            
+
+        #delete previous count file
+        for file in os.listdir(prefpath) :
+            if "fontselector_size_" in file :
+                os.remove(os.path.join(prefpath, file))
+        #write size file
+        open(size_file_output + str(size_total), 'a').close()
+
         return {'FINISHED'}
