@@ -17,12 +17,6 @@ def fontselector_suppress_fp(index) :
 def menu_export_favorites(self, context) :
     self.layout.operator('fontselector.export_favorites', text="Favorite Fonts export", icon='FILE_FONT')
 
-# create pref folder if doesn't exist
-def create_prefs_folder() :
-        prefpath = get_addon_preferences().prefs_folderpath
-        if os.path.isdir(prefpath) == False :
-                os.makedirs(prefpath)
-
 # clear collection
 def clear_collection(collection) :
         if len(collection)>=1:
@@ -35,10 +29,15 @@ def absolute_path(path) :
         return apath
 
 # get size of folder and subdir in bytes
-def get_size(folderpath):
+def get_size(folderpath) :
     total_size = 0
     for dirpath, dirnames, filenames in os.walk(folderpath):
         for f in filenames:
             fp = os.path.join(dirpath, f)
             total_size += os.path.getsize(fp)
     return total_size
+
+# create directory if doesn't exist
+def create_dir(dir_path) :
+        if os.path.isdir(dir_path) == False :
+                os.makedirs(dir_path)

@@ -3,7 +3,7 @@ import os
 import csv
 
 from .preferences import get_addon_preferences
-from .misc_functions import create_prefs_folder, clear_collection
+from .misc_functions import create_dir, clear_collection
 from .function_load_favorites import load_favorites
 
 from .global_variable import extensions
@@ -31,7 +31,7 @@ class FontSelectorRefreshModal(bpy.types.Operator):
             bpy.ops.fontselector.remove_unused()
 
         #check if external folder exist and create it if not
-        create_prefs_folder()
+        create_dir(prefpath)
 
         #clear collection
         clear_collection(fontlist)
