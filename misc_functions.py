@@ -3,6 +3,7 @@ import os
 
 from .preferences import get_addon_preferences
 
+from global_variable import extensions
 
 # suppress filepath
 def fontselector_suppress_fp(index) :
@@ -50,3 +51,17 @@ def remove_unused_font() :
                 removed_fonts_count += 1
                 bpy.data.fonts.remove(f, do_unlink=True)
         return removed_fonts_count
+
+# get all font files in dir and subdir
+def get_all_font_files(base_dir) :
+        font_files = []
+        for (root, directories, filenames) in os.walk(base_dir) :
+                for file in filenames :
+                        extension = os.path.splitext(file)[1]
+                        if any(extension == ext for ext in extensions) :
+                                font_files.append(os.path.join(root, file))
+        return font_files
+
+
+        
+
