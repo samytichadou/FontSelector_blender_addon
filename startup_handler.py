@@ -3,8 +3,11 @@ import os
 from bpy.app.handlers import persistent
 
 from .preferences import get_addon_preferences
-from .global_variable import fav_list, font_list, subdir_list, size_file
 from .misc_functions import get_size, absolute_path
+from .function_load_font_subdir import load_font_subdir
+from .function_load_favorites import load_favorites
+
+from .global_variable import fav_list, font_list, subdir_list, size_file
 
 @persistent
 def fontselector_startup(scene):
@@ -27,6 +30,7 @@ def fontselector_startup(scene):
             #check if refreshing font list is needed
             for file in os.listdir(prefpath) :
                 if size_file in file :
+                    chk_changes = 0
                     assumed_size = int(file.split(size_file)[1])                 
                     #get real size
                     size_total = 0
@@ -36,15 +40,20 @@ def fontselector_startup(scene):
                             size_total += get_size(path)
                     #do something if size changed
                     if size_total != assumed_size :
+                        chk_changes = 1
                         print("Font Selector --- Changes in Font Folders, refresh needed")
                     break
-            
-            #load files
-            bpy.ops.fontselector.load_fontlist()
-            if os.path.isfile(prefsubdir) :
-                bpy.ops.fontselector.load_fontsubs()
-            if os.path.isfile(preffav) and len(fontlist) > 0 :
-                bpy.ops.fontselector.load_favorites()
-            print("Font Selector --- Settings loaded")
 
-            
+            if chk_changes == 1 :
+                bpy.ops.fontselector.refresh()
+                
+            else :
+                #load files
+                bpy.ops.fontselector.load_fontlist()
+                if os.path.isfile(prefsubdir) :
+                    load_font_subdir()
+
+            if os.path.isfile(preffav) and len(fontlist) > 0 :
+                load_favorites()
+                
+            print("Font Selector --- Settings loaded")    
