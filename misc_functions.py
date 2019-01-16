@@ -33,3 +33,12 @@ def clear_collection(collection) :
 def absolute_path(path) :
         apath = os.path.abspath(bpy.path.abspath(path))
         return apath
+
+# get size of folder and subdir in bytes
+def get_size(folderpath):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(folderpath):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+    return total_size
