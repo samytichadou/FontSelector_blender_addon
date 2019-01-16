@@ -4,6 +4,7 @@ import csv
 
 from .preferences import get_addon_preferences
 
+from .function_load_favorites import load_favorites
 
 class FontSelectorFilterFavorite(bpy.types.Operator):
     bl_idname = "fontselector.filter_favorites"
@@ -78,7 +79,7 @@ class FontSelectorFilterFavorite(bpy.types.Operator):
                         print("Font Selector Warning : No Favorite Fonts")
                 
                 if os.path.isfile(preffav)==True:
-                    bpy.ops.fontselector.load_favorites()
+                    load_favorites()
             else:
                 info = 'Preference File does not exist, check Preference Folder path'
                 self.report({'ERROR'}, info)  

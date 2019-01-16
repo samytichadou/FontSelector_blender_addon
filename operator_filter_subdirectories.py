@@ -3,7 +3,7 @@ import os
 import csv
 
 from .preferences import get_addon_preferences
-
+from .function_load_favorites import load_favorites
 
 class FontSelectorFilterSubdirFonts(bpy.types.Operator):
     bl_idname = "fontselector.filter_subdirfonts"
@@ -55,6 +55,6 @@ class FontSelectorFilterSubdirFonts(bpy.types.Operator):
                             newfont.filepath=p
                             newfont.subdirectory=s
                             
-        bpy.ops.fontselector.load_favorites()
+        load_favorites()
                             
         return {'FINISHED'}

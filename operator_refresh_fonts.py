@@ -4,6 +4,8 @@ import os
 
 from .preferences import get_addon_preferences
 from .misc_functions import create_prefs_folder, absolute_path, clear_collection, get_size
+from .function_load_font_subdir import load_font_subdir
+from .function_load_favorites import load_favorites
 
 from .global_variable import *
 
@@ -138,7 +140,7 @@ class FontSelectorRefresh(bpy.types.Operator):
                 self.report({'INFO'}, info)
 
             if os.path.isfile(preffav)==True :
-                bpy.ops.fontselector.load_favorites()
+                load_favorites()
 
         elif chkdir == 0 :
             info = 'No valid Font Folder, check Preferences'
@@ -165,7 +167,7 @@ class FontSelectorRefresh(bpy.types.Operator):
             for d in subdir:
                 nfile3.write(os.path.basename(d)+"\n")
             nfile3.close()
-            bpy.ops.fontselector.load_fontsubs()
+            load_font_subdir()
 
         #delete previous count file
         for file in os.listdir(prefpath) :

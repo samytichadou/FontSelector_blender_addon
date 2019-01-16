@@ -4,6 +4,8 @@ import csv
 
 from .preferences import get_addon_preferences
 from .misc_functions import create_prefs_folder, clear_collection
+from .function_load_favorites import load_favorites
+
 from .global_variable import extensions
 
 class FontSelectorRefreshModal(bpy.types.Operator):
@@ -117,7 +119,7 @@ class FontSelectorRefreshModal(bpy.types.Operator):
                 print(info)
                 self.report({'INFO'}, info)
             if os.path.isfile(preffav)==True:
-                bpy.ops.fontselector.load_favorites()
+                load_favorites()
                 
         elif chk==0:
             info = 'No valid Font Folder, check Preferences'

@@ -3,7 +3,7 @@ import os
 import csv
 
 from .preferences import get_addon_preferences
-
+from .function_load_favorites import load_favorites
 
 class FontSelectorLoadFontList(bpy.types.Operator):
     bl_idname = "fontselector.load_fontlist"
@@ -49,7 +49,7 @@ class FontSelectorLoadFontList(bpy.types.Operator):
                         newfont.filepath=p
                         newfont.subdirectory=s
                 if os.path.isfile(preffav)==True:
-                    bpy.ops.fontselector.load_favorites()
+                    load_favorites()
             else:
                 info = 'Preference File does not exist, check Preference Folder path'
                 self.report({'ERROR'}, info)  
