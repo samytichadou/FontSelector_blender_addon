@@ -4,6 +4,7 @@ import csv
 
 from .preferences import get_addon_preferences
 from .misc_functions import clear_collection, absolute_path
+
 from .global_variable import subdir_list
 
 def load_font_subdir():
