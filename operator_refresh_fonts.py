@@ -3,7 +3,7 @@ import csv
 import os
 
 from .preferences import get_addon_preferences
-from .misc_functions import create_prefs_folder, absolute_path, clear_collection, get_size
+from .misc_functions import create_dir, absolute_path, clear_collection, get_size
 from .function_load_font_subdir import load_font_subdir
 from .function_load_favorites import load_favorites
 
@@ -28,8 +28,7 @@ class FontSelectorRefresh(bpy.types.Operator):
         dlist = bpy.data.fonts
         addon_preferences = get_addon_preferences()
         fplist = addon_preferences.font_folders
-        prefs = addon_preferences.prefs_folderpath
-        prefpath = absolute_path(prefs)
+        prefpath = absolute_path(addon_preferences.prefs_folderpath)
 
         #define preference files
         preffav = os.path.join(prefpath, fav_list)
@@ -60,7 +59,7 @@ class FontSelectorRefresh(bpy.types.Operator):
             bpy.ops.fontselector.remove_unused()
         
         #check if external folder exist and create it if not
-        create_prefs_folder()
+        create_dir(prefpath)
         
         #clear list
         clear_collection(fontlist)
