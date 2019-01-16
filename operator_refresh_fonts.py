@@ -83,7 +83,7 @@ class FontSelectorRefresh(bpy.types.Operator):
                         #memorize subdirs
                         for f2 in os.listdir(dirpath):
                             filename, file_extension = os.path.splitext(f2)
-                            if any(file_extension==ext for ext in extensions) and dirpath not in subdir:
+                            if any(file_extension == ext for ext in extensions) and dirpath not in subdir :
                                 subdir.append(dirpath)
         
         chkfont = 0
