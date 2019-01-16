@@ -41,3 +41,12 @@ def get_size(folderpath) :
 def create_dir(dir_path) :
         if os.path.isdir(dir_path) == False :
                 os.makedirs(dir_path)
+
+# remove unused font datablocks
+def remove_unused_font() :
+        removed_fonts_count = 0
+        for f in bpy.data.fonts :
+            if f.users == 0 :
+                removed_fonts_count += 1
+                bpy.data.fonts.remove(f, do_unlink=True)
+        return removed_fonts_count

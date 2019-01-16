@@ -1,5 +1,6 @@
 import bpy
 
+from .misc_functions import remove_unused_font
 
 class FontSelectorRemoveUnused(bpy.types.Operator):
     bl_idname = "fontselector.remove_unused"
@@ -9,19 +10,12 @@ class FontSelectorRemoveUnused(bpy.types.Operator):
     
     @classmethod
     def poll(cls, context):
-        flist=bpy.data.fonts
-        return len(flist)>0
+        return len(bpy.data.fonts)>0
     
     def execute(self, context):
-        flist=bpy.data.fonts
-        n=0
-        for f in flist:
-            if f.users==0:
-                n=n+1
-                bpy.data.fonts.remove(f, do_unlink=True)
-        
-        if n>0:
-            info = str(n)+' unused Font(s) removed'
+        removed_font_count = remove_unused_font()
+        if removed_font_count > 0 :
+            info = str(removed_font_count)+' unused Font(s) removed'
             self.report({'INFO'}, info)  
         else:
             info = 'No unused Font to remove'
