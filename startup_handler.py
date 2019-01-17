@@ -45,7 +45,10 @@ def fontselector_startup(scene):
                     break
 
             if chk_changes == 1 :
-                bpy.ops.fontselector.refresh()
+                #old way
+                #bpy.ops.fontselector.refresh()
+                #modal
+                bpy.ops.fontselector.modal_test()
                 
             else :
                 #load files
