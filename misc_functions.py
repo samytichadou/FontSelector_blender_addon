@@ -3,7 +3,7 @@ import os
 
 from .preferences import get_addon_preferences
 
-from global_variable import extensions
+from .global_variable import extensions
 
 # suppress filepath
 def fontselector_suppress_fp(index) :
@@ -61,7 +61,3 @@ def get_all_font_files(base_dir) :
                         if any(extension == ext for ext in extensions) :
                                 font_files.append(os.path.join(root, file))
         return font_files
-
-
-        
-
