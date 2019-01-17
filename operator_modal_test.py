@@ -33,7 +33,7 @@ class FontSelectorModalTest(bpy.types.Operator):
                 self._updating = True   
                 #font treatment
                 print(self.font_list[self.count])
-                self.report({'INFO'}, str(self.count+1)+"/"+str(self.total))
+                print(str(self.count+1)+"/"+str(self.total))
                 self.count += 1
 
                 self._updating = False
