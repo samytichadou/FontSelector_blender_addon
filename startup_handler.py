@@ -45,6 +45,7 @@ def fontselector_startup(scene):
                     break
 
             if chk_changes == 1 :
+                print("Font Selector --- No Changes in Font Folders")
                 #old way
                 #bpy.ops.fontselector.refresh()
                 #modal
