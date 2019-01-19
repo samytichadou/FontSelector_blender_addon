@@ -45,13 +45,13 @@ def fontselector_startup(scene):
                     break
 
             if chk_changes == 1 :
-                print("Font Selector --- No Changes in Font Folders")
                 #old way
                 #bpy.ops.fontselector.refresh()
                 #modal
                 bpy.ops.fontselector.modal_test()
                 
             else :
+                print("Font Selector --- No Changes in Font Folders")
                 #load files
                 bpy.ops.fontselector.load_fontlist()
                 if os.path.isfile(prefsubdir) :
