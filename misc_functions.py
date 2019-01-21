@@ -5,7 +5,7 @@ from .preferences import get_addon_preferences
 
 from .global_variable import extensions
 
-# suppress filepath
+# suppress preferences filepath
 def fontselector_suppress_fp(index) :
     #get addon prefs
     addon_preferences = get_addon_preferences()
@@ -61,3 +61,8 @@ def get_all_font_files(base_dir) :
                         if any(extension == ext for ext in extensions) :
                                 font_files.append(os.path.join(root, file))
         return font_files
+
+# suppress existing file
+def suppress_existing_file(filepath) :
+    if os.path.isfile(filepath) :
+        os.remove(filepath)
