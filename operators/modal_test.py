@@ -32,11 +32,15 @@ def draw_callback_loading(self, context):
     y = 0
     completion = count / total
     size = int(width * completion)
+    color_bar_back = [1.0, 1.0, 1.0, 0.1]
+    color_bar = [1.0, 1.0, 1.0, 0.3]
+    color_font = [1.0, 1.0, 1.0, 1.0]
 
-    draw_box(x, y, size, bar_thickness, (1.0, 1.0, 1.0, 0.15))
+    draw_box(x, y, width, bar_thickness, color_bar_back)
+    draw_box(x, y, size, bar_thickness, color_bar)
 
     # Text
-    bgl.glColor4f(1.0, 1.0, 1.0, 1.0)
+    bgl.glColor4f(*color_font)
     font_id = 0  # XXX, need to find out how best to get this.
     text = "Fonts Loading"
     xfont = width / 2 - 60
@@ -70,11 +74,12 @@ class FontSelectorModalTest(bpy.types.Operator):
     def modal(self, context, event):
         global count
 
-        # redraw info area
+        # redraw area
         try:
             for area in context.screen.areas:
-                if area.type == 'VIEW_3D':
-                    area.tag_redraw()
+                area.tag_redraw()
+#                if area.type == 'VIEW_3D':
+#                    area.tag_redraw()
         except AttributeError:
             pass
 
@@ -106,12 +111,16 @@ class FontSelectorModalTest(bpy.types.Operator):
         # the arguments we pass the callback
         args = (self, context)
         self._timer = wm.event_timer_add(0.001, context.window)
-        self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_loading, args, 'WINDOW', 'POST_PIXEL')
+        self._handle1 = bpy.types.SpaceView3D.draw_handler_add(draw_callback_loading, args, 'WINDOW', 'POST_PIXEL')
+        #self._handle2 = bpy.types.SpaceOutliner.draw_handler_add(draw_callback_loading, args, 'WINDOW', 'POST_PIXEL')
+        #self._handle3 = bpy.types.SpaceProperties.draw_handler_add(draw_callback_loading, args, 'WINDOW', 'POST_PIXEL')
         wm.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
     def cancel(self, context):
-        bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
+        bpy.types.SpaceView3D.draw_handler_remove(self._handle1, 'WINDOW')
+        #bpy.types.SpaceOutliner.draw_handler_remove(self._handle2, 'WINDOW')
+        #bpy.types.SpaceProperties.draw_handler_remove(self._handle3, 'WINDOW')
         self.report({'INFO'}, "CANCEL")
         print('cancel')
         wm = context.window_manager
@@ -126,7 +135,9 @@ class FontSelectorModalTest(bpy.types.Operator):
         ### TODO ### recover old json files
 
     def finish(self, context):
-        bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
+        bpy.types.SpaceView3D.draw_handler_remove(self._handle1, 'WINDOW')
+        #bpy.types.SpaceOutliner.draw_handler_remove(self._handle2, 'WINDOW')
+        #bpy.types.SpaceProperties.draw_handler_remove(self._handle3, 'WINDOW')
         self.report({'INFO'}, "FINISHED")
         print('finished')
         wm = context.window_manager
