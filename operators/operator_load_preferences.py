@@ -2,7 +2,7 @@ import bpy
 import os
 import csv
 
-from .preferences import get_addon_preferences
+from ..preferences import get_addon_preferences
 
 
 class FontSelectorLoadFPPrefs(bpy.types.Operator):

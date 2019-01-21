@@ -2,8 +2,8 @@ import bpy
 import os
 import csv
 
-from .preferences import get_addon_preferences
-from .function_load_favorites import load_favorites
+from ..preferences import get_addon_preferences
+from ..function_load_favorites import load_favorites
 
 class FontSelectorFilterSubdirFonts(bpy.types.Operator):
     bl_idname = "fontselector.filter_subdirfonts"

@@ -1,7 +1,7 @@
 import bpy
 import os
 
-from .preferences import get_addon_preferences
+from ..preferences import get_addon_preferences
 
 
 class FontSelectorSaveFPPrefs(bpy.types.Operator):

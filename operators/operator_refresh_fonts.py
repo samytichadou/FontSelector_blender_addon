@@ -2,12 +2,12 @@ import bpy
 import csv
 import os
 
-from .preferences import get_addon_preferences
-from .misc_functions import create_dir, absolute_path, clear_collection, get_size
-from .function_load_font_subdir import load_font_subdir
-from .function_load_favorites import load_favorites
+from ..preferences import get_addon_preferences
+from ..misc_functions import create_dir, absolute_path, clear_collection, get_size
+from ..function_load_font_subdir import load_font_subdir
+from ..function_load_favorites import load_favorites
 
-from .global_variable import *
+from ..global_variable import *
 
 class FontSelectorRefresh(bpy.types.Operator):
     bl_idname = "fontselector.refresh"

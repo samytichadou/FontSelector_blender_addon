@@ -1,6 +1,6 @@
 import bpy
 
-from .preferences import get_addon_preferences
+from ..preferences import get_addon_preferences
 
 class FontSelectorAddFP(bpy.types.Operator):
     bl_idname = "fontselector.add_fp"

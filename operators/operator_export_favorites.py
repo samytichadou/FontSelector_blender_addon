@@ -3,7 +3,7 @@ import os
 import shutil
 from bpy_extras.io_utils import ExportHelper
 
-from .preferences import get_addon_preferences
+from ..preferences import get_addon_preferences
 
 
 class FontSelectorExportFavorites(bpy.types.Operator, ExportHelper):

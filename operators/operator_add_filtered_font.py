@@ -2,10 +2,10 @@ import bpy
 import os
 import csv
 
-from .preferences import get_addon_preferences
-from .misc_functions import absolute_path, create_dir
+from ..preferences import get_addon_preferences
+from ..misc_functions import absolute_path, create_dir
 
-from .global_variable import filter_list
+from ..global_variable import filter_list
 
 class FontSelectorAddFiltered(bpy.types.Operator):
     bl_idname = "fontselector.add_filtered"

@@ -4,7 +4,7 @@ import time
 import blf
 import bgl
 
-from .misc_functions import get_all_font_files
+from ..misc_functions import get_all_font_files
 
 path = r"C:\Windows\Fonts"
 count = 0
@@ -65,6 +65,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         total = len(self.font_list)
         print("Start")
 
+        ### TODO ### turn relevant json files into old
+
     def modal(self, context, event):
         global count
 
@@ -121,6 +123,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         count = 0
         self.font_list.clear()
 
+        ### TODO ### recover old json files
+
     def finish(self, context):
         bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
         self.report({'INFO'}, "FINISHED")
@@ -133,3 +137,5 @@ class FontSelectorModalTest(bpy.types.Operator):
         total = 0
         count = 0
         self.font_list.clear()
+
+        ### TODO ### delete json old files

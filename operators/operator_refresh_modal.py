@@ -2,11 +2,11 @@ import bpy
 import os
 import csv
 
-from .preferences import get_addon_preferences
-from .misc_functions import create_dir, clear_collection
-from .function_load_favorites import load_favorites
+from ..preferences import get_addon_preferences
+from ..misc_functions import create_dir, clear_collection
+from ..function_load_favorites import load_favorites
 
-from .global_variable import extensions
+from ..global_variable import extensions
 
 class FontSelectorRefreshModal(bpy.types.Operator):
     bl_idname = "fontselector.refresh_modal"
