@@ -48,7 +48,8 @@ def fontselector_startup(scene):
                 #old way
                 #bpy.ops.fontselector.refresh()
                 #modal
-                bpy.ops.fontselector.modal_test()
+                #bpy.ops.fontselector.modal_test()
+                pass
                 
             else :
                 print("Font Selector --- No Changes in Font Folders")
