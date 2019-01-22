@@ -54,13 +54,28 @@ def remove_unused_font() :
 
 # get all font files in dir and subdir
 def get_all_font_files(base_dir) :
-        font_files = []
+        print("font function")
+        font_files_list = []
+        subdir_list = []
         for (root, directories, filenames) in os.walk(base_dir) :
                 for file in filenames :
                         extension = os.path.splitext(file)[1]
                         if any(extension == ext for ext in extensions) :
-                                font_files.append(os.path.join(root, file))
-        return font_files
+
+                                dupe_check = 0
+                                font_path = os.path.join(root, file)
+                                subdir = os.path.basename(os.path.dirname(font_path))
+                                font_files_list.append([font_path, subdir, file])
+
+                                # create the subdir list
+                                for dir in subdir_list :
+                                        if dir == subdir :
+                                                dupe_check = 1
+                                                break
+                                if dupe_check == 0 :
+                                        subdir_list.append(subdir)
+
+        return font_files_list, subdir_list
 
 # suppress existing file
 def suppress_existing_file(filepath) :
