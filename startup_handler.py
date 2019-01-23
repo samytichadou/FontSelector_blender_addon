@@ -35,7 +35,7 @@ def fontselector_startup(scene):
                 #old way
                 #bpy.ops.fontselector.refresh()
                 #modal
-                #bpy.ops.fontselector.modal_test()
+                #bpy.ops.fontselector.modal_refresh()
                 pass
                 
             else :
