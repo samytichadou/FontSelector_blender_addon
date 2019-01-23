@@ -31,7 +31,7 @@ def fontselector_startup(scene):
             chk_changes = check_size_changes()
 
             if chk_changes :
-                print("Font Selector --- " + changes_msg)
+                print(print_statement + changes_msg)
                 #old way
                 #bpy.ops.fontselector.refresh()
                 #modal
@@ -39,7 +39,7 @@ def fontselector_startup(scene):
                 pass
                 
             else :
-                print("Font Selector --- " + no_changes_msg)
+                print(print_statement + no_changes_msg)
                 #load files
                 bpy.ops.fontselector.load_fontlist()
                 if os.path.isfile(prefsubdir) :
@@ -48,4 +48,4 @@ def fontselector_startup(scene):
             if os.path.isfile(preffav) and len(fontlist) > 0 :
                 load_favorites()
                 
-            print("Font Selector --- Settings loaded")
+            print(print_statement + settings_loaded_msg)
