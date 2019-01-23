@@ -134,7 +134,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         print("Start")
 
         # turn relevant json files into old
-        os.rename(self.json_output, self.json_old)
+        if os.path.isfile(self.json_output) :
+            os.rename(self.json_output, self.json_old)
 
     def modal(self, context, event):
         global count
@@ -221,7 +222,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         del self.font_list[:]
 
         # recover old json files
-        os.rename(self.json_old, self.json_output)
+        if os.path.isfile(self.json_old) :
+            os.rename(self.json_old, self.json_output)
 
     def finish(self, context):
         bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
@@ -243,7 +245,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         # write json file
         create_json_file(datas, self.json_output)
         # delete json old files
-        os.remove(self.json_old)
+        if os.path.isfile(self.json_old) :
+            os.remove(self.json_old)
 
         global total
         global count
