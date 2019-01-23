@@ -34,7 +34,6 @@ def add_subdirectories_json(datas, subdir_list) :
 
 def add_size_json(datas, size) :
     datas['size'] = size
-    
     return datas
 
 #read json
