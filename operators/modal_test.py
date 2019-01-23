@@ -142,8 +142,7 @@ class FontSelectorModalTest(bpy.types.Operator):
         #check if external folder exist and create it if not
         create_dir(prefpath)
 
-        print("Start")
-        
+        self.report({'INFO'}, start_refreshing_msg) 
 
     def modal(self, context, event):
         global count
