@@ -43,7 +43,7 @@ def create_dir(dir_path) :
         if os.path.isdir(dir_path) == False :
                 os.makedirs(dir_path)
 
-# remove unused font datablocks
+# remove unused font datablocks and return number of fonts removed
 def remove_unused_font() :
         removed_fonts_count = 0
         for f in bpy.data.fonts :
