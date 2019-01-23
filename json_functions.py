@@ -1,10 +1,12 @@
 import bpy
 import json
 
+# create json file
 def create_json_file(datas, path) :
     with open(path, "w") as write_file :
         json.dump(datas, write_file, indent=4, sort_keys=True)
 
+# initialize json datas
 def initialize_json_datas () :
     datas = {}
     datas['size'] = []
@@ -12,6 +14,7 @@ def initialize_json_datas () :
     datas['subdirectories'] = []
     return datas
 
+# add fonts to json datas
 def add_fonts_json(datas, font_list) :
     #datas = {}
     #datas['font'] = []
@@ -23,6 +26,7 @@ def add_fonts_json(datas, font_list) :
         })
     return datas
 
+# add subdirectories to json datas
 def add_subdirectories_json(datas, subdir_list) :
     for sub in subdir_list :
         datas['subdirectories'].append({
@@ -31,11 +35,12 @@ def add_subdirectories_json(datas, subdir_list) :
         })
     return datas
 
+# add size to json datas
 def add_size_json(datas, size) :
     datas['size'] = size
     return datas
 
-#read json
+# read json
 def read_json(filepath):
     with open(filepath, "r") as read_file:
         datas = json.load(read_file)
