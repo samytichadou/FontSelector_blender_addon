@@ -54,7 +54,6 @@ def remove_unused_font() :
 
 # get all font files in dir and subdir
 def get_all_font_files(base_dir) :
-        print("font function")
         font_files_list = []
         subdir_list = []
         for (root, directories, filenames) in os.walk(base_dir) :
