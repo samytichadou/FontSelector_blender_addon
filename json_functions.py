@@ -3,7 +3,7 @@ import json
 
 def create_json_file(datas, path) :
     with open(path, "w") as write_file :
-        json.dump(datas, write_file)
+        json.dump(datas, write_file, indent=4, sort_keys=True)
 
 def initialize_json_datas () :
     datas = {}
@@ -18,20 +18,19 @@ def add_fonts_json(datas, font_list) :
     #datas = {}
     #datas['font'] = []
     for font in font_list :
-        datas['fonts'].append([{
+        datas['fonts'].append({
             "name" : font[0],
             "filepath" : font[1],
             "subdirectory" : font[2]
-        }])
-    
+        })
     return datas
 
 def add_subdirectories_json(datas, subdir_list) :
     for sub in subdir_list :
-        datas['subdirectories'].append([{
-            "name" : sub[0]
-        }])
-    
+        datas['subdirectories'].append({
+            "name" : sub[0],
+            "filepath" : sub[1]
+        })
     return datas
 
 def add_size_json(datas, size) :
