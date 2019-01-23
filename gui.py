@@ -40,7 +40,8 @@ class FontSelectorPanel(bpy.types.Panel):
             layout.label('Add Font Folder in Addon Preference', icon='INFO')
         else:
             row=layout.row()
-            row.operator("fontselector.refresh", icon='FILE_REFRESH')
+            row.operator("fontselector.modal_refresh", text="", icon='FILE_REFRESH')
+            row.operator("fontselector.refresh", text='', icon='FILE_REFRESH')
             if fonth.fontselector_list==0:
                 row=layout.row()
                 row.label('Refresh to get List of available Fonts', icon='INFO')
