@@ -10,7 +10,6 @@ def initialize_json_datas () :
     datas['size'] = []
     datas['fonts'] = []
     datas['subdirectories'] = []
-    datas['filtered'] = []
     return datas
 
 def add_fonts_json(datas, font_list) :
