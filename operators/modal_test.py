@@ -4,7 +4,7 @@ import time
 import blf
 import bgl
 
-from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size
+from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font
 from ..preferences import get_addon_preferences
 from ..global_variable import json_file
 from ..json_functions import *
@@ -69,7 +69,7 @@ class FontSelectorModalTest(bpy.types.Operator):
     font_list = []
     json_font_list = []
     subdirectories = []
-    filter_list = []
+    avoid_list = []
     corrupted = []
     size_total = 0
     pref_path = ""
@@ -103,8 +103,7 @@ class FontSelectorModalTest(bpy.types.Operator):
 
         fplist = addon_preferences.font_folders
         prefpath = absolute_path(addon_preferences.prefs_folderpath)
-        collection_font_list = bpy.data.window_managers['WinMan'].fontselector_list
-        data_font_list = bpy.data.fonts
+        #data_font_list = bpy.data.fonts
 
         for folder in fplist :
             if folder.folderpath != "" :
@@ -117,25 +116,22 @@ class FontSelectorModalTest(bpy.types.Operator):
                     self.subdirectories.append(subdir)
         total = len(self.font_list)
 
-        #get filtered font
+        
+        if os.path.isfile(self.json_output) :
+            # turn relevant json files into old
+            os.rename(self.json_output, self.json_old)
 
         #create subdir list
 
         #clean unused
-        if len(data_font_list) > 0:
-            bpy.ops.fontselector.remove_unused()
+        remove_unused_font()
         
         #check if external folder exist and create it if not
         create_dir(prefpath)
-        
-        #clear list
-        #clear_collection(collection_font_list)      
 
         print("Start")
 
-        # turn relevant json files into old
-        if os.path.isfile(self.json_output) :
-            os.rename(self.json_output, self.json_old)
+        
 
     def modal(self, context, event):
         global count
@@ -163,7 +159,7 @@ class FontSelectorModalTest(bpy.types.Operator):
                 chk_local_dupe = 0
                 path, subdir, name = self.font_list[count]
 
-                for filtered in self.filter_list :
+                for filtered in self.avoid_list :
                     if name == filtered :
                         chk_local_dupe = 1
                         print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
@@ -178,10 +174,10 @@ class FontSelectorModalTest(bpy.types.Operator):
                         # delete font
                         bpy.data.fonts.remove(datafont, do_unlink=True)
                         # append in filter list
-                        self.filter_list.append(name)
+                        self.avoid_list.append(name)
                         print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
                     except RuntimeError:
-                        self.filter_list.append(name)
+                        self.avoid_list.append(name)
                         self.corrupted.append([path, subdir, name])
                         print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
 
@@ -210,27 +206,34 @@ class FontSelectorModalTest(bpy.types.Operator):
 
     def cancel(self, context):
         bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
-        self.report({'INFO'}, "CANCEL")
-        print('cancel')
         wm = context.window_manager
         wm.event_timer_remove(self._timer)
 
+        # return cancel state to user
+        self.report({'INFO'}, "CANCEL")
+        print('cancel')
+
+        # recover old json files
+        if os.path.isfile(self.json_old) :
+            os.rename(self.json_old, self.json_output)
+
+        # reset variables
         global total
         global count
         total = 0
         count = 0
         del self.font_list[:]
 
-        # recover old json files
-        if os.path.isfile(self.json_old) :
-            os.rename(self.json_old, self.json_output)
-
     def finish(self, context):
         bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
-        self.report({'INFO'}, "FINISHED")
-        print('finished')
         wm = context.window_manager
         wm.event_timer_remove(self._timer)
+
+        collection_font_list = bpy.data.window_managers['WinMan'].fontselector_list
+
+        # return finish state to user
+        self.report({'INFO'}, "FINISHED")
+        print('finished')
 
         # initialize json
         datas = initialize_json_datas()
@@ -238,16 +241,20 @@ class FontSelectorModalTest(bpy.types.Operator):
         datas = add_fonts_json(datas, self.json_font_list)
         # write json subdir list
         datas = add_subdirectories_json(datas, self.subdirectories)
-        # write json filter list
         # write json size
         datas = add_size_json(datas, self.size_total)
-        # copy json 
         # write json file
         create_json_file(datas, self.json_output)
         # delete json old files
         if os.path.isfile(self.json_old) :
             os.remove(self.json_old)
 
+        # clean collection data
+        #clear_collection(collection_font_list)     
+
+        # load new json into blender data blocks
+
+        # reset variables
         global total
         global count
         total = 0
