@@ -6,8 +6,11 @@ import bgl
 
 from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font
 from ..preferences import get_addon_preferences
-from ..global_variable import json_file
 from ..json_functions import *
+from ..functions.load_json import load_json_font_file
+
+from ..global_variable import json_file
+from ..global_messages import *
 
 count = 0
 total = 0
@@ -28,30 +31,31 @@ def draw_box(x, y, w, h, color):
 
 # callback for loading bar in 3D view 
 def draw_callback_px(self, context):
-    bar_thickness = 30
+    bar_thickness = 10
 
     # Progress Bar
     width = context.area.width
+    height = context.area.height
     x = 0
     y = 0
     completion = count / total
     size = int(width * completion)
     color_bar_back = [1.0, 1.0, 1.0, 0.1]
-    color_bar = [1.0, 1.0, 1.0, 0.3]
+    color_bar = [1.0, 1.0, 1.0, 0.7]
     color_font = [1.0, 1.0, 1.0, 1.0]
 
-    draw_box(x, y, width, bar_thickness, color_bar_back)
+    #draw_box(x, y, width, bar_thickness, color_bar_back)
     draw_box(x, y, size, bar_thickness, color_bar)
 
     # Text
-    bgl.glColor4f(*color_font)
-    font_id = 0  # XXX, need to find out how best to get this.
-    text = "Fonts Loading"
-    xfont = width / 2 - 60
-    yfont = 10
-    blf.position(font_id, xfont, yfont, 0)
-    blf.size(font_id, 18, 72)
-    blf.draw(font_id, text)
+    #bgl.glColor4f(*color_font)
+    #font_id = 0  # XXX, need to find out how best to get this.
+    #text = "Fonts Loading"
+    #xfont = width / 2 - 60
+    #yfont = 10
+    #blf.position(font_id, xfont, yfont, 0)
+    #blf.size(font_id, 18, 72)
+    #blf.draw(font_id, text)
 
     bgl.glEnd()
 
@@ -59,8 +63,8 @@ def draw_callback_px(self, context):
 
 # refresh operator modal
 class FontSelectorModalTest(bpy.types.Operator):
-    bl_idname = "fontselector.modal_test"
-    bl_label = "Modal Test"
+    bl_idname = "fontselector.modal_refresh"
+    bl_label = "Refresh Font List Modal"
 
 
     _updating = False
@@ -115,7 +119,6 @@ class FontSelectorModalTest(bpy.types.Operator):
                 for subdir in subdir_list :
                     self.subdirectories.append(subdir)
         total = len(self.font_list)
-
         
         if os.path.isfile(self.json_output) :
             # turn relevant json files into old
@@ -130,7 +133,6 @@ class FontSelectorModalTest(bpy.types.Operator):
         create_dir(prefpath)
 
         print("Start")
-
         
 
     def modal(self, context, event):
@@ -140,7 +142,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         try:
             for area in context.screen.areas:
                 #area.tag_redraw()
-                if area.type == 'VIEW_3D':
+                #If area.type == 'VIEW_3D':
+                if area.type == 'PROPERTIES':
                     area.tag_redraw()
         except AttributeError:
             pass
@@ -200,18 +203,16 @@ class FontSelectorModalTest(bpy.types.Operator):
         # the arguments we pass the callback
         args = (self, context)
         self._timer = wm.event_timer_add(0.001, context.window)
-        self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
+        #self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
+        self._handle = bpy.types.SpaceProperties.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
         wm.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
     def cancel(self, context):
-        bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
+        #bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
+        bpy.types.SpaceProperties.draw_handler_remove(self._handle, 'WINDOW')
         wm = context.window_manager
         wm.event_timer_remove(self._timer)
-
-        # return cancel state to user
-        self.report({'INFO'}, "CANCEL")
-        print('cancel')
 
         # recover old json files
         if os.path.isfile(self.json_old) :
@@ -223,23 +224,26 @@ class FontSelectorModalTest(bpy.types.Operator):
         total = 0
         count = 0
         del self.font_list[:]
+        del self.subdirectories[:]
+
+        # return cancel state to user
+        self.report({'INFO'}, cancel_refresh_msg)
 
     def finish(self, context):
-        bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
+        #bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
+        bpy.types.SpaceProperties.draw_handler_remove(self._handle, 'WINDOW')
         wm = context.window_manager
         wm.event_timer_remove(self._timer)
 
         collection_font_list = bpy.data.window_managers['WinMan'].fontselector_list
-
-        # return finish state to user
-        self.report({'INFO'}, "FINISHED")
-        print('finished')
+        collection_subdir_list = bpy.data.window_managers['WinMan'].fontselector_sub
 
         # initialize json
         datas = initialize_json_datas()
         # write json font list
         datas = add_fonts_json(datas, self.json_font_list)
         # write json subdir list
+        print(self.subdirectories)
         datas = add_subdirectories_json(datas, self.subdirectories)
         # write json size
         datas = add_size_json(datas, self.size_total)
@@ -250,9 +254,11 @@ class FontSelectorModalTest(bpy.types.Operator):
             os.remove(self.json_old)
 
         # clean collection data
-        #clear_collection(collection_font_list)     
+        clear_collection(collection_font_list)
+        clear_collection(collection_subdir_list)
 
         # load new json into blender data blocks
+        load_json_font_file(self.json_output, collection_font_list, collection_subdir_list)
 
         # reset variables
         global total
@@ -260,3 +266,17 @@ class FontSelectorModalTest(bpy.types.Operator):
         total = 0
         count = 0
         del self.font_list[:]
+        del self.subdirectories[:]
+
+        # redraw area
+        try:
+            for area in context.screen.areas:
+                if area.type == 'PROPERTIES':
+                    area.tag_redraw()
+        except AttributeError:
+            pass
+
+        # if only one subdir, select it
+
+        # return finish state to user
+        self.report({'INFO'}, refresh_msg)
