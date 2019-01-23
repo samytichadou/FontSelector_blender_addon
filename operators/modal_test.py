@@ -6,8 +6,9 @@ import bgl
 
 from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size
 from ..preferences import get_addon_preferences
+from ..global_variable import json_file
+from ..json_functions import *
 
-path = r"C:\Windows\Fonts"
 count = 0
 total = 0
 
@@ -26,7 +27,7 @@ def draw_box(x, y, w, h, color):
     bgl.glEnd()
 
 # callback for loading bar in 3D view 
-def draw_callback_loading(self, context): 
+def draw_callback_px(self, context):
     bar_thickness = 30
 
     # Progress Bar
@@ -66,10 +67,15 @@ class FontSelectorModalTest(bpy.types.Operator):
     _timer = None
 
     font_list = []
+    json_font_list = []
     subdirectories = []
     filter_list = []
+    corrupted = []
+    size_total = 0
+    pref_path = ""
+    json_output = ""
+    json_old = ""
 
-    data_font_list = bpy.data.fonts
 
     @classmethod
     def poll(cls, context):
@@ -91,17 +97,24 @@ class FontSelectorModalTest(bpy.types.Operator):
         global total
 
         addon_preferences = get_addon_preferences()
+        self.pref_path = addon_preferences.prefs_folderpath
+        self.json_output = os.path.join(addon_preferences.prefs_folderpath, json_file)
+        self.json_old = os.path.join(addon_preferences.prefs_folderpath, "fontselector.old")
+
         fplist = addon_preferences.font_folders
         prefpath = absolute_path(addon_preferences.prefs_folderpath)
         collection_font_list = bpy.data.window_managers['WinMan'].fontselector_list
+        data_font_list = bpy.data.fonts
 
         for folder in fplist :
-            absolute_folder = absolute_path(folder.folderpath)
-            fontpath_list, subdir_list = get_all_font_files(absolute_folder)
-            for font in fontpath_list :
-                self.font_list.append(font)
-            for subdir in subdir_list :
-                self.subdirectories.append(subdir)
+            if folder.folderpath != "" :
+                absolute_folder = absolute_path(folder.folderpath)
+                self.size_total += get_size(absolute_folder) 
+                fontpath_list, subdir_list = get_all_font_files(absolute_folder)
+                for font in fontpath_list :
+                    self.font_list.append(font)
+                for subdir in subdir_list :
+                    self.subdirectories.append(subdir)
         total = len(self.font_list)
 
         #get filtered font
@@ -109,7 +122,7 @@ class FontSelectorModalTest(bpy.types.Operator):
         #create subdir list
 
         #clean unused
-        if len(self.data_font_list) > 0:
+        if len(data_font_list) > 0:
             bpy.ops.fontselector.remove_unused()
         
         #check if external folder exist and create it if not
@@ -120,7 +133,8 @@ class FontSelectorModalTest(bpy.types.Operator):
 
         print("Start")
 
-        ### TODO ### turn relevant json files into old
+        # turn relevant json files into old
+        os.rename(self.json_output, self.json_old)
 
     def modal(self, context, event):
         global count
@@ -147,18 +161,27 @@ class FontSelectorModalTest(bpy.types.Operator):
                 #font treatment
                 chk_local_dupe = 0
                 path, subdir, name = self.font_list[count]
+
                 for filtered in self.filter_list :
                     if name == filtered :
                         chk_local_dupe = 1
                         print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
                         break
+
                 if chk_local_dupe == 0 :
                     try:
-                        bpy.data.fonts.load(filepath = path)
-                        
+                        # load font in blender datas to get name
+                        datafont = bpy.data.fonts.load(filepath = path)
+                        # append to json font list [name, filepath, subdir]
+                        self.json_font_list.append([datafont.name, path, subdir])
+                        # delete font
+                        bpy.data.fonts.remove(datafont, do_unlink=True)
+                        # append in filter list
+                        self.filter_list.append(name)
                         print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
                     except RuntimeError:
-                        self.filterlist.append(name)
+                        self.filter_list.append(name)
+                        self.corrupted.append([path, subdir, name])
                         print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
 
                 #print(self.font_list[count])
@@ -180,7 +203,7 @@ class FontSelectorModalTest(bpy.types.Operator):
         # the arguments we pass the callback
         args = (self, context)
         self._timer = wm.event_timer_add(0.001, context.window)
-        self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_loading, args, 'WINDOW', 'POST_PIXEL')
+        self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
         wm.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
@@ -197,7 +220,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         count = 0
         del self.font_list[:]
 
-        ### TODO ### recover old json files
+        # recover old json files
+        os.rename(self.json_old, self.json_output)
 
     def finish(self, context):
         bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
@@ -206,10 +230,23 @@ class FontSelectorModalTest(bpy.types.Operator):
         wm = context.window_manager
         wm.event_timer_remove(self._timer)
 
+        # initialize json
+        datas = initialize_json_datas()
+        # write json font list
+        datas = add_fonts_json(datas, self.json_font_list)
+        # write json subdir list
+        datas = add_subdirectories_json(datas, self.subdirectories)
+        # write json filter list
+        # write json size
+        datas = add_size_json(datas, self.size_total)
+        # copy json 
+        # write json file
+        create_json_file(datas, self.json_output)
+        # delete json old files
+        os.remove(self.json_old)
+
         global total
         global count
         total = 0
         count = 0
         del self.font_list[:]
-
-        ### TODO ### delete json old files
