@@ -52,7 +52,7 @@ def remove_unused_font() :
                 bpy.data.fonts.remove(f, do_unlink=True)
         return removed_fonts_count
 
-# get all font files in dir and subdir
+# get all font files in dir and subdir ((font path, font subdir, file name)(subdir name, subdir path))
 def get_all_font_files(base_dir) :
         font_files_list = []
         subdir_list = []
@@ -68,12 +68,11 @@ def get_all_font_files(base_dir) :
 
                                 # create the subdir list
                                 for dir in subdir_list :
-                                        if dir == subdir :
+                                        if dir[0] == subdir :
                                                 dupe_check = 1
                                                 break
                                 if dupe_check == 0 :
-                                        subdir_list.append(subdir)
-
+                                        subdir_list.append([subdir, root])
         return font_files_list, subdir_list
 
 # suppress existing file
