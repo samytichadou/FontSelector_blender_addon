@@ -6,3 +6,5 @@ font_list = "fontselector_fontlist"
 filter_list = "fontselector_filter"
 subdir_list = "fontselector_subdir"
 size_file = "fontselector_size_"
+
+json_file = "fontselector.json"
