@@ -8,6 +8,7 @@ from ..function_load_font_subdir import load_font_subdir
 from ..function_load_favorites import load_favorites
 
 from ..global_variable import *
+from ..global_messages import *
 
 class FontSelectorRefresh(bpy.types.Operator):
     bl_idname = "fontselector.refresh"
@@ -134,20 +135,16 @@ class FontSelectorRefresh(bpy.types.Operator):
 
             if os.path.isfile(prefflist)==True :
                 bpy.ops.fontselector.load_fontlist()
-                info='Font Selector : Font List refreshed'
-                #print(info)#
-                self.report({'INFO'}, info)
+                self.report({'INFO'}, refresh_msg)
 
             if os.path.isfile(preffav)==True :
                 load_favorites()
 
         elif chkdir == 0 :
-            info = 'No valid Font Folder, check Preferences'
-            self.report({'ERROR'}, info)  
+            self.report({'ERROR'}, folder_error_msg)  
             
         elif chkfont == 0 :
-            info = 'No valid Font in Folders, check Preferences'
-            self.report({'ERROR'}, info)
+            self.report({'ERROR'}, folder_error_msg)  
             
         #write filterlist
         if len(filterlist) != 0:
