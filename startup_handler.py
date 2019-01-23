@@ -7,14 +7,16 @@ from .misc_functions import get_size, absolute_path
 from .function_load_font_subdir import load_font_subdir
 from .function_load_favorites import load_favorites
 
+from .functions.check_size import check_size_changes
+
 from .global_variable import fav_list, font_list, subdir_list, size_file
+from .global_messages import *
 
 @persistent
 def fontselector_startup(scene):
     addon_preferences = get_addon_preferences()
-    fplist = addon_preferences.font_folders
     prefpath = absolute_path(addon_preferences.prefs_folderpath)
-    #get prefs files
+    # get prefs files
     preffav = os.path.join(prefpath, fav_list)
     prefflist = os.path.join(prefpath, font_list)
     prefsubdir = os.path.join(prefpath, subdir_list)
@@ -23,28 +25,13 @@ def fontselector_startup(scene):
 
     #check preference path exist
     if os.path.isdir(prefpath) :
-
         #check font list
         if os.path.isfile(prefflist) :
 
-            #check if refreshing font list is needed
-            for file in os.listdir(prefpath) :
-                if size_file in file :
-                    chk_changes = 0
-                    assumed_size = int(file.split(size_file)[1])                 
-                    #get real size
-                    size_total = 0
-                    for fp in fplist :
-                        if fp.folderpath != "" :
-                            path = absolute_path(fp.folderpath)
-                            size_total += get_size(path)
-                    #do something if size changed
-                    if size_total != assumed_size :
-                        chk_changes = 1
-                        print("Font Selector --- Changes in Font Folders, refresh needed")
-                    break
+            chk_changes = check_size_changes()
 
-            if chk_changes == 1 :
+            if chk_changes :
+                print("Font Selector --- " + changes_msg)
                 #old way
                 #bpy.ops.fontselector.refresh()
                 #modal
@@ -52,7 +39,7 @@ def fontselector_startup(scene):
                 pass
                 
             else :
-                print("Font Selector --- No Changes in Font Folders")
+                print("Font Selector --- " + no_changes_msg)
                 #load files
                 bpy.ops.fontselector.load_fontlist()
                 if os.path.isfile(prefsubdir) :
@@ -61,4 +48,4 @@ def fontselector_startup(scene):
             if os.path.isfile(preffav) and len(fontlist) > 0 :
                 load_favorites()
                 
-            print("Font Selector --- Settings loaded")    
+            print("Font Selector --- Settings loaded")
