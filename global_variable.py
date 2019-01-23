@@ -8,3 +8,4 @@ subdir_list = "fontselector_subdir"
 size_file = "fontselector_size_"
 
 json_file = "fontselector.json"
+json_favorites = "fontselector_favorites.json"
