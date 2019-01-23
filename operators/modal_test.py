@@ -1,7 +1,7 @@
 import bpy
 import os
 import time
-import blf
+#import blf
 import bgl
 
 from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font
@@ -31,21 +31,31 @@ def draw_box(x, y, w, h, color):
 
 # callback for loading bar in 3D view 
 def draw_callback_px(self, context):
-    bar_thickness = 10
+    # get color and size of progress bar
+    addon_preferences = get_addon_preferences()
+    color_bar = addon_preferences.progress_bar_color
+    bar_thickness = addon_preferences.progress_bar_size
 
     # Progress Bar
     width = context.area.width
-    height = context.area.height
+    #height = context.area.height
     x = 0
     y = 0
     completion = count / total
     size = int(width * completion)
-    color_bar_back = [1.0, 1.0, 1.0, 0.1]
-    color_bar = [1.0, 1.0, 1.0, 0.7]
-    color_font = [1.0, 1.0, 1.0, 1.0]
+    #color_bar_back = [1.0, 1.0, 1.0, 0.1]
+    #color_font = [1.0, 1.0, 1.0, 1.0]
 
     #draw_box(x, y, width, bar_thickness, color_bar_back)
-    draw_box(x, y, size, bar_thickness, color_bar)
+    #draw_box(x, y, size, bar_thickness, color_bar)
+    bgl.glColor4f(*color_bar)
+    bgl.glEnable(bgl.GL_BLEND)
+    bgl.glBegin(bgl.GL_QUADS)
+    
+    bgl.glVertex2f(x + size, y + bar_thickness)
+    bgl.glVertex2f(x, y + bar_thickness)
+    bgl.glVertex2f(x, y)
+    bgl.glVertex2f(x + size, y)
 
     # Text
     #bgl.glColor4f(*color_font)
@@ -142,7 +152,7 @@ class FontSelectorModalTest(bpy.types.Operator):
         try:
             for area in context.screen.areas:
                 #area.tag_redraw()
-                #If area.type == 'VIEW_3D':
+                #if area.type == 'VIEW_3D':
                 if area.type == 'PROPERTIES':
                     area.tag_redraw()
         except AttributeError:
@@ -165,7 +175,7 @@ class FontSelectorModalTest(bpy.types.Operator):
                 for filtered in self.avoid_list :
                     if name == filtered :
                         chk_local_dupe = 1
-                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
+                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
                         break
 
                 if chk_local_dupe == 0 :
@@ -178,11 +188,11 @@ class FontSelectorModalTest(bpy.types.Operator):
                         bpy.data.fonts.remove(datafont, do_unlink=True)
                         # append in filter list
                         self.avoid_list.append(name)
-                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
+                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
                     except RuntimeError:
                         self.avoid_list.append(name)
                         self.corrupted.append([path, subdir, name])
-                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
+                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
 
                 #print(self.font_list[count])
                 #print(str(count+1)+"/"+str(total))
@@ -243,7 +253,6 @@ class FontSelectorModalTest(bpy.types.Operator):
         # write json font list
         datas = add_fonts_json(datas, self.json_font_list)
         # write json subdir list
-        print(self.subdirectories)
         datas = add_subdirectories_json(datas, self.subdirectories)
         # write json size
         datas = add_size_json(datas, self.size_total)

@@ -35,6 +35,23 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
             default=False,
             description="If enabled, Font subdirectory will be shown in the Font list",
             )
+
+    # progress bar
+    progress_bar_color = bpy.props.FloatVectorProperty(
+            name = "Progress Bar Color", 
+            size = 4,
+            min=0.0,
+            max=1.0,
+            default=[1, 1, 1, 1],
+            subtype='COLOR'
+            )
+
+    progress_bar_size = bpy.props.IntProperty(
+            name = "Progress Bar Size", 
+            min=1,
+            max=100,
+            default=10
+            )
             
     def draw(self, context):
         layout = self.layout
@@ -48,6 +65,11 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
         row=layout.row(align=True)
         row.label(icon='SCRIPTWIN')
         row.prop(self, 'prefs_folderpath', text='External Preferences Path')
+
+        row=layout.row(align=True)
+        row.label("Progress Bar")
+        row.prop(self, 'progress_bar_color', text='')
+        row.prop(self, 'progress_bar_size')
         
         row=layout.row(align=True)
         row.label('Number of Font list rows', icon='COLLAPSEMENU')
