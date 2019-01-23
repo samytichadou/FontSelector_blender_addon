@@ -15,6 +15,7 @@ class FontSelectorFontList(bpy.types.PropertyGroup) :
     
 class FontSelectorFontSubs(bpy.types.PropertyGroup) :
     '''name = StringProperty() '''
+    filepath = bpy.props.StringProperty(name = "filepath")
 
 class FontFolders(bpy.types.PropertyGroup) :
     '''name = StringProperty() '''
