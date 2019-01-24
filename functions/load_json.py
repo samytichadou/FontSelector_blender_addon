@@ -13,9 +13,9 @@ def load_json_font_file(json_file, font_collection, subdir_collection) :
     # load fonts
     for font in datas['fonts'] :
         fontlist.append([font['name'], font['filepath'], font['subdirectory']])
-    print(fontlist)
+
     fontlist.sort(key=item_name_getter)
-    print(fontlist)
+
     for font in fontlist :
         newfont = font_collection.add()
         newfont.name = font[0]

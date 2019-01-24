@@ -174,7 +174,7 @@ class FontSelectorModalTest(bpy.types.Operator):
                 for filtered in self.avoid_list :
                     if name == filtered :
                         chk_local_dupe = 1
-                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
+                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
                         break
 
                 if chk_local_dupe == 0 :
@@ -187,11 +187,11 @@ class FontSelectorModalTest(bpy.types.Operator):
                         bpy.data.fonts.remove(datafont, do_unlink=True)
                         # append in filter list
                         self.avoid_list.append(name)
-                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
+                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
                     except RuntimeError:
                         self.avoid_list.append(name)
                         self.corrupted.append([path, subdir, name])
-                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
+                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
 
                 #print(self.font_list[count])
                 #print(str(count+1)+"/"+str(total))
