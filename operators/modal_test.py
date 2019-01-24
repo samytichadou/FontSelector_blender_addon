@@ -4,7 +4,7 @@ import time
 #import blf
 import bgl
 
-from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font
+from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font, update_progress
 from ..preferences import get_addon_preferences
 from ..json_functions import *
 from ..functions.load_json import load_json_font_file
@@ -174,7 +174,8 @@ class FontSelectorModalTest(bpy.types.Operator):
                 for filtered in self.avoid_list :
                     if name == filtered :
                         chk_local_dupe = 1
-                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
+                        update_progress(progress_print_statement, count + 1, total, name)
+                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
                         break
 
                 if chk_local_dupe == 0 :
@@ -187,11 +188,13 @@ class FontSelectorModalTest(bpy.types.Operator):
                         bpy.data.fonts.remove(datafont, do_unlink=True)
                         # append in filter list
                         self.avoid_list.append(name)
-                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
+                        update_progress(progress_print_statement, count + 1, total, name)
+                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
                     except RuntimeError:
                         self.avoid_list.append(name)
                         self.corrupted.append([path, subdir, name])
-                        print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
+                        update_progress(progress_print_statement, count + 1, total, name)
+                        #print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
 
                 #print(self.font_list[count])
                 #print(str(count+1)+"/"+str(total))
