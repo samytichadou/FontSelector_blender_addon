@@ -10,3 +10,5 @@ folder_error_msg = "No valid Font Folder"
 settings_loaded_msg = "Settings Loaded"
 
 print_statement = "Font Selector ---"
+
+progress_print_statement = "Font Selector Refreshing"
