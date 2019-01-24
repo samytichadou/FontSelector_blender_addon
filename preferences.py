@@ -52,6 +52,12 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
             max=100,
             default=10
             )
+
+    # debug
+    debug_value = bpy.props.BoolProperty(
+            name = "Debug Toggle", 
+            default = False
+            )
             
     def draw(self, context):
         layout = self.layout
@@ -70,6 +76,10 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
         row.label("Progress Bar")
         row.prop(self, 'progress_bar_color', text='')
         row.prop(self, 'progress_bar_size')
+
+        row=layout.row(align=True)
+        row.label("Development")
+        row.prop(self, 'debug_value')
         
         row=layout.row(align=True)
         row.label('Number of Font list rows', icon='COLLAPSEMENU')
