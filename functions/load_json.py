@@ -2,15 +2,25 @@ import bpy
 
 from ..json_functions import read_json
 
+# get element
+def item_name_getter(elem):
+    return elem[0]
+
 def load_json_font_file(json_file, font_collection, subdir_collection) :
     datas = read_json(json_file)
+    fontlist = []
 
     # load fonts
     for font in datas['fonts'] :
+        fontlist.append([font['name'], font['filepath'], font['subdirectory']])
+    print(fontlist)
+    fontlist.sort(key=item_name_getter)
+    print(fontlist)
+    for font in fontlist :
         newfont = font_collection.add()
-        newfont.name = font['name']
-        newfont.filepath = font['filepath']
-        newfont.subdirectory = font['subdirectory']
+        newfont.name = font[0]
+        newfont.filepath = font[1]
+        newfont.subdirectory = font[2]
 
     # load subdirs
     for subdir in datas['subdirectories'] : 
