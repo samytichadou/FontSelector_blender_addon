@@ -3,6 +3,7 @@ import os
 import time
 #import blf
 import bgl
+import sys
 
 from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font, update_progress
 from ..preferences import get_addon_preferences
@@ -159,13 +160,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         except AttributeError:
             pass
 
-        # handle cancelling
-        if event.type in {'ESC'} :
-            self.cancel(context)
-            return {'CANCELLED'}
-
         # do calculations
-        elif event.type == 'TIMER' and not self._updating :
+        if event.type == 'TIMER' and not self._updating :
             try :
                 self._updating = True   
 
@@ -210,6 +206,11 @@ class FontSelectorModalTest(bpy.types.Operator):
             except IndexError :
                 self.finish(context)
                 return {'FINISHED'}
+
+        # handle cancelling
+        elif event.type in {'ESC'} :
+            self.cancel(context)
+            return {'CANCELLED'}
         
         # continue
         else :
@@ -244,6 +245,8 @@ class FontSelectorModalTest(bpy.types.Operator):
         del self.subdirectories[:]
 
         # return cancel state to user
+        print()
+        print(cancel_refresh_msg)
         self.report({'INFO'}, cancel_refresh_msg)
 
     def finish(self, context):
