@@ -82,25 +82,12 @@ def suppress_existing_file(filepath) :
         os.remove(filepath)
 
 # print progression update
-def update_progress(job_title, count, total_count, message) :
+def update_progress(job_title, count, total_count) :
     progress = count / total_count
+
     length = 20 # modify this to change the length
     block = int(round(length*progress))
-    msg = "\r{0}: [{1}] {2}% --- ".format(job_title, "#" * block + "-" * (length - block), round(progress * 100, 2))
-
-    # running
-    if progress < 1 : 
-        msg += message.ljust(100)
-
-        # update
-        sys.stdout.write(msg)
-        sys.stdout.flush()
-
-    # finish
-    else :
-        msg += "Fonts Treated".ljust(100)
-
-        # update
-        sys.stdout.write(msg)
-        sys.stdout.flush()
-        print()
+    msg = "\r{0}: [{1}] {2}%".format(job_title, "#"*block + "-"*(length-block), round(progress*100, 2))
+    if progress >= 1: msg += " Fonts Treated\r\n"
+    sys.stdout.write(msg)
+    sys.stdout.flush()
