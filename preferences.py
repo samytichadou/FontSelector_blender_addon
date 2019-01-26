@@ -58,6 +58,16 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
             name = "Debug Toggle", 
             default = False
             )
+    
+    # handler behavior
+    startup_check_behavior = bpy.props.EnumProperty(
+        name = "Startup Check", 
+        default = 'AUTOMATIC_UPDATE',
+        items=(
+            ('AUTOMATIC_UPDATE', "Auto Update", ""),
+            ('MESSAGE_ONLY', "Message Only", ""),
+            ('MANUAL', "Manual", "")
+            ))
             
     def draw(self, context):
         layout = self.layout
@@ -71,6 +81,10 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
         row=layout.row(align=True)
         row.label(icon='SCRIPTWIN')
         row.prop(self, 'prefs_folderpath', text='External Preferences Path')
+
+        row=layout.row(align=True)
+        row.label("Startup")
+        row.prop(self, 'startup_check_behavior')
 
         row=layout.row(align=True)
         row.label("Progress Bar")
