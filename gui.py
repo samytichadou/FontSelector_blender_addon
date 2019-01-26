@@ -2,7 +2,6 @@ import bpy
 
 from.preferences import get_addon_preferences
 
-
 class FontSelectorPanel(bpy.types.Panel):
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
@@ -23,16 +22,16 @@ class FontSelectorPanel(bpy.types.Panel):
         layout = self.layout
         #get addon prefs
         addon_preferences = get_addon_preferences()
-        rownumber=addon_preferences.row_number
+        rownumber = addon_preferences.row_number
         fplist = addon_preferences.font_folders
-        activedata=bpy.context.active_object.data
-        fonth=bpy.data.window_managers['WinMan']
+        activedata = bpy.context.active_object.data
+        wm = bpy.data.window_managers['WinMan']
         
-        if len(fonth.fontselector_sub)>5:
+        if len(wm.fontselector_sub)>5:
             sub_row = 5
         else:
             try :
-                sub_row=len(fonth.fontselector_sub)
+                sub_row=len(wm.fontselector_sub)
             except IndexError :
                 sub_row = 1
         
@@ -42,7 +41,7 @@ class FontSelectorPanel(bpy.types.Panel):
             row=layout.row()
             row.operator("fontselector.modal_refresh", text="", icon='FILE_REFRESH')
             row.operator("fontselector.refresh", text='', icon='FILE_REFRESH')
-            if fonth.fontselector_list==0:
+            if wm.fontselector_list==0:
                 row=layout.row()
                 row.label('Refresh to get List of available Fonts', icon='INFO')
             else: 
@@ -53,8 +52,8 @@ class FontSelectorPanel(bpy.types.Panel):
                     row.prop(activedata, 'fontselector_favs', text='', icon='SOLO_ON')
                 elif activedata.fontselector_favs==False:
                     row.prop(activedata, 'fontselector_favs', text='', icon='SOLO_OFF')
-                if len(fonth.fontselector_sub)!=0 and activedata.fontselector_use_sub==True:
+                if len(wm.fontselector_sub)!=0 and activedata.fontselector_use_sub==True:
                     row=layout.row()
-                    row.template_list("SubdirUIList", "", fonth, "fontselector_sub", activedata, "fontselector_sub_index", rows=sub_row)
+                    row.template_list("SubdirUIList", "", wm, "fontselector_sub", activedata, "fontselector_sub_index", rows=sub_row)
                 row=layout.row()
-                row.template_list("FontUIList", "", fonth, "fontselector_list", activedata, "fontselector_index", rows=rownumber)
+                row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows=rownumber)
