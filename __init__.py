@@ -64,7 +64,7 @@ def register():
     bpy.types.WindowManager.screen_pie_index = \
         bpy.props.IntProperty(name='Screen Pie Index', default=0)
          
-    print("Registered {} with {} modules".format(bl_info["name"], len(modules)))
+    # print("Registered {} with {} modules".format(bl_info["name"], len(modules)))
 
     ### PROPS ###
 
@@ -96,7 +96,7 @@ def unregister():
     
     del bpy.types.WindowManager.screen_pie_index
 
-    print("Unregistered {}".format(bl_info["name"]))
+    # print("Unregistered {}".format(bl_info["name"]))
 
     ### PROPS ###
 
