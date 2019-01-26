@@ -43,10 +43,13 @@ def fontselector_startup(scene):
 
                 else :
                     print(print_statement + no_changes_msg)
+                    # load json list
+                    load_json_font_file(json_list_file, font_collection, subdir_collection)
+            
+            else :
+                # load json list
+                load_json_font_file(json_list_file, font_collection, subdir_collection)
 
-                
-            # load json list
-            load_json_font_file(json_list_file, font_collection, subdir_collection)
             #bpy.ops.fontselector.load_fontlist()
 
             # load favorite list
