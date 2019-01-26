@@ -41,6 +41,9 @@ def fontselector_startup(scene):
                     if behavior == 'AUTOMATIC_UPDATE' :
                         bpy.ops.fontselector.modal_refresh()
 
+                    else :
+                        bpy.ops.fontselector.dialog_message('INVOKE_DEFAULT', code = 1)
+
                 else :
                     print(print_statement + no_changes_msg)
                     # load json list
