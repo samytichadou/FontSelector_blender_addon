@@ -64,9 +64,9 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
         name = "Startup Check", 
         default = 'AUTOMATIC_UPDATE',
         items=(
-            ('AUTOMATIC_UPDATE', "Auto Update", ""),
-            ('MESSAGE_ONLY', "Message Only", ""),
-            ('MANUAL', "Manual", "")
+            ('AUTOMATIC_UPDATE', "Auto Update", "Auto Check of Font Folder on startup, if Changes, Blender will refresh the Font List"),
+            ('MESSAGE_ONLY', "Message Only", "Auto Check of Font Folder on startup, if Changes, Blender will show a message"),
+            ('MANUAL', "Manual", "No Startup Check, Font List has to be manually refreshed")
             ))
             
     def draw(self, context):
