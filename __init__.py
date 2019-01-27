@@ -75,7 +75,7 @@ def register():
     bpy.types.TextCurve.fontselector_index = \
         bpy.props.IntProperty(update = update_change_font)
     bpy.types.TextCurve.fontselector_sub_index = \
-        bpy.props.IntProperty(update = update_subdir_filter)
+        bpy.props.IntProperty()
     bpy.types.TextCurve.fontselector_use_sub = \
         bpy.props.BoolProperty(update = update_subdir_toggle, description = "Toggle display Subdirectory Mode")
     
