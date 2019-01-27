@@ -60,27 +60,24 @@ import traceback
 def register():
     try: bpy.utils.register_module(__name__)
     except: traceback.print_exc()
-    
-    bpy.types.WindowManager.screen_pie_index = \
-        bpy.props.IntProperty(name='Screen Pie Index', default=0)
          
     # print("Registered {} with {} modules".format(bl_info["name"], len(modules)))
 
     ### PROPS ###
 
     bpy.types.WindowManager.fontselector_list = \
-        bpy.props.CollectionProperty(type=FontSelectorFontList)
+        bpy.props.CollectionProperty(type = FontSelectorFontList)
     bpy.types.WindowManager.fontselector_sub = \
-        bpy.props.CollectionProperty(type=FontSelectorFontSubs)
+        bpy.props.CollectionProperty(type = FontSelectorFontSubs)
     bpy.types.TextCurve.fontselector_favs = \
-        bpy.props.BoolProperty(default=False, update=update_favorite_filter,
-                                description="Toggle display only Favorite Fonts")
+        bpy.props.BoolProperty(default = False, update = update_favorite_filter,
+                                description = "Toggle display only Favorite Fonts")
     bpy.types.TextCurve.fontselector_index = \
-        bpy.props.IntProperty(update=update_change_font)
+        bpy.props.IntProperty(update = update_change_font)
     bpy.types.TextCurve.fontselector_sub_index = \
-        bpy.props.IntProperty(update=update_subdir_filter)
+        bpy.props.IntProperty(update = update_subdir_filter)
     bpy.types.TextCurve.fontselector_use_sub = \
-        bpy.props.BoolProperty(update=update_subdir_toggle, description="Toggle display Subdirectory Mode")
+        bpy.props.BoolProperty(update = update_subdir_toggle, description = "Toggle display Subdirectory Mode")
     
     ### HANDLER ###
 
@@ -93,8 +90,6 @@ def register():
 def unregister():
     try: bpy.utils.unregister_module(__name__)
     except: traceback.print_exc()
-    
-    del bpy.types.WindowManager.screen_pie_index
 
     # print("Unregistered {}".format(bl_info["name"]))
 

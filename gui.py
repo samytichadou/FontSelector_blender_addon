@@ -27,33 +27,32 @@ class FontSelectorPanel(bpy.types.Panel):
         activedata = bpy.context.active_object.data
         wm = bpy.data.window_managers['WinMan']
         
-        if len(wm.fontselector_sub)>5:
+        if len(wm.fontselector_sub) > 5:
             sub_row = 5
         else:
             try :
-                sub_row=len(wm.fontselector_sub)
+                sub_row = len(wm.fontselector_sub)
             except IndexError :
                 sub_row = 1
         
         if len(fplist)==0:
-            layout.label('Add Font Folder in Addon Preference', icon='INFO')
+            layout.label('Add Font Folder in Addon Preference', icon = 'INFO')
         else:
-            row=layout.row()
-            row.operator("fontselector.modal_refresh", text="", icon='FILE_REFRESH')
-            row.operator("fontselector.refresh", text='', icon='FILE_REFRESH')
-            if wm.fontselector_list==0:
-                row=layout.row()
-                row.label('Refresh to get List of available Fonts', icon='INFO')
+            row = layout.row(align = True)
+            #row.prop(wm, 'fontselector_subdirectories', text = "")
+            #row = layout.row()
+            row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
+            #row.operator("fontselector.refresh", text = '', icon = 'FILE_REFRESH')
+            if wm.fontselector_list == 0 :
+                row = layout.row()
+                row.label('Refresh to get List of available Fonts', icon = 'INFO')
             else: 
-                row.operator("fontselector.remove_unused", icon='UNLINKED')
-                row.operator("fontselector.check_changes", text='', icon='LAMP')
-                row.prop(activedata, 'fontselector_use_sub', text='', icon='FILESEL')
-                if activedata.fontselector_favs==True:
-                    row.prop(activedata, 'fontselector_favs', text='', icon='SOLO_ON')
-                elif activedata.fontselector_favs==False:
-                    row.prop(activedata, 'fontselector_favs', text='', icon='SOLO_OFF')
-                if len(wm.fontselector_sub)!=0 and activedata.fontselector_use_sub==True:
-                    row=layout.row()
-                    row.template_list("SubdirUIList", "", wm, "fontselector_sub", activedata, "fontselector_sub_index", rows=sub_row)
-                row=layout.row()
-                row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows=rownumber)
+                row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
+                row.operator("fontselector.check_changes", text = '', icon = 'LAMP')
+                #row.prop(activedata, 'fontselector_use_sub', text = '', icon = 'FILESEL')
+                if activedata.fontselector_favs == True :
+                    row.prop(activedata, 'fontselector_favs', text = '', icon = 'SOLO_ON')
+                elif activedata.fontselector_favs==False :
+                    row.prop(activedata, 'fontselector_favs', text = '', icon = 'SOLO_OFF')
+                row = layout.row()
+                row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)

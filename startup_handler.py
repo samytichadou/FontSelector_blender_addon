@@ -20,8 +20,6 @@ def fontselector_startup(scene):
     prefpath = absolute_path(addon_preferences.prefs_folderpath)
     # get prefs files
     preffav = os.path.join(prefpath, fav_list)
-    prefflist = os.path.join(prefpath, font_list)
-    prefsubdir = os.path.join(prefpath, subdir_list)
     json_list_file = os.path.join(prefpath, json_file)
 
     font_collection = bpy.data.window_managers['WinMan'].fontselector_list

@@ -221,13 +221,11 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         # the arguments we pass the callback
         args = (self, context)
         self._timer = wm.event_timer_add(0.001, context.window)
-        #self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
         self._handle = bpy.types.SpaceProperties.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
         wm.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
     def cancel(self, context):
-        #bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
         bpy.types.SpaceProperties.draw_handler_remove(self._handle, 'WINDOW')
         wm = context.window_manager
         wm.event_timer_remove(self._timer)
@@ -250,7 +248,6 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         self.report({'INFO'}, cancel_refresh_msg)
 
     def finish(self, context):
-        #bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
         bpy.types.SpaceProperties.draw_handler_remove(self._handle, 'WINDOW')
         wm = context.window_manager
         wm.event_timer_remove(self._timer)
@@ -295,7 +292,7 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         except AttributeError:
             pass
 
-        # if only one subdir, select it
+        # if subdir no longer exists, select All
 
         # return finish state to user
         self.report({'INFO'}, refresh_msg)

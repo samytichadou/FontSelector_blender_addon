@@ -1,28 +1,101 @@
 import bpy
 
 from .preferences import get_addon_preferences
-
+from .update_functions import get_subdirectories_items
 
 #font list
 class FontUIList(bpy.types.UIList):
+
+    show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectory", default = False)
+    show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites", default = False)
+    subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, name = "Subdirectories")
+    favorite_filter = bpy.props.BoolProperty(name = "Filter Favorites", default = False)
     
-    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag):
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
+        self.use_filter_show = True
         #get addon prefs
         addon_preferences = get_addon_preferences()
-        subdir=addon_preferences.prefs_show_subdir
-        
-        if item.missingfont==True:
-            layout.label(icon='ERROR')
+        show_subdir = addon_preferences.prefs_show_subdir
+        active_subdir = bpy.data.window_managers['WinMan'].fontselector_sub
+
+        if item.missingfont :
+            layout.label(icon = 'ERROR')
         layout.label(item.name)
-        if subdir==True:
+        if self.show_subdirectory_name :
             layout.label(item.subdirectory)
-        if item.favorite==True:
-            layout.prop(item, "favorite", text="", icon='SOLO_ON', emboss=False, translate=False)
-        else:
-            layout.prop(item, "favorite", text="", icon='SOLO_OFF', emboss=False, translate=False)
-            
-#subdir list
-class SubdirUIList(bpy.types.UIList):
-    
-    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag):
-        layout.label(item.name)
+        if self.show_favorite_icon :
+            if item.favorite :
+                layout.prop(item, "favorite", text = "", icon = 'SOLO_ON', emboss = False)
+            else:
+                layout.prop(item, "favorite", text = "", icon='SOLO_OFF', emboss = False)
+
+    def draw_filter(self, context, layout):
+        # Nothing much to say here, it's usual UI code...
+
+        # FILTER
+        row = layout.row(align = True)
+        row.label('Filter')
+
+        # search classic
+        # invert filtering
+        
+        # show only favorites
+        row.prop(self, 'favorite_filter', text='', icon = 'SOLO_ON')
+        # filter by subfolder
+        row.prop(self, 'subdirectories_filter', text = '')
+
+        # SORT
+        row = layout.row(align = True)
+        row.label('Sort')
+
+        # sort invert
+        row.prop(self, 'use_filter_sort_reverse', text = '', icon = 'ARROW_LEFTRIGHT')
+        # sort by subfolder
+
+        # VIEW
+        row = layout.row(align = True)
+        row.label('Display')
+
+        # show subfolder option
+        row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILESEL')
+        # show favorite
+        row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
+
+    # Called once to filter/reorder items.
+    def filter_items(self, context, data, propname):
+        # This function gets the collection property (as the usual tuple (data, propname)), and must return two lists:
+        # * The first one is for filtering, it must contain 32bit integers were self.bitflag_filter_item marks the
+        #   matching item as filtered (i.e. to be shown), and 31 other bits are free for custom needs. Here we use the
+        #   first one to mark VGROUP_EMPTY.
+        # * The second one is for reordering, it must return a list containing the new indices of the items (which
+        #   gives us a mapping org_idx -> new_idx).
+        # Please note that the default UI_UL_list defines helper functions for common tasks (see its doc for more info).
+        # If you do not make filtering and/or ordering, return empty list(s) (this will be more efficient than
+        # returning full lists doing nothing!).
+
+        # Default return values.
+        flt_flags = []
+        flt_neworder = []
+
+        col = getattr(data, propname)
+        
+        # subdir filtering
+        if self.subdirectories_filter != 'All' :
+            for font in col :
+                if font.subdirectory == self.subdirectories_filter :
+                    flt_flags.append(self.bitflag_filter_item)
+                else :
+                    flt_flags.append(0)
+
+        # favs filtering
+        if self.favorite_filter :
+            for font in col :
+                if font.favorite :
+                    flt_flags.append(self.bitflag_filter_item)
+                else :
+                    flt_flags.append(0)
+
+        
+        # Do filtering/reordering here...
+
+        return flt_flags, flt_neworder

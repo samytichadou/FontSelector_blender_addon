@@ -2,6 +2,7 @@ import bpy
 import os
 
 from .function_change_font import change_font
+from .misc_functions import clear_collection
 
 first_active_object = ""
     
@@ -47,7 +48,7 @@ def update_change_font(self, context):
 
             #reset global variable                        
             first_active_object = ""
-    
+ 
 #update save favorites
 def update_save_favorites(self, context):
     active=bpy.context.active_object
@@ -59,13 +60,17 @@ def update_save_favorites(self, context):
 def update_favorite_filter(self, context):
     bpy.ops.fontselector.filter_favorites()
     
-#update list for subdir filter
-def update_subdir_filter(self, context):
-    bpy.ops.fontselector.filter_subdirfonts()
-    
 #update lists when toggling subdir
 def update_subdir_toggle(self, context):
     active=bpy.context.active_object
     if active is not None:
         if active.type=='FONT':
             bpy.ops.fontselector.filter_favorites()
+
+#get subdirectories item for enum property
+def get_subdirectories_items(self, context):
+    subdir_list = []
+    subdir_list.append(("All", "All", "All available Fonts"))
+    for sub in bpy.data.window_managers['WinMan'].fontselector_sub :
+        subdir_list.append((sub.name, sub.name, sub.filepath))
+    return subdir_list
