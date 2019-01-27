@@ -46,10 +46,11 @@ modules = developer_utils.setup_addon_modules(__path__, __name__, "bpy" in local
 # IMPORT SPECIFICS
 ##################################
 
+
 from .misc_functions import menu_export_favorites
 from .startup_handler import fontselector_startup
 from .properties import *
-from .update_functions import *
+from .update_functions import update_favorite_filter, update_change_font, update_subdir_toggle
 
 
 # register
@@ -61,7 +62,7 @@ def register():
     try: bpy.utils.register_module(__name__)
     except: traceback.print_exc()
          
-    # print("Registered {} with {} modules".format(bl_info["name"], len(modules)))
+    print("Registered {} with {} modules".format(bl_info["name"], len(modules)))
 
     ### PROPS ###
 
@@ -91,7 +92,7 @@ def unregister():
     try: bpy.utils.unregister_module(__name__)
     except: traceback.print_exc()
 
-    # print("Unregistered {}".format(bl_info["name"]))
+    print("Unregistered {}".format(bl_info["name"]))
 
     ### PROPS ###
 
