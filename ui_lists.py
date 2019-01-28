@@ -72,30 +72,32 @@ class FontUIList(bpy.types.UIList):
         # Please note that the default UI_UL_list defines helper functions for common tasks (see its doc for more info).
         # If you do not make filtering and/or ordering, return empty list(s) (this will be more efficient than
         # returning full lists doing nothing!).
-
+        
         # Default return values.
         flt_flags = []
         flt_neworder = []
 
         col = getattr(data, propname)
+
+        ### FILTERING ###
+
+        ### TODO ### avoid if no filter flag
+        flt_flags = [self.bitflag_filter_item] * len(col)
         
         # subdir filtering
         if self.subdirectories_filter != 'All' :
-            for font in col :
-                if font.subdirectory == self.subdirectories_filter :
-                    flt_flags.append(self.bitflag_filter_item)
-                else :
-                    flt_flags.append(0)
+            for idx, font in enumerate(col):
+                if font.subdirectory != self.subdirectories_filter :
+                    flt_flags[idx] = 0
 
         # favs filtering
         if self.favorite_filter :
-            for font in col :
-                if font.favorite :
-                    flt_flags.append(self.bitflag_filter_item)
-                else :
-                    flt_flags.append(0)
+            for idx, font in enumerate(col):
+                if flt_flags[idx] != 0 :
+                    if font.favorite ==False :
+                        flt_flags[idx] = 0
 
         
-        # Do filtering/reordering here...
+        ### REORDERING ###
 
         return flt_flags, flt_neworder
