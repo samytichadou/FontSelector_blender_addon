@@ -10,7 +10,7 @@ class FontUIList(bpy.types.UIList):
     show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites", default = False)
     subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, 
                                                 name = "Subdirectories")
-    favorite_filter = bpy.props.BoolProperty(name = "Filter Favorites", default = False)
+    favorite_filter = bpy.props.BoolProperty(name = "Favorites Filter", default = False)
     invert_filter = bpy.props.BoolProperty(name = "Invert Filter", default = False)
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
@@ -35,10 +35,11 @@ class FontUIList(bpy.types.UIList):
         # Nothing much to say here, it's usual UI code...
 
         # FILTER
-        row = layout.row(align = True)
-        row.label('Filter')
+        box = layout.box()
+        row = box.row(align = True)
 
         # search classic
+        row.prop(self, 'filter_name', text = '')
         # invert filtering
         row.prop(self, 'invert_filter', text = '', icon = 'ARROW_LEFTRIGHT')
         # show only favorites
@@ -47,7 +48,8 @@ class FontUIList(bpy.types.UIList):
         row.prop(self, 'subdirectories_filter', text = '')
 
         # SORT
-        row = layout.row(align = True)
+        box = layout.box()
+        row = box.row(align = True)
         row.label('Sort')
 
         # sort invert
@@ -55,7 +57,8 @@ class FontUIList(bpy.types.UIList):
         # sort by subfolder
 
         # VIEW
-        row = layout.row(align = True)
+        box = layout.box()
+        row = box.row(align = True)
         row.label('Display')
 
         # show subfolder option
