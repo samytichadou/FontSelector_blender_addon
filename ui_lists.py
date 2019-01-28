@@ -93,18 +93,21 @@ class FontUIList(bpy.types.UIList):
 
         # name search
         if self.filter_name :
-            flt_flags = helper_funcs.filter_items_by_name(self.filter_name, self.bitflag_filter_item, col, "name")
-        
+            #flt_flags = helper_funcs.filter_items_by_name(self.filter_name, self.bitflag_filter_item, col, "name", flags=None, reverse=False)
+            for idx, font in enumerate(col) :
+                if flt_flags[idx] != 0 :
+                    if self.filter_name.lower() not in font.name.lower() :
+                        flt_flags[idx] = 0
         # subdir filtering
         if self.subdirectories_filter != 'All' :
-            for idx, font in enumerate(col):
+            for idx, font in enumerate(col) :
                 if flt_flags[idx] != 0 :
                     if font.subdirectory != self.subdirectories_filter :
                         flt_flags[idx] = 0
 
         # favs filtering
         if self.favorite_filter :
-            for idx, font in enumerate(col):
+            for idx, font in enumerate(col) :
                 if flt_flags[idx] != 0 :
                     if font.favorite ==False :
                         flt_flags[idx] = 0
