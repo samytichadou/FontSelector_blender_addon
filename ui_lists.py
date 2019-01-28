@@ -8,8 +8,10 @@ class FontUIList(bpy.types.UIList):
 
     show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectory", default = False)
     show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites", default = False)
-    subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, name = "Subdirectories")
+    subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, 
+                                                name = "Subdirectories")
     favorite_filter = bpy.props.BoolProperty(name = "Filter Favorites", default = False)
+    invert_filter = bpy.props.BoolProperty(name = "Invert Filter", default = False)
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         self.use_filter_show = True
@@ -38,9 +40,9 @@ class FontUIList(bpy.types.UIList):
 
         # search classic
         # invert filtering
-        
+        row.prop(self, 'invert_filter', text = '', icon = 'ARROW_LEFTRIGHT')
         # show only favorites
-        row.prop(self, 'favorite_filter', text='', icon = 'SOLO_ON')
+        row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
         # filter by subfolder
         row.prop(self, 'subdirectories_filter', text = '')
 
@@ -96,6 +98,14 @@ class FontUIList(bpy.types.UIList):
                 if flt_flags[idx] != 0 :
                     if font.favorite ==False :
                         flt_flags[idx] = 0
+
+        # invert filtering
+        if self.invert_filter :
+            for idx, font in enumerate(col):
+                if flt_flags[idx] != 0 :
+                    flt_flags[idx] = 0
+                else :
+                    flt_flags[idx] = self.bitflag_filter_item
 
         
         ### REORDERING ###
