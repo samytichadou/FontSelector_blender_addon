@@ -50,7 +50,7 @@ modules = developer_utils.setup_addon_modules(__path__, __name__, "bpy" in local
 from .misc_functions import menu_export_favorites
 from .startup_handler import fontselector_startup
 from .properties import *
-from .update_functions import update_favorite_filter, update_change_font, update_subdir_toggle
+from .update_functions import update_change_font
 
 
 # register
@@ -70,16 +70,9 @@ def register():
         bpy.props.CollectionProperty(type = FontSelectorFontList)
     bpy.types.WindowManager.fontselector_sub = \
         bpy.props.CollectionProperty(type = FontSelectorFontSubs)
-    bpy.types.TextCurve.fontselector_favs = \
-        bpy.props.BoolProperty(default = False, update = update_favorite_filter,
-                                description = "Toggle display only Favorite Fonts")
     bpy.types.TextCurve.fontselector_index = \
         bpy.props.IntProperty(update = update_change_font)
-    bpy.types.TextCurve.fontselector_sub_index = \
-        bpy.props.IntProperty()
-    bpy.types.TextCurve.fontselector_use_sub = \
-        bpy.props.BoolProperty(update = update_subdir_toggle, description = "Toggle display Subdirectory Mode")
-    
+
     ### HANDLER ###
 
     bpy.app.handlers.load_post.append(fontselector_startup)
@@ -98,10 +91,7 @@ def unregister():
 
     del bpy.types.WindowManager.fontselector_list
     del bpy.types.WindowManager.fontselector_sub
-    del bpy.types.TextCurve.fontselector_favs
     del bpy.types.TextCurve.fontselector_index
-    del bpy.types.TextCurve.fontselector_sub_index
-    del bpy.types.TextCurve.fontselector_use_sub
     
     ### HANDLER
 
