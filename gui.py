@@ -50,9 +50,5 @@ class FontSelectorPanel(bpy.types.Panel):
                 row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
                 row.operator("fontselector.check_changes", text = '', icon = 'LAMP')
                 #row.prop(activedata, 'fontselector_use_sub', text = '', icon = 'FILESEL')
-                if activedata.fontselector_favs == True :
-                    row.prop(activedata, 'fontselector_favs', text = '', icon = 'SOLO_ON')
-                elif activedata.fontselector_favs==False :
-                    row.prop(activedata, 'fontselector_favs', text = '', icon = 'SOLO_OFF')
                 row = layout.row()
                 row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
