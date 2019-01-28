@@ -6,12 +6,15 @@ from .update_functions import get_subdirectories_items
 #font list
 class FontUIList(bpy.types.UIList):
 
-    show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectory", default = False)
-    show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites", default = False)
+    show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectory")
+    show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites")
+
     subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, 
                                                 name = "Subdirectories")
-    favorite_filter = bpy.props.BoolProperty(name = "Favorites Filter", default = False)
-    invert_filter = bpy.props.BoolProperty(name = "Invert Filter", default = False)
+    favorite_filter = bpy.props.BoolProperty(name = "Favorites Filter")
+    invert_filter = bpy.props.BoolProperty(name = "Invert Filter")
+
+    subdirectories_sorting = bpy.props.BoolProperty(name = "Sort by Subdirectories")
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         self.use_filter_show = True
@@ -50,11 +53,11 @@ class FontUIList(bpy.types.UIList):
         # SORT
         box = layout.box()
         row = box.row(align = True)
-        row.label('Sort')
 
         # sort invert
         row.prop(self, 'use_filter_sort_reverse', text = '', icon = 'ARROW_LEFTRIGHT')
         # sort by subfolder
+        row.prop(self, 'subdirectories_sorting', text = '', icon = 'FILESEL')
 
         # VIEW
         box = layout.box()
