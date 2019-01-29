@@ -19,10 +19,6 @@ class FontUIList(bpy.types.UIList):
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         #self.use_filter_show = True
-        #get addon prefs
-        addon_preferences = get_addon_preferences()
-        show_subdir = addon_preferences.prefs_show_subdir
-        active_subdir = bpy.data.window_managers['WinMan'].fontselector_sub
 
         if item.missingfont :
             layout.label(icon = 'ERROR')
@@ -38,6 +34,8 @@ class FontUIList(bpy.types.UIList):
     def draw_filter(self, context, layout):
         # Nothing much to say here, it's usual UI code...
 
+        wm = bpy.data.window_managers['WinMan']
+
         # FILTER
         box = layout.box()
         row = box.row(align = True)
@@ -48,7 +46,9 @@ class FontUIList(bpy.types.UIList):
         row.prop(self, 'filter_name', text = '')
         row.separator()
         # filter by subfolder
-        row.prop(self, 'subdirectories_filter', text = '')
+        #row.prop(self, 'subdirectories_filter', text = '')
+        row.prop(wm, 'fontselector_subdirectories', text = '')
+        row.operator('fontselector.open_subdirectory', text = '', icon = 'FILE_FOLDER')
         row.separator()
         # show only favorites
         row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
@@ -75,6 +75,7 @@ class FontUIList(bpy.types.UIList):
         row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILESEL')
         # show favorite
         row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
+        
 
     # Called once to filter/reorder items.
     def filter_items(self, context, data, propname):
@@ -95,10 +96,12 @@ class FontUIList(bpy.types.UIList):
         helper_funcs = bpy.types.UI_UL_list
 
         col = getattr(data, propname)
+
+        subdirectories_filter = bpy.data.window_managers['WinMan'].fontselector_subdirectories
         
         ### FILTERING ###
 
-        if self.filter_name or self.subdirectories_filter != "All" or self.favorite_filter or self.invert_filter :
+        if self.filter_name or subdirectories_filter != "All" or self.favorite_filter or self.invert_filter :
             flt_flags = [self.bitflag_filter_item] * len(col)
 
             # name search
@@ -109,10 +112,10 @@ class FontUIList(bpy.types.UIList):
                         if self.filter_name.lower() not in font.name.lower() :
                             flt_flags[idx] = 0
             # subdir filtering
-            if self.subdirectories_filter != 'All' :
+            if subdirectories_filter != 'All' :
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
-                        if font.subdirectory != self.subdirectories_filter :
+                        if font.subdirectory != subdirectories_filter :
                             flt_flags[idx] = 0
 
             # favs filtering

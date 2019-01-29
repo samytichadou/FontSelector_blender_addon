@@ -50,7 +50,7 @@ modules = developer_utils.setup_addon_modules(__path__, __name__, "bpy" in local
 from .misc_functions import menu_export_favorites
 from .startup_handler import fontselector_startup
 from .properties import *
-from .update_functions import update_change_font
+from .update_functions import update_change_font, get_subdirectories_items
 
 
 # register
@@ -72,6 +72,10 @@ def register():
         bpy.props.CollectionProperty(type = FontSelectorFontSubs)
     bpy.types.TextCurve.fontselector_index = \
         bpy.props.IntProperty(update = update_change_font)
+    bpy.types.WindowManager.fontselector_subdirectories = \
+        bpy.props.EnumProperty(items = get_subdirectories_items, 
+                                name = "Subdirectories",
+                                description = "Display only specific Subdirectories")
 
     ### HANDLER ###
 
