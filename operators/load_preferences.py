@@ -11,7 +11,7 @@ from ..json_functions import read_json
 
 class FontSelectorLoadFPPrefs(bpy.types.Operator):
     bl_idname = "fontselector.load_fpprefs"
-    bl_label = ""
+    bl_label = "Load Font Folders"
     bl_description = "Load Font Folders Paths from external Font Selector preferences File"
     bl_options = {'REGISTER', 'UNDO'}
     
