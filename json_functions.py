@@ -40,6 +40,19 @@ def add_size_json(datas, size) :
     datas['size'] = size
     return datas
 
+# initialize json fontfolders datas
+def initialize_json_fontfolders_datas () :
+    datas = {}
+    datas['fonfolders'] = []
+    return datas
+
+# add fontfolder to json datas
+def add_fontfolders_json(datas, fontfolder) :
+    datas['fonfolders'].append({
+        "folder_path" : fontfolder
+    })
+    return datas
+
 # read json
 def read_json(filepath):
     with open(filepath, "r") as read_file:

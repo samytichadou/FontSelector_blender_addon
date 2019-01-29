@@ -2,7 +2,10 @@ import bpy
 import os
 
 from ..preferences import get_addon_preferences
-
+from ..misc_functions import create_dir, absolute_path
+from ..global_variable import json_font_folders
+from ..global_messages import fontfolder_saved
+from ..json_functions import initialize_json_fontfolders_datas, add_fontfolders_json, create_json_file
 
 class FontSelectorSaveFPPrefs(bpy.types.Operator):
     bl_idname = "fontselector.save_fpprefs"
@@ -21,27 +24,53 @@ class FontSelectorSaveFPPrefs(bpy.types.Operator):
     def execute(self, context):
         #get addon prefs
         addon_preferences = get_addon_preferences()
-        fplist = addon_preferences.font_folders
+        font_folders_list = addon_preferences.font_folders
         prefs = addon_preferences.prefs_folderpath
-        prefpath = os.path.abspath(bpy.path.abspath(prefs))
-        prefFP = os.path.join(prefpath, "fontselector_fontfolders")
-        linelist=[]
+        prefpath = absolute_path(prefs)
+        json_path = os.path.join(prefpath, json_font_folders)
+        fontfolder_ok = []
+        deleted = []
         
         #check if folder exist and create it if not
-        if os.path.isdir(prefpath)==False:
-            os.makedirs(prefpath)
+        create_dir(prefpath)
 
-        chk=0
-        for fp in fplist:
-            fpath=os.path.abspath(bpy.path.abspath(fp.folderpath))
-            if os.path.isdir(fpath)==True:
-                chk=1
-                linelist.append(fpath)
-                
-        if chk==1:
-            nfile = open(prefFP, "w")
-            for l in list(set(linelist)):
-                nfile.write(l+'\n')
-            nfile.close()
-                    
+        #remove previous json
+        if os.path.isfile(json_path) :
+            os.remove(json_path)
+
+        chk_folder_exist = 0
+        idx = 0
+        for folder in font_folders_list :
+            folder_path = absolute_path(folder.folderpath)
+            if os.path.isdir(folder_path) :
+                chk_folder_exist = 1
+                # check dupe
+                fontfolder_ok.append(folder_path)
+            else :
+                # delete font folder
+                font_folders_list.remove(idx)
+                deleted.append(folder_path)
+            idx += 1
+        
+        #format json
+        if chk_folder_exist == 1 :
+            datas = initialize_json_fontfolders_datas()
+            for folder in fontfolder_ok :
+                datas = add_fontfolders_json(datas, folder)
+
+            #write json
+            create_json_file(datas, json_path)
+
+            #inform user
+            if len(deleted) > 0 :
+                deleted_list = str(deleted).strip("[]")
+                bpy.ops.fontselector.dialog_message('INVOKE_DEFAULT', code = 3, customstring = deleted_list)
+            else :
+                self.report({'INFO'}, fontfolder_saved)
+        else :
+            if len(deleted) > 0 :
+                # inform user
+                deleted_list = str(deleted).strip("[]")
+                bpy.ops.fontselector.dialog_message('INVOKE_DEFAULT', code = 4, customstring = deleted_list)
+
         return {'FINISHED'}
