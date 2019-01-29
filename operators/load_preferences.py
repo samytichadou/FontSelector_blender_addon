@@ -3,6 +3,10 @@ import os
 import csv
 
 from ..preferences import get_addon_preferences
+from ..global_variable import json_font_folders
+from ..global_messages import fontfolder_loaded, fontfolder_not_loaded
+from ..misc_functions import absolute_path, clear_collection
+from ..json_functions import read_json
 
 
 class FontSelectorLoadFPPrefs(bpy.types.Operator):
@@ -15,38 +19,33 @@ class FontSelectorLoadFPPrefs(bpy.types.Operator):
     def poll(cls, context):
         #get addon prefs
         addon_preferences = get_addon_preferences()
-        prefs = addon_preferences.prefs_folderpath
-        return prefs!=''
+        prefs = absolute_path(addon_preferences.prefs_folderpath)
+        json_path = os.path.join(prefs, json_font_folders)
+        return os.path.isfile(json_path)
     
     def execute(self, context):
         #get addon prefs
         addon_preferences = get_addon_preferences()
-        fplist = addon_preferences.font_folders
+        font_folders_list = addon_preferences.font_folders
         prefs = addon_preferences.prefs_folderpath
-        prefpath = os.path.abspath(bpy.path.abspath(prefs))
-        prefFP = os.path.join(prefpath, "fontselector_fontfolders")
+        prefpath = absolute_path(prefs)
+        json_path = os.path.join(prefpath, json_font_folders)
         
         #remove existing folder list
-        if len(fplist)>=1:
-            for i in range(len(fplist)-1,-1,-1):
-                fplist.remove(i)
+        clear_collection(font_folders_list)
         
-        if os.path.isdir(prefpath)==True:
-            if os.path.isfile(prefFP)==True:
-                with open(prefFP, 'r', newline='') as csvfile:
-                    line = csv.reader(csvfile, delimiter='\n')
-                    for l in line:
-                        l1=str(l).replace("[", "")
-                        l2=l1.replace("]", "")
-                        l3=l2.replace("'", "")
-                        l4=l3.replace('"', "")
-                        newfolder=fplist.add()
-                        newfolder.folderpath=l4
-            else:
-                info = 'Preference File does not exist, check Preference Folder path'
-                self.report({'ERROR'}, info)  
-        else:
-            info = 'Folder does not exist, check Preference Folder path'
-            self.report({'ERROR'}, info)  
+        #load json file
+        folders_count = 0
+        datas = read_json(json_path)
+        for folder in datas['fonfolders'] :
+            folders_count += 1
+            newfolder = font_folders_list.add()
+            newfolder.folderpath = folder['folder_path']
+
+        # inform user
+        if folders_count > 0 :
+            self.report({'INFO'}, fontfolder_loaded)
+        else :
+            self.report({'WARNING'}, fontfolder_not_loaded)
             
         return {'FINISHED'}

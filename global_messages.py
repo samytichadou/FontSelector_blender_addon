@@ -15,8 +15,10 @@ progress_print_statement = "Font Selector Refreshing"
 
 subdirectory_error = "Font Subdirectory does not exist"
 
+### FONT FOLDERS COLLECTION ###
+
 fontfolder_saved = "Font Folders saved"
-
 fontfolder_not_saved = "Impossible to save Font Folders"
-
 fontfolder_deleted = "Non-existent Font Folder deleted : "
+fontfolder_loaded = "Font Folders loaded"
+fontfolder_not_loaded = "No Font Folders to load"

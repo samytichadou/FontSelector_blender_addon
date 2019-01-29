@@ -31,10 +31,10 @@ class FontSelectorSaveFPPrefs(bpy.types.Operator):
         fontfolder_ok = []
         deleted = []
         
-        #check if folder exist and create it if not
+        # check if folder exist and create it if not
         create_dir(prefpath)
 
-        #remove previous json
+        # remove previous json
         if os.path.isfile(json_path) :
             os.remove(json_path)
 
@@ -52,16 +52,16 @@ class FontSelectorSaveFPPrefs(bpy.types.Operator):
                 deleted.append(folder_path)
             idx += 1
         
-        #format json
+        # format json
         if chk_folder_exist == 1 :
             datas = initialize_json_fontfolders_datas()
             for folder in fontfolder_ok :
                 datas = add_fontfolders_json(datas, folder)
 
-            #write json
+            # write json
             create_json_file(datas, json_path)
 
-            #inform user
+            # inform user
             if len(deleted) > 0 :
                 deleted_list = str(deleted).strip("[]")
                 bpy.ops.fontselector.dialog_message('INVOKE_DEFAULT', code = 3, customstring = deleted_list)
