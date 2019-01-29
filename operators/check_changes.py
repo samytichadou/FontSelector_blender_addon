@@ -27,7 +27,7 @@ class FontSelectorCheckChanges(bpy.types.Operator):
         chk_changes = check_size_changes()
 
         if chk_changes :
-            self.report({'INFO'}, changes_msg)
+            bpy.ops.fontselector.dialog_message('INVOKE_DEFAULT', code = 1)
             
         else :
             self.report({'INFO'}, no_changes_msg)

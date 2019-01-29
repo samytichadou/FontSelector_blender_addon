@@ -12,3 +12,5 @@ settings_loaded_msg = "Settings Loaded"
 print_statement = "Font Selector --- "
 
 progress_print_statement = "Font Selector Refreshing"
+
+subdirectory_error = "Font Subdirectory does not exist"
