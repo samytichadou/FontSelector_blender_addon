@@ -18,7 +18,7 @@ class FontUIList(bpy.types.UIList):
     subdirectories_sorting = bpy.props.BoolProperty(name = "Sort by Subdirectories", description = "Sort by Subdirectories")
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
-        self.use_filter_show = True
+        #self.use_filter_show = True
         #get addon prefs
         addon_preferences = get_addon_preferences()
         show_subdir = addon_preferences.prefs_show_subdir
