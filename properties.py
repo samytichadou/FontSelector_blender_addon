@@ -21,6 +21,6 @@ class FontFolders(bpy.types.PropertyGroup) :
     '''name = StringProperty() '''
     folderpath = bpy.props.StringProperty(
             name = "Folder path",
-            description = "Folder where CatHide Presets will be stored",
+            description = "Folders where Fonts are stored",
             subtype = "DIR_PATH",
             )
