@@ -9,7 +9,7 @@ from ..json_functions import initialize_json_fontfolders_datas, add_fontfolders_
 
 class FontSelectorSaveFPPrefs(bpy.types.Operator):
     bl_idname = "fontselector.save_fpprefs"
-    bl_label = ""
+    bl_label = "Save Font Folders"
     bl_description = "Save Font Folders Paths in external Font Selector preference file"
     bl_options = {'REGISTER', 'UNDO'}
     
