@@ -6,15 +6,16 @@ from .update_functions import get_subdirectories_items
 #font list
 class FontUIList(bpy.types.UIList):
 
-    show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectory")
-    show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites")
+    show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectories", description = "Show Subdirectories")
+    show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites", description = "Show Favorites")
 
     subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, 
-                                                name = "Subdirectories")
-    favorite_filter = bpy.props.BoolProperty(name = "Favorites Filter")
-    invert_filter = bpy.props.BoolProperty(name = "Invert Filter")
+                                                name = "Subdirectories",
+                                                description = "Display only specific Subdirectories")
+    favorite_filter = bpy.props.BoolProperty(name = "Favorites Filter", description = "Show Only Favorites")
+    invert_filter = bpy.props.BoolProperty(name = "Invert Filter", description = "Invert Filter")
 
-    subdirectories_sorting = bpy.props.BoolProperty(name = "Sort by Subdirectories")
+    subdirectories_sorting = bpy.props.BoolProperty(name = "Sort by Subdirectories", description = "Sort by Subdirectories")
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         self.use_filter_show = True
@@ -40,29 +41,35 @@ class FontUIList(bpy.types.UIList):
         # FILTER
         box = layout.box()
         row = box.row(align = True)
+        row.label(icon = 'VIEWZOOM')
+        row.separator()
 
         # search classic
         row.prop(self, 'filter_name', text = '')
-        # invert filtering
-        row.prop(self, 'invert_filter', text = '', icon = 'ARROW_LEFTRIGHT')
-        # show only favorites
-        row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
+        row.separator()
         # filter by subfolder
         row.prop(self, 'subdirectories_filter', text = '')
+        row.separator()
+        # show only favorites
+        row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
+        # invert filtering
+        row.prop(self, 'invert_filter', text = '', icon = 'ARROW_LEFTRIGHT')
 
         # SORT
         box = layout.box()
         row = box.row(align = True)
-
-        # sort invert
-        row.prop(self, 'use_filter_sort_reverse', text = '', icon = 'ARROW_LEFTRIGHT')
+        row.label(icon = 'SORTSIZE')
+        row.separator()
+        
         # sort by subfolder
         row.prop(self, 'subdirectories_sorting', text = '', icon = 'FILESEL')
+        # sort invert
+        row.prop(self, 'use_filter_sort_reverse', text = '', icon = 'ARROW_LEFTRIGHT')
 
         # VIEW
-        box = layout.box()
-        row = box.row(align = True)
-        row.label('Display')
+        row.separator()
+        row.label(icon = 'RESTRICT_VIEW_OFF')
+        row.separator()
 
         # show subfolder option
         row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILESEL')
@@ -88,42 +95,44 @@ class FontUIList(bpy.types.UIList):
         helper_funcs = bpy.types.UI_UL_list
 
         col = getattr(data, propname)
-
+        
         ### FILTERING ###
 
-        ### TODO ### avoid if no filter flag
-        flt_flags = [self.bitflag_filter_item] * len(col)
+        if self.filter_name or self.subdirectories_filter != "All" or self.favorite_filter or self.invert_filter :
+            flt_flags = [self.bitflag_filter_item] * len(col)
 
-        # name search
-        if self.filter_name :
-            #flt_flags = helper_funcs.filter_items_by_name(self.filter_name, self.bitflag_filter_item, col, "name", flags=None, reverse=False)
-            for idx, font in enumerate(col) :
-                if flt_flags[idx] != 0 :
-                    if self.filter_name.lower() not in font.name.lower() :
+            # name search
+            if self.filter_name :
+                #flt_flags = helper_funcs.filter_items_by_name(self.filter_name, self.bitflag_filter_item, col, "name", flags=None, reverse=False)
+                for idx, font in enumerate(col) :
+                    if flt_flags[idx] != 0 :
+                        if self.filter_name.lower() not in font.name.lower() :
+                            flt_flags[idx] = 0
+            # subdir filtering
+            if self.subdirectories_filter != 'All' :
+                for idx, font in enumerate(col) :
+                    if flt_flags[idx] != 0 :
+                        if font.subdirectory != self.subdirectories_filter :
+                            flt_flags[idx] = 0
+
+            # favs filtering
+            if self.favorite_filter :
+                for idx, font in enumerate(col) :
+                    if flt_flags[idx] != 0 :
+                        if font.favorite ==False :
+                            flt_flags[idx] = 0
+
+            # invert filtering
+            if self.invert_filter :
+                for idx, font in enumerate(col) :
+                    if flt_flags[idx] != 0 :
                         flt_flags[idx] = 0
-        # subdir filtering
-        if self.subdirectories_filter != 'All' :
-            for idx, font in enumerate(col) :
-                if flt_flags[idx] != 0 :
-                    if font.subdirectory != self.subdirectories_filter :
-                        flt_flags[idx] = 0
+                    else :
+                        flt_flags[idx] = self.bitflag_filter_item
 
-        # favs filtering
-        if self.favorite_filter :
-            for idx, font in enumerate(col) :
-                if flt_flags[idx] != 0 :
-                    if font.favorite ==False :
-                        flt_flags[idx] = 0
-
-        # invert filtering
-        if self.invert_filter :
-            for idx, font in enumerate(col):
-                if flt_flags[idx] != 0 :
-                    flt_flags[idx] = 0
-                else :
-                    flt_flags[idx] = self.bitflag_filter_item
-
-        
         ### REORDERING ###
+        if self.subdirectories_sorting :
+            _sort = [(idx, font) for idx, font in enumerate(col)]
+            flt_neworder = helper_funcs.sort_items_helper(_sort, key=lambda font: font[1].subdirectory)
 
         return flt_flags, flt_neworder
