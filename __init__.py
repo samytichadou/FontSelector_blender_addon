@@ -61,8 +61,8 @@ import traceback
 def register():
     try: bpy.utils.register_module(__name__)
     except: traceback.print_exc()
-         
-    print("Registered {} with {} modules".format(bl_info["name"], len(modules)))
+
+    #print("Registered {} with {} modules".format(bl_info["name"], len(modules)))
 
     ### PROPS ###
 
@@ -89,7 +89,7 @@ def unregister():
     try: bpy.utils.unregister_module(__name__)
     except: traceback.print_exc()
 
-    print("Unregistered {}".format(bl_info["name"]))
+    #print("Unregistered {}".format(bl_info["name"]))
 
     ### PROPS ###
 
