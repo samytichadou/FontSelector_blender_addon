@@ -5,7 +5,7 @@ from bpy.app.handlers import persistent
 from .preferences import get_addon_preferences
 from .misc_functions import get_size, absolute_path
 from .function_load_font_subdir import load_font_subdir
-from .function_load_favorites import load_favorites
+from .functions.load_favorites import load_favorites
 
 from .functions.check_size import check_size_changes
 from .functions.load_json import load_json_font_file
@@ -19,7 +19,7 @@ def fontselector_startup(scene):
     behavior = addon_preferences.startup_check_behavior
     prefpath = absolute_path(addon_preferences.prefs_folderpath)
     # get prefs files
-    preffav = os.path.join(prefpath, fav_list)
+    json_favorites_file = os.path.join(prefpath, json_favorites)
     json_list_file = os.path.join(prefpath, json_file)
 
     font_collection = bpy.data.window_managers['WinMan'].fontselector_list
@@ -54,7 +54,7 @@ def fontselector_startup(scene):
             #bpy.ops.fontselector.load_fontlist()
 
             # load favorite list
-            if os.path.isfile(preffav) and len(font_collection) > 0 :
+            if os.path.isfile(json_favorites_file) and len(font_collection) > 0 :
                 load_favorites()
             
             # return state to user

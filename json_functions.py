@@ -1,10 +1,22 @@
 import bpy
 import json
 
+
+### MISC - GENERAL ###
+
 # create json file
 def create_json_file(datas, path) :
     with open(path, "w") as write_file :
         json.dump(datas, write_file, indent=4, sort_keys=True)
+
+# read json
+def read_json(filepath):
+    with open(filepath, "r") as read_file:
+        datas = json.load(read_file)
+    return datas
+
+
+### MAIN LIST FILE ####
 
 # initialize json datas
 def initialize_json_datas () :
@@ -40,6 +52,9 @@ def add_size_json(datas, size) :
     datas['size'] = size
     return datas
 
+
+### FONTFOLDER ####
+
 # initialize json fontfolders datas
 def initialize_json_fontfolders_datas () :
     datas = {}
@@ -53,8 +68,18 @@ def add_fontfolders_json(datas, fontfolder) :
     })
     return datas
 
-# read json
-def read_json(filepath):
-    with open(filepath, "r") as read_file:
-        datas = json.load(read_file)
+
+### FAVORITES ####
+
+# initialize json favorites datas
+def initialize_json_favorites_datas () :
+    datas = {}
+    datas['favorites'] = []
+    return datas
+
+# add favorite to json datas
+def add_favorite_json(datas, font) :
+    datas['favorites'].append({
+        "font" : font
+    })
     return datas

@@ -9,4 +9,4 @@ size_file = "fontselector_size_"
 
 json_file = "fontselector.json"
 json_font_folders = "font_folders.json"
-json_favorites = "fontselector_favorites.json"
+json_favorites = "font_favorites.json"
