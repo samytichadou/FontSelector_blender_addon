@@ -70,12 +70,14 @@ def register():
         bpy.props.CollectionProperty(type = FontSelectorFontList)
     bpy.types.WindowManager.fontselector_sub = \
         bpy.props.CollectionProperty(type = FontSelectorFontSubs)
-    bpy.types.TextCurve.fontselector_index = \
-        bpy.props.IntProperty(update = update_change_font)
     bpy.types.WindowManager.fontselector_subdirectories = \
         bpy.props.EnumProperty(items = get_subdirectories_items, 
                                 name = "Subdirectories",
                                 description = "Display only specific Subdirectories")
+    bpy.types.WindowManager.fontselector_override = bpy.props.BoolProperty()
+
+    bpy.types.TextCurve.fontselector_index = \
+        bpy.props.IntProperty(update = update_change_font)
 
     ### HANDLER ###
 
@@ -95,6 +97,9 @@ def unregister():
 
     del bpy.types.WindowManager.fontselector_list
     del bpy.types.WindowManager.fontselector_sub
+    del bpy.types.WindowManager.fontselector_subdirectories
+    del bpy.types.WindowManager.fontselector_override
+
     del bpy.types.TextCurve.fontselector_index
     
     ### HANDLER

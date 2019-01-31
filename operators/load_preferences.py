@@ -1,6 +1,5 @@
 import bpy
 import os
-import csv
 
 from ..preferences import get_addon_preferences
 from ..global_variable import json_font_folders
