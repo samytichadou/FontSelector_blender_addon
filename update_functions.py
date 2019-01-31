@@ -97,7 +97,7 @@ def update_fake_user(self, context) :
 
             #no font file
             else:
-                font.missingfont=True
+                font.missingfont = True
 
             # use fake user
             new_font.use_fake_user = True
