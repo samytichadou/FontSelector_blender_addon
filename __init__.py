@@ -50,7 +50,7 @@ modules = developer_utils.setup_addon_modules(__path__, __name__, "bpy" in local
 from .misc_functions import menu_export_favorites
 from .startup_handler import fontselector_startup
 from .properties import *
-from .update_functions import update_change_font, get_subdirectories_items
+from .update_functions import update_change_font, get_subdirectories_items, update_change_folder_override
 
 
 # register
@@ -75,6 +75,14 @@ def register():
                                 name = "Subdirectories",
                                 description = "Display only specific Subdirectories")
     bpy.types.WindowManager.fontselector_override = bpy.props.BoolProperty()
+    bpy.types.WindowManager.fontselector_folder_override = bpy.props.StringProperty(
+                                                        name = "Folder Override",
+                                                        default = '',
+                                                        description = "Folder for local override of the Font Folders preferences",
+                                                        subtype = "DIR_PATH",
+                                                        update = update_change_folder_override
+                                                        )
+    bpy.types.WindowManager.fontselector_foldername_override = bpy.props.StringProperty(default = "")
 
     bpy.types.TextCurve.fontselector_index = \
         bpy.props.IntProperty(update = update_change_font)
@@ -99,6 +107,8 @@ def unregister():
     del bpy.types.WindowManager.fontselector_sub
     del bpy.types.WindowManager.fontselector_subdirectories
     del bpy.types.WindowManager.fontselector_override
+    del bpy.types.WindowManager.fontselector_folder_override
+    del bpy.types.WindowManager.fontselector_foldername_override
 
     del bpy.types.TextCurve.fontselector_index
     

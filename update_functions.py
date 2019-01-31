@@ -111,3 +111,8 @@ def update_fake_user(self, context) :
                     bpy.data.fonts.remove(old_font, do_unlink=True)
             except KeyError :
                 pass
+
+def update_change_folder_override(self, context) :
+    wm = bpy.data.window_managers['WinMan']
+    folder_path = wm.fontselector_folder_override
+    wm.fontselector_foldername_override = os.path.basename(os.path.dirname(folder_path))

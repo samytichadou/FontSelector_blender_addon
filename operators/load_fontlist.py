@@ -3,7 +3,7 @@ import os
 
 
 from ..preferences import get_addon_preferences
-from ..global_variable import json_font_folders
+from ..global_variable import json_file
 from ..global_messages import refresh_msg
 from ..misc_functions import absolute_path, clear_collection
 from ..functions.load_json import load_json_font_file
@@ -19,13 +19,13 @@ class FontSelectorLoadFPPrefs(bpy.types.Operator):
     def poll(cls, context):
         addon_preferences = get_addon_preferences()
         prefs = absolute_path(addon_preferences.prefs_folderpath)
-        json_path = os.path.join(prefs, json_font_folders)
+        json_path = os.path.join(prefs, json_file)
         return os.path.isfile(json_path)
     
     def execute(self, context):
         addon_preferences = get_addon_preferences()
         prefpath = absolute_path(addon_preferences.prefs_folderpath)
-        json_path = os.path.join(prefpath, json_font_folders)
+        json_path = os.path.join(prefpath, json_file)
 
         collection_font_list = bpy.data.window_managers['WinMan'].fontselector_list
         collection_subdir_list = bpy.data.window_managers['WinMan'].fontselector_sub

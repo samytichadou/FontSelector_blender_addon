@@ -39,10 +39,7 @@ class FontSelectorPanel(bpy.types.Panel):
             layout.label('Add Font Folder in Addon Preference', icon = 'INFO')
         else:
             row = layout.row(align = True)
-            #row.prop(wm, 'fontselector_subdirectories', text = "")
-            #row = layout.row()
             row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
-            #row.operator("fontselector.refresh", text = '', icon = 'FILE_REFRESH')
             if wm.fontselector_list == 0 :
                 row = layout.row()
                 row.label('Refresh to get List of available Fonts', icon = 'INFO')
@@ -50,6 +47,12 @@ class FontSelectorPanel(bpy.types.Panel):
                 row.operator("fontselector.check_changes", text = '', icon = 'LAMP')
                 row.separator()
                 row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
-                #row.prop(activedata, 'fontselector_use_sub', text = '', icon = 'FILESEL')
+                row.separator()
+                row.prop(wm, 'fontselector_folder_override', text = '', icon = 'FILESEL', icon_only = True)
+                if wm.fontselector_override :
+                    row.operator('fontselector.load_fontlist', text = '', icon ='CANCEL')
+                else :
+                    row.operator('fontselector.override_folder', text = '', icon ='HAND')
+                row.label(wm.fontselector_foldername_override)
                 row = layout.row()
                 row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)

@@ -17,6 +17,10 @@ subdirectory_error = "Font Subdirectory does not exist"
 
 export_finished = "Fonts Exported"
 
+### OVERRIDE ##
+
+override_loaded_msg = "Override Folder Loaded"
+
 ### FONT FOLDERS COLLECTION ###
 
 fontfolder_saved = "Font Folders saved"
