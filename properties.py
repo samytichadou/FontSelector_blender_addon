@@ -1,6 +1,6 @@
 import bpy
 
-from .update_functions import update_save_favorites
+from .update_functions import update_save_favorites, update_fake_user
 
 
 class FontSelectorFontList(bpy.types.PropertyGroup) :
@@ -12,7 +12,7 @@ class FontSelectorFontList(bpy.types.PropertyGroup) :
                                     update = update_save_favorites,
                                     description = "Mark/Unmark as Favorite Font")
     subdirectory = bpy.props.StringProperty(name="Subdirectory")
-    fake_user = bpy.props.BoolProperty(name = "Fake User", default = False)
+    fake_user = bpy.props.BoolProperty(name = "Fake User", default = False, update = update_fake_user)
     
 class FontSelectorFontSubs(bpy.types.PropertyGroup) :
     '''name = StringProperty() '''

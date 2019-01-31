@@ -63,3 +63,50 @@ def get_subdirectories_items(self, context) :
     for sub in bpy.data.window_managers['WinMan'].fontselector_sub :
         subdir_list.append((sub.name, sub.name, sub.filepath))
     return subdir_list
+
+#update make fake_user
+def update_fake_user(self, context) :
+    fontlist = bpy.data.window_managers['WinMan'].fontselector_list
+    for font in fontlist :
+        if font.fake_user :
+            # import font
+            if os.path.isfile(font.filepath) :
+                chkunused = 0
+                chklocal = 0
+
+                #check for local font
+                for f in bpy.data.fonts :
+                    if f.filepath == font.filepath :
+                        chklocal= 1
+                        new_font = f
+                        break
+
+                #check unused font
+                if chklocal == 0 :
+                    for f in bpy.data.fonts :
+                        if f.users == 0 and f.filepath != font.filepath and chkunused == 0 :
+                            chkunused = 1
+                            f.name = os.path.splitext(font.name)[0]
+                            f.filepath = font.filepath
+                            new_font = f
+                            break
+                
+                #import font
+                if chkunused == 0 and chklocal == 0 :
+                    new_font = bpy.data.fonts.load(filepath=font.filepath)
+
+            #no font file
+            else:
+                font.missingfont=True
+
+            # use fake user
+            new_font.use_fake_user = True
+        # remove fake user
+        else :
+            try :
+                old_font = bpy.data.fonts[font.name]
+                old_font.use_fake_user = False
+                # remove font
+                bpy.data.fonts.remove(old_font, do_unlink=True)
+            except KeyError :
+                pass

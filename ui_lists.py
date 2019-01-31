@@ -8,6 +8,7 @@ class FontUIList(bpy.types.UIList):
 
     show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectories", description = "Show Subdirectories")
     show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites", description = "Show Favorites")
+    show_fake_user = bpy.props.BoolProperty(name = "Show Fake User", description = "Fake a User for active font, allowing to keep it in the blend")
 
     subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, 
                                                 name = "Subdirectories",
@@ -20,19 +21,22 @@ class FontUIList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         #self.use_filter_show = True
 
+        row = layout.row(align = True)
+
         if item.missingfont :
-            layout.label(icon = 'ERROR')
-        layout.label(item.name)
+            row.label(icon = 'ERROR')
+        row.label(item.name)
         if self.show_subdirectory_name :
-            layout.label(item.subdirectory)
+            row.label(item.subdirectory)
         if self.show_favorite_icon :
             if item.favorite :
-                layout.prop(item, "favorite", text = "", icon = 'SOLO_ON', emboss = False)
+                row.prop(item, "favorite", text = "", icon = 'SOLO_ON', emboss = True)
             else:
-                layout.prop(item, "favorite", text = "", icon='SOLO_OFF', emboss = False)
+                row.prop(item, "favorite", text = "", icon = 'SOLO_OFF', emboss = True)
+        if self.show_fake_user :
+            row.prop(item, "fake_user", text = "", icon = 'FONT_DATA', emboss = True)
 
     def draw_filter(self, context, layout):
-        # Nothing much to say here, it's usual UI code...
 
         wm = bpy.data.window_managers['WinMan']
 
@@ -75,6 +79,8 @@ class FontUIList(bpy.types.UIList):
         row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILESEL')
         # show favorite
         row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
+        # show fake user
+        row.prop(self, 'show_fake_user', text = '', icon = 'FONT_DATA')
         
 
     # Called once to filter/reorder items.
