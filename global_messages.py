@@ -15,6 +15,8 @@ progress_print_statement = "Font Selector Refreshing"
 
 subdirectory_error = "Font Subdirectory does not exist"
 
+export_finished = "Fonts Exported"
+
 ### FONT FOLDERS COLLECTION ###
 
 fontfolder_saved = "Font Folders saved"

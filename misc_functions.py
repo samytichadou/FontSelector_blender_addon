@@ -6,7 +6,7 @@ from .global_variable import extensions
 
 # export menu
 def menu_export_favorites(self, context) :
-    self.layout.operator('fontselector.export_favorites', text="Favorite Fonts export", icon='FILE_FONT')
+    self.layout.operator('fontselector.export_fonts', text="Fonts export", icon='FILE_FONT')
 
 # clear collection
 def clear_collection(collection) :
