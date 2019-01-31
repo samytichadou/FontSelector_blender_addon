@@ -8,7 +8,7 @@ class FontUIList(bpy.types.UIList):
 
     show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectories", description = "Show Subdirectories")
     show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites", description = "Show Favorites")
-    show_fake_user = bpy.props.BoolProperty(name = "Show Fake User", description = "Fake a User for active font, allowing to keep it in the blend")
+    show_fake_user = bpy.props.BoolProperty(name = "Show Fake User", description = "Show Fake User")
 
     subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, 
                                                 name = "Subdirectories",
@@ -29,10 +29,8 @@ class FontUIList(bpy.types.UIList):
         if self.show_subdirectory_name :
             row.label(item.subdirectory)
         if self.show_favorite_icon :
-            if item.favorite :
-                row.prop(item, "favorite", text = "", icon = 'SOLO_ON', emboss = True)
-            else:
-                row.prop(item, "favorite", text = "", icon = 'SOLO_OFF', emboss = True)
+            icon = 'SOLO_ON' if item.favorite else 'SOLO_OFF'
+            row.prop(item, "favorite", text = "", icon = icon, emboss = True)
         if self.show_fake_user :
             row.prop(item, "fake_user", text = "", icon = 'FONT_DATA', emboss = True)
 

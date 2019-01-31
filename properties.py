@@ -12,7 +12,11 @@ class FontSelectorFontList(bpy.types.PropertyGroup) :
                                     update = update_save_favorites,
                                     description = "Mark/Unmark as Favorite Font")
     subdirectory = bpy.props.StringProperty(name="Subdirectory")
-    fake_user = bpy.props.BoolProperty(name = "Fake User", default = False, update = update_fake_user)
+    fake_user = bpy.props.BoolProperty(name = "Fake User",
+                                    default = False, 
+                                    update = update_fake_user,
+                                    description = "Fake a User for active font, allowing to keep it in the blend"
+                                    )
     
 class FontSelectorFontSubs(bpy.types.PropertyGroup) :
     '''name = StringProperty() '''
