@@ -15,6 +15,7 @@ class FontUIList(bpy.types.UIList):
                                                 description = "Display only specific Subdirectories")
     favorite_filter = bpy.props.BoolProperty(name = "Favorites Filter", description = "Show Only Favorites")
     invert_filter = bpy.props.BoolProperty(name = "Invert Filter", description = "Invert Filter")
+    fake_user_filter = bpy.props.BoolProperty(name = "Fake User Filter", description = "Fake User Filter")
 
     subdirectories_sorting = bpy.props.BoolProperty(name = "Sort by Subdirectories", description = "Sort by Subdirectories")
     
@@ -54,6 +55,8 @@ class FontUIList(bpy.types.UIList):
         row.separator()
         # show only favorites
         row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
+        # show only fake user
+        row.prop(self, 'fake_user_filter', text = '', icon = 'FONT_DATA')
         # invert filtering
         row.prop(self, 'invert_filter', text = '', icon = 'ARROW_LEFTRIGHT')
 
@@ -105,7 +108,7 @@ class FontUIList(bpy.types.UIList):
         
         ### FILTERING ###
 
-        if self.filter_name or subdirectories_filter != "All" or self.favorite_filter or self.invert_filter :
+        if self.filter_name or subdirectories_filter != "All" or self.favorite_filter or self.invert_filter or self.fake_user_filter:
             flt_flags = [self.bitflag_filter_item] * len(col)
 
             # name search
@@ -127,6 +130,13 @@ class FontUIList(bpy.types.UIList):
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
                         if font.favorite ==False :
+                            flt_flags[idx] = 0
+            
+            # fake user filtering
+            if self.fake_user_filter :
+                for idx, font in enumerate(col) :
+                    if flt_flags[idx] != 0 :
+                        if font.fake_user ==False :
                             flt_flags[idx] = 0
 
             # invert filtering
