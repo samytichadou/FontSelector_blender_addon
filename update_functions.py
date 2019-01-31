@@ -106,7 +106,8 @@ def update_fake_user(self, context) :
             try :
                 old_font = bpy.data.fonts[font.name]
                 old_font.use_fake_user = False
-                # remove font
-                bpy.data.fonts.remove(old_font, do_unlink=True)
+                if old_font.users == 0 :
+                    # remove font
+                    bpy.data.fonts.remove(old_font, do_unlink=True)
             except KeyError :
                 pass
