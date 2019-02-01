@@ -62,8 +62,6 @@ def register():
     try: bpy.utils.register_module(__name__)
     except: traceback.print_exc()
 
-    #print("Registered {} with {} modules".format(bl_info["name"], len(modules)))
-
     ### PROPS ###
 
     bpy.types.WindowManager.fontselector_list = \
@@ -100,8 +98,6 @@ def register():
 def unregister():
     try: bpy.utils.unregister_module(__name__)
     except: traceback.print_exc()
-
-    #print("Unregistered {}".format(bl_info["name"]))
 
     ### PROPS ###
 
