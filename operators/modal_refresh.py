@@ -1,7 +1,6 @@
 import bpy
 import os
 import time
-#import blf
 import bgl
 import sys
 
@@ -280,7 +279,7 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
         # load favorites
         load_favorites()
-        
+
         # reset variables
         global total
         global count
