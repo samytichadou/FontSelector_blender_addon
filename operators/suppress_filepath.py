@@ -19,5 +19,9 @@ class FontSelectorSuppressFP(bpy.types.Operator):
         return len(fplist)>0
     
     def execute(self, context):
-        fontselector_suppress_fp(self.index)
+        #get addon prefs
+        addon_preferences = get_addon_preferences()
+        fplist = addon_preferences.font_folders
+        
+        fplist.remove(self.index)
         return {'FINISHED'}
