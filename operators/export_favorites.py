@@ -31,7 +31,11 @@ class FontSelectorExportFavorites(bpy.types.Operator, ExportHelper) :
         fontlist = bpy.data.window_managers['WinMan'].fontselector_list
         chk_favorites_fake = 0
         for f in fontlist : 
-            if f.favorite or f.fake_user :
+            if f.favorite :
+                chk_favorites_fake = 1
+                break
+        for f in bpy.data.fonts :
+            if f.use_fake_user :
                 chk_favorites_fake = 1
                 break
         return chk_favorites_fake == 1
@@ -41,7 +45,8 @@ class FontSelectorExportFavorites(bpy.types.Operator, ExportHelper) :
         for f in fontlist :
             if f.favorite :
                 self.favorites_list.append(f.filepath)
-            if f.fake_user :
+        for f in bpy.data.fonts :
+            if f.use_fake_user :
                 self.fake_user_list.append(f.filepath)
         if not self.favorites_list and self.fake_user_list :
             self.export_mode = 'FAKE_USER'
