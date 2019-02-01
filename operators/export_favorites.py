@@ -3,7 +3,8 @@ import os
 import shutil
 from bpy_extras.io_utils import ExportHelper
 
-from ..misc_functions import absolute_path
+from ..functions.misc_functions import absolute_path
+
 from ..global_messages import export_finished, print_statement
 
 class FontSelectorExportFavorites(bpy.types.Operator, ExportHelper) :

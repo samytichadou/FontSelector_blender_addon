@@ -2,10 +2,11 @@ import bpy
 import os
 
 from ..preferences import get_addon_preferences
+from ..functions.misc_functions import absolute_path, clear_collection
+from ..functions.json_functions import read_json
+
 from ..global_variable import json_font_folders
 from ..global_messages import fontfolder_loaded, fontfolder_not_loaded
-from ..misc_functions import absolute_path, clear_collection
-from ..json_functions import read_json
 
 
 class FontSelectorLoadFPPrefs(bpy.types.Operator):

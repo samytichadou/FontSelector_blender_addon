@@ -1,6 +1,6 @@
 import bpy
 
-from ..misc_functions import absolute_path
+from ..functions.misc_functions import absolute_path
 
 def load_fake_user() :
     wm = bpy.data.window_managers['WinMan']

@@ -1,7 +1,7 @@
 import bpy
 import os
 
-from .function_change_font import change_font
+from .change_font import change_font
 from .misc_functions import clear_collection
 
 first_active_object = ""

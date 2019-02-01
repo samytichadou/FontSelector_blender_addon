@@ -2,10 +2,12 @@ import bpy
 import os
 
 from ..preferences import get_addon_preferences
-from ..misc_functions import create_dir, absolute_path
+from ..functions.misc_functions import create_dir, absolute_path
+from ..functions.json_functions import initialize_json_fontfolders_datas, add_fontfolders_json, create_json_file
+
 from ..global_variable import json_font_folders
 from ..global_messages import fontfolder_saved
-from ..json_functions import initialize_json_fontfolders_datas, add_fontfolders_json, create_json_file
+
 
 class FontSelectorSaveFPPrefs(bpy.types.Operator):
     bl_idname = "fontselector.save_fpprefs"

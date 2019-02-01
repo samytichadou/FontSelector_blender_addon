@@ -2,11 +2,12 @@ import bpy
 
 
 from ..preferences import get_addon_preferences
+from ..functions.misc_functions import absolute_path, clear_collection, get_all_font_files
+from ..functions.update_functions import update_change_font
+
 from ..global_variable import json_font_folders
 from ..global_messages import override_loaded_msg
-from ..misc_functions import absolute_path, clear_collection, get_all_font_files
 
-from ..update_functions import update_change_font
 
 class FontSelectorOverrideFolder(bpy.types.Operator):
     bl_idname = "fontselector.override_folder"

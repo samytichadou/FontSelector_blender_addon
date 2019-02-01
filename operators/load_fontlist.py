@@ -3,13 +3,13 @@ import os
 
 
 from ..preferences import get_addon_preferences
+from ..functions.misc_functions import absolute_path, clear_collection
+from ..functions.load_json import load_json_font_file
+from ..functions.load_favorites import load_favorites
+from ..functions.update_functions import update_change_font
+
 from ..global_variable import json_file
 from ..global_messages import refresh_msg
-from ..misc_functions import absolute_path, clear_collection
-from ..functions.load_json import load_json_font_file
-from ..functions.load_favorites import *
-
-from ..update_functions import update_change_font
 
 
 class FontSelectorLoadFPPrefs(bpy.types.Operator):

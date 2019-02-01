@@ -2,7 +2,7 @@ import bpy
 import os
 import sys
 
-from .global_variable import extensions
+from ..global_variable import extensions
 
 # export menu
 def menu_export_favorites(self, context) :

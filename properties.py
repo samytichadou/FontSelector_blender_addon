@@ -1,6 +1,6 @@
 import bpy
 
-from .update_functions import update_save_favorites
+from .functions.update_functions import update_save_favorites
 
 
 class FontSelectorFontList(bpy.types.PropertyGroup) :

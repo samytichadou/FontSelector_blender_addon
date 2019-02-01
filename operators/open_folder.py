@@ -3,7 +3,7 @@ import os
 import platform
 import subprocess
 
-from ..misc_functions import absolute_path
+from ..functions.misc_functions import absolute_path
 
 class FontSelectorOpenSubdirectory(bpy.types.Operator):
     bl_idname = "fontselector.open_subdirectory"

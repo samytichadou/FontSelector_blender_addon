@@ -3,9 +3,11 @@ import os
 import csv
 
 from ..preferences import get_addon_preferences
-from ..misc_functions import absolute_path, create_dir
+from ..functions.misc_functions import absolute_path, create_dir
+from ..functions.json_functions import initialize_json_favorites_datas, add_favorite_json, read_json, create_json_file
+
 from ..global_variable import json_favorites
-from ..json_functions import initialize_json_favorites_datas, add_favorite_json, read_json, create_json_file
+
 
 class FontSelectorSaveFavorites(bpy.types.Operator):
     bl_idname = "fontselector.save_favorites"

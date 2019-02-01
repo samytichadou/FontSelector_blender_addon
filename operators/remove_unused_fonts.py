@@ -1,6 +1,6 @@
 import bpy
 
-from ..misc_functions import remove_unused_font
+from ..functions.misc_functions import remove_unused_font
 
 class FontSelectorRemoveUnused(bpy.types.Operator):
     bl_idname = "fontselector.remove_unused"

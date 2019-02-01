@@ -1,6 +1,6 @@
 import bpy
 
-from ..json_functions import read_json
+from .json_functions import read_json
 
 # get element
 def item_name_getter(elem):

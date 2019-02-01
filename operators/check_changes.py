@@ -3,7 +3,7 @@ import os
 
 from ..functions.check_size import check_size_changes
 from ..preferences import get_addon_preferences
-from ..misc_functions import absolute_path
+from ..functions.misc_functions import absolute_path
 
 from ..global_variable import json_file
 from ..global_messages import *

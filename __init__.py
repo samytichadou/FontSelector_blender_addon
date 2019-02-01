@@ -47,10 +47,10 @@ modules = developer_utils.setup_addon_modules(__path__, __name__, "bpy" in local
 ##################################
 
 
-from .misc_functions import menu_export_favorites
+from .functions.misc_functions import menu_export_favorites
 from .startup_handler import fontselector_startup
 from .properties import *
-from .update_functions import update_change_font, get_subdirectories_items, update_change_folder_override
+from .functions.update_functions import update_change_font, get_subdirectories_items, update_change_folder_override
 
 
 # register

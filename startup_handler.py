@@ -3,10 +3,8 @@ import os
 from bpy.app.handlers import persistent
 
 from .preferences import get_addon_preferences
-from .misc_functions import get_size, absolute_path
-from .function_load_font_subdir import load_font_subdir
+from .functions.misc_functions import get_size, absolute_path
 from .functions.load_favorites import load_favorites
-
 from .functions.check_size import check_size_changes
 from .functions.load_json import load_json_font_file
 

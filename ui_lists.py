@@ -1,7 +1,7 @@
 import bpy
 
 from .preferences import get_addon_preferences
-from .update_functions import get_subdirectories_items
+from .functions.update_functions import get_subdirectories_items
 
 #font list
 class FontUIList(bpy.types.UIList):

@@ -4,14 +4,14 @@ import time
 import bgl
 import sys
 
-from ..misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font, update_progress
+from ..functions.misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font, update_progress
 from ..preferences import get_addon_preferences
-from ..json_functions import *
+from ..functions.json_functions import initialize_json_datas, add_fonts_json, add_subdirectories_json, add_size_json, create_json_file
 from ..functions.load_json import load_json_font_file
-from ..functions.load_favorites import *
+from ..functions.load_favorites import load_favorites
 
 from ..global_variable import json_file
-from ..global_messages import *
+from ..global_messages import start_refreshing_msg, progress_print_statement, cancel_refresh_msg, refresh_msg
 
 count = 0
 total = 0

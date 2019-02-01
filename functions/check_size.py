@@ -1,8 +1,8 @@
 import bpy
 import os
 
-from ..json_functions import read_json
-from ..misc_functions import get_size, absolute_path
+from .json_functions import read_json
+from .misc_functions import get_size, absolute_path
 from ..preferences import get_addon_preferences
 
 from ..global_variable import json_file

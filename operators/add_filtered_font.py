@@ -3,7 +3,7 @@ import os
 import csv
 
 from ..preferences import get_addon_preferences
-from ..misc_functions import absolute_path, create_dir
+from ..functions.misc_functions import absolute_path, create_dir
 
 from ..global_variable import filter_list
 

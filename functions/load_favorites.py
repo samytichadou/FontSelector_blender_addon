@@ -3,8 +3,9 @@ import os
 import csv
 
 from ..preferences import get_addon_preferences
-from ..misc_functions import absolute_path
-from ..json_functions import read_json
+from .misc_functions import absolute_path
+from .json_functions import read_json
+
 from ..global_variable import json_favorites
 
 def load_favorites() :
