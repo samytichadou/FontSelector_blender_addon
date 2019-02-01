@@ -16,13 +16,13 @@ def load_favorites() :
     debug = addon_preferences.debug_value
 
     favorites_list = []
-    
-    datas = read_json(json_file)
-    for fav in datas['favorites'] :
-        favorites_list.append(fav['font'])
-        for font in collection_font_list :
-            if fav['font'] == font.name :
-                font.favorite = True
+    if os.path.isfile(json_file) :   
+        datas = read_json(json_file)
+        for fav in datas['favorites'] :
+            favorites_list.append(fav['font'])
+            for font in collection_font_list :
+                if fav['font'] == font.name :
+                    font.favorite = True
 
     # debug
     if debug:
