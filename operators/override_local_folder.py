@@ -44,6 +44,10 @@ class FontSelectorOverrideFolder(bpy.types.Operator):
                 bpy.data.fonts.remove(datafont, do_unlink=True)
             except RuntimeError :
                 pass
+        for subdir in subdir_list :
+            newsubdir = collection_subdir_list.add()
+            newsubdir.name = subdir[0]
+            newsubdir.filepath = subdir[1]
 
         # toggle override prop to false
         bpy.data.window_managers['WinMan'].fontselector_override = True

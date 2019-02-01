@@ -21,6 +21,7 @@ class FontUIList(bpy.types.UIList):
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         #self.use_filter_show = True
+        wm = bpy.data.window_managers['WinMan']
 
         row = layout.row(align = True)
 
@@ -29,7 +30,7 @@ class FontUIList(bpy.types.UIList):
         row.label(item.name)
         if self.show_subdirectory_name :
             row.label(item.subdirectory)
-        if self.show_favorite_icon :
+        if self.show_favorite_icon and not wm.fontselector_override :
             icon = 'SOLO_ON' if item.favorite else 'SOLO_OFF'
             row.prop(item, "favorite", text = "", icon = icon, emboss = True)
         if self.show_fake_user :
@@ -53,8 +54,9 @@ class FontUIList(bpy.types.UIList):
         row.prop(wm, 'fontselector_subdirectories', text = '')
         row.operator('fontselector.open_subdirectory', text = '', icon = 'FILE_FOLDER')
         row.separator()
-        # show only favorites
-        row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
+        if not wm.fontselector_override :
+            # show only favorites
+            row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
         # show only fake user
         row.prop(self, 'fake_user_filter', text = '', icon = 'FONT_DATA')
         # invert filtering
@@ -78,8 +80,9 @@ class FontUIList(bpy.types.UIList):
 
         # show subfolder option
         row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILESEL')
-        # show favorite
-        row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
+        if not wm.fontselector_override :
+            # show favorite
+            row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
         # show fake user
         row.prop(self, 'show_fake_user', text = '', icon = 'FONT_DATA')
         
@@ -105,10 +108,11 @@ class FontUIList(bpy.types.UIList):
         col = getattr(data, propname)
 
         subdirectories_filter = bpy.data.window_managers['WinMan'].fontselector_subdirectories
+        wm = bpy.data.window_managers['WinMan']
         
         ### FILTERING ###
 
-        if self.filter_name or subdirectories_filter != "All" or self.favorite_filter or self.invert_filter or self.fake_user_filter:
+        if self.filter_name or subdirectories_filter != "All" or self.favorite_filter or self.invert_filter or self.fake_user_filter :
             flt_flags = [self.bitflag_filter_item] * len(col)
 
             # name search
@@ -126,7 +130,7 @@ class FontUIList(bpy.types.UIList):
                             flt_flags[idx] = 0
 
             # favs filtering
-            if self.favorite_filter :
+            if self.favorite_filter and not wm.fontselector_override :
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
                         if font.favorite ==False :
