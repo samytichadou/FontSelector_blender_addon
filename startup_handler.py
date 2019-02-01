@@ -10,8 +10,8 @@ from .functions.load_favorites import load_favorites
 from .functions.check_size import check_size_changes
 from .functions.load_json import load_json_font_file
 
-from .global_variable import *
-from .global_messages import *
+from .global_variable import json_file, json_favorites
+from .global_messages import print_statement, settings_loaded_msg, changes_msg, no_changes_msg
 
 @persistent
 def fontselector_startup(scene):
@@ -50,8 +50,6 @@ def fontselector_startup(scene):
             else :
                 # load json list
                 load_json_font_file(json_list_file, font_collection, subdir_collection)
-
-            #bpy.ops.fontselector.load_fontlist()
 
             # load favorite list
             if os.path.isfile(json_favorites_file) and len(font_collection) > 0 :
