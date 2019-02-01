@@ -93,7 +93,6 @@ class FontSelectorModalRefresh(bpy.types.Operator):
     json_old = ""
     debug = False
 
-
     @classmethod
     def poll(cls, context):
         addon_preferences = get_addon_preferences()
@@ -154,8 +153,6 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         # redraw area
         try:
             for area in context.screen.areas:
-                #area.tag_redraw()
-                #if area.type == 'VIEW_3D':
                 if area.type == 'PROPERTIES':
                     area.tag_redraw()
         except AttributeError:
