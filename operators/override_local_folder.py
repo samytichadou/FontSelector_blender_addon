@@ -6,6 +6,8 @@ from ..global_variable import json_font_folders
 from ..global_messages import override_loaded_msg
 from ..misc_functions import absolute_path, clear_collection, get_all_font_files
 
+from ..update_functions import update_change_font
+
 class FontSelectorOverrideFolder(bpy.types.Operator):
     bl_idname = "fontselector.override_folder"
     bl_label = "Toggle Override Folder"
@@ -31,6 +33,7 @@ class FontSelectorOverrideFolder(bpy.types.Operator):
         clear_collection(collection_subdir_list)
 
         # load fonts
+        idx = 0
         for font in fontpath_list :
             try :
                 # load font in blender datas to get name
@@ -38,8 +41,10 @@ class FontSelectorOverrideFolder(bpy.types.Operator):
                 # add to font list
                 newfont = collection_font_list.add()
                 newfont.name = datafont.name
-                newfont.filepath = font[0]
+                newfont.filepath = datafont.filepath
                 newfont.subdirectory = font[1]
+                newfont.index = idx
+                idx += 1
                 # delete font
                 bpy.data.fonts.remove(datafont, do_unlink=True)
             except RuntimeError :
@@ -48,6 +53,9 @@ class FontSelectorOverrideFolder(bpy.types.Operator):
             newsubdir = collection_subdir_list.add()
             newsubdir.name = subdir[0]
             newsubdir.filepath = subdir[1]
+
+        # update font in viewport
+        update_change_font(self, context)
 
         # toggle override prop to false
         bpy.data.window_managers['WinMan'].fontselector_override = True

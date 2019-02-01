@@ -15,15 +15,17 @@ def load_json_font_file(json_file, font_collection, subdir_collection) :
         fontlist.append([font['name'], font['filepath'], font['subdirectory']])
 
     fontlist.sort(key=item_name_getter)
-
+    idx = 0
     for font in fontlist :
         newfont = font_collection.add()
         newfont.name = font[0]
         newfont.filepath = font[1]
         newfont.subdirectory = font[2]
+        newfont.index = idx
+        idx += 1
 
     # load subdirs
     for subdir in datas['subdirectories'] : 
         newsubdir = subdir_collection.add()
         newsubdir.name = subdir['name']
-        newsubdir.filepath = subdir['filepath']
+        newsubdir.filepath = subdir['filepath']    

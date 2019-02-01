@@ -7,7 +7,9 @@ from ..global_variable import json_file
 from ..global_messages import refresh_msg
 from ..misc_functions import absolute_path, clear_collection
 from ..functions.load_json import load_json_font_file
-from ..functions.load_favorites import load_favorites
+from ..functions.load_favorites import *
+
+from ..update_functions import update_change_font
 
 
 class FontSelectorLoadFPPrefs(bpy.types.Operator):
@@ -40,6 +42,9 @@ class FontSelectorLoadFPPrefs(bpy.types.Operator):
 
         # load favorites
         load_favorites()
+
+        # update font in viewport
+        update_change_font(self, context)
 
         # toggle override prop to false
         bpy.data.window_managers['WinMan'].fontselector_override = False

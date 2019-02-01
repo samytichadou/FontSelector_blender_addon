@@ -8,7 +8,7 @@ from ..misc_functions import get_all_font_files, create_dir, absolute_path, clea
 from ..preferences import get_addon_preferences
 from ..json_functions import *
 from ..functions.load_json import load_json_font_file
-from ..functions.load_favorites import load_favorites
+from ..functions.load_favorites import *
 
 from ..global_variable import json_file
 from ..global_messages import *

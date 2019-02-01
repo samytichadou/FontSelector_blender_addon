@@ -86,6 +86,8 @@ def register():
 
     bpy.types.TextCurve.fontselector_index = \
         bpy.props.IntProperty(update = update_change_font)
+    bpy.types.TextCurve.fontselector_override_index = \
+        bpy.props.IntProperty(update = update_change_font)
 
     ### HANDLER ###
 
@@ -111,6 +113,7 @@ def unregister():
     del bpy.types.WindowManager.fontselector_foldername_override
 
     del bpy.types.TextCurve.fontselector_index
+    del bpy.types.TextCurve.fontselector_override_index
     
     ### HANDLER
 

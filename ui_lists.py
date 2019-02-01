@@ -22,19 +22,32 @@ class FontUIList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         #self.use_filter_show = True
         wm = bpy.data.window_managers['WinMan']
-
+        text_index = bpy.context.active_object.data.fontselector_index
         row = layout.row(align = True)
 
         if item.missingfont :
             row.label(icon = 'ERROR')
         row.label(item.name)
+
         if self.show_subdirectory_name :
             row.label(item.subdirectory)
+
+        if self.show_fake_user :
+            if item.index == text_index :
+                row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = 'FONT_DATA', emboss = True)
+            else :
+                try :
+                    if bpy.data.fonts[item.name].use_fake_user :
+                        row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = 'FONT_DATA', emboss = True)
+                    else :
+                        row.label(icon = 'RADIOBUT_OFF')
+                except KeyError :
+                    row.label(icon = 'RADIOBUT_OFF')
+
         if self.show_favorite_icon and not wm.fontselector_override :
             icon = 'SOLO_ON' if item.favorite else 'SOLO_OFF'
             row.prop(item, "favorite", text = "", icon = icon, emboss = True)
-        if self.show_fake_user :
-            row.prop(item, "fake_user", text = "", icon = 'FONT_DATA', emboss = True)
+
 
     def draw_filter(self, context, layout):
 
@@ -54,11 +67,11 @@ class FontUIList(bpy.types.UIList):
         row.prop(wm, 'fontselector_subdirectories', text = '')
         row.operator('fontselector.open_subdirectory', text = '', icon = 'FILE_FOLDER')
         row.separator()
+        # show only fake user
+        row.prop(self, 'fake_user_filter', text = '', icon = 'FONT_DATA')
         if not wm.fontselector_override :
             # show only favorites
             row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
-        # show only fake user
-        row.prop(self, 'fake_user_filter', text = '', icon = 'FONT_DATA')
         # invert filtering
         row.prop(self, 'invert_filter', text = '', icon = 'ARROW_LEFTRIGHT')
 
@@ -80,11 +93,11 @@ class FontUIList(bpy.types.UIList):
 
         # show subfolder option
         row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILESEL')
+        # show fake user
+        row.prop(self, 'show_fake_user', text = '', icon = 'FONT_DATA')
         if not wm.fontselector_override :
             # show favorite
             row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
-        # show fake user
-        row.prop(self, 'show_fake_user', text = '', icon = 'FONT_DATA')
         
 
     # Called once to filter/reorder items.
@@ -140,7 +153,10 @@ class FontUIList(bpy.types.UIList):
             if self.fake_user_filter :
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
-                        if font.fake_user ==False :
+                        try :
+                            if not bpy.data.fonts[font.name].use_fake_user :
+                               flt_flags[idx] = 0
+                        except KeyError : 
                             flt_flags[idx] = 0
 
             # invert filtering

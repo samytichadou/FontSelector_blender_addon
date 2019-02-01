@@ -27,14 +27,6 @@ class FontSelectorPanel(bpy.types.Panel):
         activedata = bpy.context.active_object.data
         wm = bpy.data.window_managers['WinMan']
         
-        if len(wm.fontselector_sub) > 5:
-            sub_row = 5
-        else:
-            try :
-                sub_row = len(wm.fontselector_sub)
-            except IndexError :
-                sub_row = 1
-        
         if len(fplist)==0:
             layout.label('Add Font Folder in Addon Preference', icon = 'INFO')
         else:
@@ -55,4 +47,7 @@ class FontSelectorPanel(bpy.types.Panel):
                     row.operator('fontselector.override_folder', text = '', icon ='HAND')
                 row.label(wm.fontselector_foldername_override)
                 row = layout.row()
-                row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
+                if not wm.fontselector_override :
+                    row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
+                else :
+                    row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_override_index", rows = rownumber)
