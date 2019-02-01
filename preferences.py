@@ -8,35 +8,26 @@ addon_name = os.path.basename(os.path.dirname(__file__))
 class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
     bl_idname = addon_name
     
+    # UI
     row_number = bpy.props.IntProperty(
-                    default=5,
-                    min=3,
-                    max=50,
-                    description='Number of rows by default of the Font List, also the minimum number of row'
+                    default = 5,
+                    min = 3,
+                    max = 50,
+                    description = 'Number of rows by default of the Font List, also the minimum number of row'
                     )
     
-    font_folders = bpy.props.CollectionProperty(type=FontFolders)
+    # FONT FOLDERS
+    font_folders = bpy.props.CollectionProperty(type = FontFolders)
     
+    # PREFS
     prefs_folderpath = bpy.props.StringProperty(
             name="Preferences Folder Path",
             default=os.path.join(bpy.utils.user_resource('CONFIG'), "font_selector_prefs"),
             description="Folder where Font Selector Preferences will be stored",
             subtype="DIR_PATH",
             )
-            
-    prefs_filter = bpy.props.StringProperty(
-            name="Filtered Font",
-            default='',
-            description="Font to filter",
-            )
-            
-    prefs_show_subdir = bpy.props.BoolProperty(
-            name="Show Font Subdirectory",
-            default=False,
-            description="If enabled, Font subdirectory will be shown in the Font list",
-            )
 
-    # progress bar
+    # PROGRESS BAR
     progress_bar_color = bpy.props.FloatVectorProperty(
             name = "Progress Bar Color", 
             size = 4,
@@ -53,13 +44,13 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
             default=10
             )
 
-    # debug
+    # DEBUG
     debug_value = bpy.props.BoolProperty(
             name = "Debug Toggle", 
             default = False
             )
     
-    # handler behavior
+    # STARTUP BEHAVIOR
     startup_check_behavior = bpy.props.EnumProperty(
         name = "Startup Check", 
         default = 'AUTOMATIC_UPDATE',
@@ -71,61 +62,52 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
             
     def draw(self, context):
         layout = self.layout
-        list=self.font_folders
-        dupelist=[]
+        font_list = self.font_folders
+
+        temp_list = [f.folderpath for f in font_list]
         
-        for i in list:
-            dupelist.append(i.folderpath)
-        dlist=[x for x in dupelist if dupelist.count(x) >= 2]
+        dupelist = [x for x in temp_list if temp_list.count(x) >= 2]
                 
-        row=layout.row(align=True)
+        row=layout.row(align = True)
         row.label(icon='SCRIPTWIN')
         row.prop(self, 'prefs_folderpath', text='External Preferences Path')
 
-        row=layout.row(align=True)
-        row.label("Startup")
+        row=layout.row(align = True)
+        row.label(icon = 'BLENDER')
         row.prop(self, 'startup_check_behavior')
 
-        row=layout.row(align=True)
-        row.label("Progress Bar")
-        row.prop(self, 'progress_bar_color', text='')
-        row.prop(self, 'progress_bar_size')
-
-        row=layout.row(align=True)
-        row.label("Development")
-        row.prop(self, 'debug_value')
+        row=layout.row(align = True)
+        row.label("Progress Bar", icon = 'TIME')
+        row.prop(self, 'progress_bar_color', text = '')
+        row.prop(self, 'progress_bar_size', text = 'Size')
         
-        row=layout.row(align=True)
+        row=layout.row(align = True)
         row.label('Number of Font list rows', icon='COLLAPSEMENU')
         row.prop(self, 'row_number', text='')
         
-        row=layout.row(align=True)
-        row.label('Subdirectories', icon='FILESEL')
-        row.prop(self, 'prefs_show_subdir', text='Show Font subdirectories')
-        
-        row=layout.row(align=True)
-        row.label('Add Font Filter', icon='FILTER')
-        row.prop(self, 'prefs_filter', text='')
-        row.operator('fontselector.add_filtered', text='', icon='ZOOMIN')
-        
-        row=layout.row()
+        row=layout.row(align = True)
         row.label("Font Folders", icon='FILE_FONT')
-        if len(dlist)>0:
+        if len(dupelist) > 0 :
             row.label('Dupe Warning', icon='ERROR')
         row.operator("fontselector.add_fp", text="Add Font Folder", icon='ZOOMIN')
-        row.operator("fontselector.save_fpprefs", text='', icon='DISK_DRIVE')
-        row.operator("fontselector.load_fpprefs", text='', icon='LOAD_FACTORY')
+        row.separator()
+        row.operator("fontselector.save_fpprefs", text='Save', icon='DISK_DRIVE')
+        row.operator("fontselector.load_fpprefs", text='Load', icon='LOAD_FACTORY')
         
-        idx=-1
-        for i in list:
-            idx=idx+1
+        idx = 0
+        for i in font_list :
             box=layout.box()
             row=box.row()
             row.prop(i, "folderpath")
-            if i.folderpath in dlist:
+            if i.folderpath in dupelist:
                 row.label(icon='ERROR')
             op=row.operator("fontselector.suppress_fp", text='', icon='X', emboss=False)
             op.index=idx
+            idx=idx+1
+
+        row=layout.row(align = True)
+        row.label("Development", icon = 'MOD_SCREW')
+        row.prop(self, 'debug_value')
             
 
 # get addon preferences
