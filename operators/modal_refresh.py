@@ -9,6 +9,7 @@ from ..misc_functions import get_all_font_files, create_dir, absolute_path, clea
 from ..preferences import get_addon_preferences
 from ..json_functions import *
 from ..functions.load_json import load_json_font_file
+from ..functions.load_favorites import load_favorites
 
 from ..global_variable import json_file
 from ..global_messages import *
@@ -277,6 +278,9 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         # load new json into blender data blocks
         load_json_font_file(self.json_output, collection_font_list, collection_subdir_list)
 
+        # load favorites
+        load_favorites()
+        
         # reset variables
         global total
         global count

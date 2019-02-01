@@ -7,6 +7,7 @@ from ..global_variable import json_file
 from ..global_messages import refresh_msg
 from ..misc_functions import absolute_path, clear_collection
 from ..functions.load_json import load_json_font_file
+from ..functions.load_favorites import load_favorites
 
 
 class FontSelectorLoadFPPrefs(bpy.types.Operator):
@@ -36,6 +37,9 @@ class FontSelectorLoadFPPrefs(bpy.types.Operator):
 
         # load json
         load_json_font_file(json_path, collection_font_list, collection_subdir_list)
+
+        # load favorites
+        load_favorites()
 
         # toggle override prop to false
         bpy.data.window_managers['WinMan'].fontselector_override = False
