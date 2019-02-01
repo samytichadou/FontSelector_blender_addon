@@ -28,3 +28,8 @@ fontfolder_not_saved = "Impossible to save Font Folders"
 fontfolder_deleted = "Non-existent Font Folder deleted : "
 fontfolder_loaded = "Font Folders loaded"
 fontfolder_not_loaded = "No Font Folders to load"
+
+### FONT INSTALLATION ####
+font_already_installed = "Font already installed in "
+font_installed = "Selected Font Installed"
+permission_denied = "Permission Denied to install in "

@@ -51,5 +51,7 @@ class FontSelectorPanel(bpy.types.Panel):
                     row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
                 else :
                     row.label('Folder Override', icon = 'INFO')
+                    row.separator()
+                    row.operator('fontselector.install_font', text = '', icon = 'FILE_FONT')
                     row = layout.row()
                     row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_override_index", rows = rownumber)

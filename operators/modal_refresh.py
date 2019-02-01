@@ -9,6 +9,7 @@ from ..preferences import get_addon_preferences
 from ..functions.json_functions import initialize_json_datas, add_fonts_json, add_subdirectories_json, add_size_json, create_json_file
 from ..functions.load_json import load_json_font_file
 from ..functions.load_favorites import load_favorites
+from ..functions.update_functions import update_change_font
 
 from ..global_variable import json_file
 from ..global_messages import start_refreshing_msg, progress_print_statement, cancel_refresh_msg, refresh_msg
@@ -276,6 +277,13 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
         # load favorites
         load_favorites()
+
+        # toggle override
+        if wm.fontselector_override :
+            wm.fontselector_override = False
+
+        # update font in viewport
+        update_change_font(self, context)
 
         # reset variables
         global total
