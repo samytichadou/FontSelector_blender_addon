@@ -1,7 +1,6 @@
 import bpy
 
 from ..preferences import get_addon_preferences
-from ..functions.suppress_font_folder import fontselector_suppress_fp
 
 
 class FontSelectorSuppressFP(bpy.types.Operator):
