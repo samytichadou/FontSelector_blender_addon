@@ -23,15 +23,19 @@ class FontSelectorLoadFPPrefs(bpy.types.Operator):
         addon_preferences = get_addon_preferences()
         prefs = absolute_path(addon_preferences.prefs_folderpath)
         json_path = os.path.join(prefs, json_file)
-        return os.path.isfile(json_path)
+        return os.path.isfile(json_path) and bpy.context.active_object.type == "FONT"
     
     def execute(self, context):
         addon_preferences = get_addon_preferences()
         prefpath = absolute_path(addon_preferences.prefs_folderpath)
         json_path = os.path.join(prefpath, json_file)
+        wm = bpy.data.window_managers['WinMan']
 
-        collection_font_list = bpy.data.window_managers['WinMan'].fontselector_list
-        collection_subdir_list = bpy.data.window_managers['WinMan'].fontselector_sub
+        collection_font_list = wm.fontselector_list
+        collection_subdir_list = wm.fontselector_sub
+
+        # toggle override prop to false
+        bpy.data.window_managers['WinMan'].fontselector_override = False
 
         # remove existing folder list
         clear_collection(collection_font_list)
@@ -45,9 +49,6 @@ class FontSelectorLoadFPPrefs(bpy.types.Operator):
 
         # update font in viewport
         update_change_font(self, context)
-
-        # toggle override prop to false
-        bpy.data.window_managers['WinMan'].fontselector_override = False
 
         # report user
         self.report({'INFO'}, refresh_msg)

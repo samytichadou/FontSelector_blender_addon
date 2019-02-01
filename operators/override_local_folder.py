@@ -18,16 +18,18 @@ class FontSelectorOverrideFolder(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         wm = bpy.data.window_managers['WinMan']
-        return wm.fontselector_folder_override != "" and not wm.fontselector_override
+        return wm.fontselector_folder_override != "" and not wm.fontselector_override and bpy.context.active_object.type == "FONT"
     
     def execute(self, context):
-        collection_font_list = bpy.data.window_managers['WinMan'].fontselector_list
-        collection_subdir_list = bpy.data.window_managers['WinMan'].fontselector_sub
-
         wm = bpy.data.window_managers['WinMan']
+        collection_font_list = wm.fontselector_list
+        collection_subdir_list = wm.fontselector_sub
         override_folder = absolute_path(wm.fontselector_folder_override)
 
         fontpath_list, subdir_list = get_all_font_files(override_folder)
+
+        # toggle override prop to false
+        bpy.data.window_managers['WinMan'].fontselector_override = True
 
         # remove existing folder list
         clear_collection(collection_font_list)
@@ -57,9 +59,6 @@ class FontSelectorOverrideFolder(bpy.types.Operator):
 
         # update font in viewport
         update_change_font(self, context)
-
-        # toggle override prop to false
-        bpy.data.window_managers['WinMan'].fontselector_override = True
 
         # report user
         self.report({'INFO'}, override_loaded_msg)

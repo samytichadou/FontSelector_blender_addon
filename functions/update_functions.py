@@ -15,12 +15,16 @@ def update_change_font(self, context) :
 
         active = first_active_object = bpy.context.active_object
         scn = bpy.context.scene
+        wm = bpy.data.window_managers['WinMan']
         
         selected = []
         chkerror = 0
 
-        fontlist = bpy.data.window_managers['WinMan'].fontselector_list
-        idx = active.data.fontselector_index
+        fontlist = wm.fontselector_list
+        if wm.fontselector_override :
+            idx = active.data.fontselector_override_index
+        else :
+            idx = active.data.fontselector_index
         
         #error handling for not updated list
         try :
@@ -43,11 +47,14 @@ def update_change_font(self, context) :
                 for obj in selected :
                     #check if font is already changed
                     if font != obj.data.font :
-                        obj.data.fontselector_index = idx
+                        if wm.fontselector_override :
+                            obj.data.fontselector_override_index = idx
+                        else :
+                            obj.data.fontselector_index = idx
                         change_font(obj, font)
 
-            #reset global variable                        
-            first_active_object = ""
+        #reset global variable                        
+        first_active_object = ""
  
 #update save favorites
 def update_save_favorites(self, context) :
