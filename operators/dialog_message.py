@@ -9,6 +9,7 @@ from ..global_messages import *
 # 4 = unable to save font folder, no existent one
 # 5 = font installed, refreshing invitation
 # 6 = persmission denied for font installation
+# 7 = no existing font list, please refresh
 
 class FontSelectorDialogMessage(bpy.types.Operator):
     bl_idname = "fontselector.dialog_message"
@@ -59,3 +60,8 @@ class FontSelectorDialogMessage(bpy.types.Operator):
         elif self.code == 6 :
             self.layout.label(permission_denied, icon = 'ERROR')
             self.layout.label(self.customstring)
+
+        # error subdirectory font folder doesn't exist anymore
+        elif self.code == 7 :
+            self.layout.label(no_font_list_msg, icon = 'ERROR')
+            self.layout.operator("fontselector.modal_refresh", icon='FILE_REFRESH')
