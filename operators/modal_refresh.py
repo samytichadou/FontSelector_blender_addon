@@ -282,8 +282,11 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         if wm.fontselector_override :
             wm.fontselector_override = False
 
-        # update font in viewport
-        update_change_font(self, context)
+        # update font in viewport if possible
+        try :
+            update_change_font(self, context)
+        except AttributeError :
+            pass
 
         # reset variables
         global total
