@@ -22,7 +22,10 @@ class FontUIList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         #self.use_filter_show = True
         wm = bpy.data.window_managers['WinMan']
-        text_index = bpy.context.active_object.data.fontselector_index
+        if not wm.fontselector_override :
+            text_index = bpy.context.active_object.data.fontselector_index
+        else :
+            text_index = bpy.context.active_object.data.fontselector_override_index
         row = layout.row(align = True)
 
         if item.missingfont :
@@ -34,7 +37,6 @@ class FontUIList(bpy.types.UIList):
 
         if self.show_fake_user :
             if item.index == text_index :
-                #font_base_name = os.path.basename(item.filepath)
                 row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = 'FONT_DATA', emboss = True)
             else :
                 try :
