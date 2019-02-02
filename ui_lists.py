@@ -34,6 +34,7 @@ class FontUIList(bpy.types.UIList):
 
         if self.show_fake_user :
             if item.index == text_index :
+                #font_base_name = os.path.basename(item.filepath)
                 row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = 'FONT_DATA', emboss = True)
             else :
                 try :

@@ -21,7 +21,8 @@ def change_font(obj, font):
             for f in bpy.data.fonts :
                 if f.users == 0 and f.filepath != font.filepath and chkunused == 0 :
                     chkunused = 1
-                    f.name = os.path.splitext(name)[0]
+                    #f.name = os.path.splitext(name)[0]
+                    f.name = font.name
                     f.filepath = font.filepath
                     new_font = f
                     break
