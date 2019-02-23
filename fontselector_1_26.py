@@ -143,29 +143,29 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
         dlist = [x for x in dupelist if dupelist.count(x) >= 2]
 
         row = layout.row(align=True)
-        row.label(icon='SCRIPTWIN')
+        row.label(icon='PREFERENCES')
         row.prop(self, 'prefs_folderpath', text='External Preferences Path')
 
         row = layout.row(align=True)
-        row.label('Number of Font list rows', icon='COLLAPSEMENU')
+        row.label(text='Number of Font list rows', icon='COLLAPSEMENU')
         row.prop(self, 'row_number', text='')
 
         row = layout.row(align=True)
-        row.label('Subdirectories', icon='FILESEL')
+        row.label(text='Subdirectories', icon='FILE_FOLDER')
         row.prop(self, 'prefs_show_subdir', text='Show Font subdirectories')
 
         row = layout.row(align=True)
-        row.label('Add Font Filter', icon='FILTER')
+        row.label(text='Add Font Filter', icon='FILTER')
         row.prop(self, 'prefs_filter', text='')
-        row.operator('fontselector.add_filtered', text='', icon='ZOOMIN')
+        row.operator('fontselector.add_filtered', text='', icon='ADD')
 
         row = layout.row()
-        row.label("Font Folders", icon='FILE_FONT')
+        row.label(text="Font Folders", icon='FILE_FONT')
         if len(dlist) > 0:
-            row.label('Dupe Warning', icon='ERROR')
-        row.operator("fontselector.add_fp", text="Add Font Folder", icon='ZOOMIN')
+            row.label(text="Dupe Warning", icon='ERROR')
+        row.operator("fontselector.add_fp", text="Add Font Folder", icon='ADD')
         row.operator("fontselector.save_fpprefs", text='', icon='DISK_DRIVE')
-        row.operator("fontselector.load_fpprefs", text='', icon='LOAD_FACTORY')
+        row.operator("fontselector.load_fpprefs", text='', icon='LOOP_BACK')
 
         idx = -1
         for i in list:
