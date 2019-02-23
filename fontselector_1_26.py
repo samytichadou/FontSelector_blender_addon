@@ -1212,7 +1212,7 @@ def register():
 
     bpy.app.handlers.load_post.append(fontselector_startup)
 
-    bpy.types.INFO_MT_file_export.append(menu_export_favorites)
+    bpy.types.TOPBAR_MT_file_export.append(menu_export_favorites)
 
 
 def unregister():
@@ -1247,7 +1247,7 @@ def unregister():
 
     bpy.app.handlers.load_post.remove(fontselector_startup)
 
-    bpy.types.INFO_MT_file_export.remove(menu_export_favorites)
+    bpy.types.TOPBAR_MT_file_export.remove(menu_export_favorites)
 
 
 if __name__ == "__main__":
