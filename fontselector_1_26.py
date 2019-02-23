@@ -21,7 +21,7 @@ bl_info = {
     "name": "Font Selector",
     "author": "Samy Tichadou (tonton)",
     "version": (1, 26),
-    "blender": (2, 7, 8),
+    "blender": (2, 80, 0),
     "location": "Properties > Font > Font selection",
     "description": "Select Fonts directly in the property panel",
     "wiki_url": "https://github.com/samytichadou/FontSelector_blender_addon/wiki",
