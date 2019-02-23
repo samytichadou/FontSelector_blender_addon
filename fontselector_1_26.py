@@ -185,7 +185,7 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences):
 
 # get addon preferences
 def get_addon_preferences():
-    addon_preferences = bpy.context.user_preferences.addons[__name__].preferences
+    addon_preferences = bpy.context.preferences.addons[__name__].preferences
     return addon_preferences
 
 
@@ -1066,9 +1066,9 @@ class FontUIList(bpy.types.UIList):
 
         if item.missingfont == True:
             layout.label(icon='ERROR')
-        layout.label(item.name)
+        layout.label(text=item.name)
         if subdir == True:
-            layout.label(item.subdirectory)
+            layout.label(text=item.subdirectory)
         if item.favorite == True:
             layout.prop(item, "favorite", text="", icon='SOLO_ON', emboss=False, translate=False)
         else:
@@ -1079,7 +1079,7 @@ class FontUIList(bpy.types.UIList):
 class SubdirUIList(bpy.types.UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag):
-        layout.label(item.name)
+        layout.label(text=item.name)
 
 
 #######################################################################
@@ -1118,16 +1118,16 @@ class FontSelectorPanel(bpy.types.Panel):
             sub_row = len(fonth.fontselector_sub)
 
         if len(fplist) == 0:
-            layout.label('Add Font Folder in Addon Preference', icon='INFO')
+            layout.label(text="Add Font Folder in Addon Preference", icon='INFO')
         else:
             row = layout.row()
             row.operator("fontselector.refresh", icon='FILE_REFRESH')
             if fonth.fontselector_list == 0:
                 row = layout.row()
-                row.label('Refresh to get List of available Fonts', icon='INFO')
+                row.label(text="Refresh to get List of available Fonts", icon='INFO')
             else:
                 row.operator("fontselector.remove_unused", icon='UNLINKED')
-                row.prop(activedata, 'fontselector_use_sub', text='', icon='FILESEL')
+                row.prop(activedata, 'fontselector_use_sub', text='', icon='FILE_FONT')
                 if activedata.fontselector_favs == True:
                     row.prop(activedata, 'fontselector_favs', text='', icon='SOLO_ON')
                 elif activedata.fontselector_favs == False:
