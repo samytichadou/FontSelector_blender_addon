@@ -219,7 +219,7 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         wm = context.window_manager
         # the arguments we pass the callback
         args = (self, context)
-        self._timer = wm.event_timer_add(0.001, context.window)
+        self._timer = wm.event_timer_add(0.001, window = context.window)
         self._handle = bpy.types.SpaceProperties.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
         wm.modal_handler_add(self)
         return {'RUNNING_MODAL'}
