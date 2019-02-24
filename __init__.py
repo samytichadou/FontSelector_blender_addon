@@ -125,7 +125,7 @@ def register():
     
     ### EXPORT MENU ###
 
-    bpy.types.INFO_MT_file_export.append(menu_export_favorites)
+    bpy.types.TOPBAR_MT_file_export.append(menu_export_favorites)
 
 def unregister():
     
@@ -157,4 +157,4 @@ def unregister():
     
     ### EXPORT MENU ###
 
-    bpy.types.INFO_MT_file_export.remove(menu_export_favorites)
+    bpy.types.TOPBAR_MT_file_export.remove(menu_export_favorites)
