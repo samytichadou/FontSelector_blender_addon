@@ -12,7 +12,7 @@ from ..global_variable import json_file
 from ..global_messages import refresh_msg
 
 
-class FontSelectorLoadFPPrefs(bpy.types.Operator):
+class FontSelectorLoadFontList(bpy.types.Operator):
     bl_idname = "fontselector.load_fontlist"
     bl_label = "Load Font List"
     bl_description = "Load existing Font List"

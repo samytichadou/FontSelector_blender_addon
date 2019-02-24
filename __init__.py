@@ -22,7 +22,7 @@ bl_info = {
  "name": "Font Selector",  
  "author": "Samy Tichadou (tonton)",  
  "version": (2, 0),  
- "blender": (2, 7, 9),  
+ "blender": (2, 80, 0),  
  "location": "Properties > Font > Font selection",  
  "description": "Select Fonts directly in the property panel",  
   "wiki_url": "https://github.com/samytichadou/FontSelector_blender_addon/wiki",  
@@ -33,34 +33,62 @@ bl_info = {
 import bpy
 
 
-# load and reload submodules
-##################################
-
-import importlib
-from . import developer_utils
-
-importlib.reload(developer_utils)
-modules = developer_utils.setup_addon_modules(__path__, __name__, "bpy" in locals())
-
-
 # IMPORT SPECIFICS
 ##################################
 
 
 from .functions.misc_functions import menu_export_favorites
 from .startup_handler import fontselector_startup
-from .properties import *
 from .functions.update_functions import update_change_font, get_subdirectories_items, update_change_folder_override
+
+from .properties import *
+from .gui import *
+from .preferences import *
+from .ui_lists import *
+from .operators.add_filepath import *
+from .operators.check_changes import *
+from .operators.dialog_message import *
+from .operators.export_favorites import *
+from .operators.load_fontlist import *
+from .operators.load_preferences import *
+from .operators.modal_refresh import *
+from .operators.open_folder import *
+from .operators.remove_unused_fonts import *
+from .operators.save_favorites import *
+from .operators.save_preferences import *
+from .operators.suppress_filepath import *
 
 
 # register
 ##################################
 
-import traceback
+classes = (FontSelectorFontList, 
+            FontSelectorFontSubs, 
+            FontFolders,
+            FontSelectorPanel,
+            FontSelectorAddonPrefs,
+            FontUIList,
+            FontSelectorAddFP,
+            FontSelectorCheckChanges,
+            FontSelectorDialogMessage,
+            FontSelectorExportFavorites,
+            FontSelectorLoadFontList,
+            FontSelectorLoadFPPrefs,
+            FontSelectorModalRefresh,
+            FontSelectorOpenSubdirectory,
+            FontSelectorRemoveUnused,
+            FontSelectorSaveFavorites,
+            FontSelectorSaveFPPrefs,
+            FontSelectorSuppressFP
+            )
 
 def register():
-    try: bpy.utils.register_module(__name__)
-    except: traceback.print_exc()
+
+    ### OPERATORS ###
+
+    from bpy.utils import register_class
+    for cls in classes :
+        register_class(cls)
 
     ### PROPS ###
 
@@ -72,7 +100,7 @@ def register():
         bpy.props.EnumProperty(items = get_subdirectories_items, 
                                 name = "Subdirectories",
                                 description = "Display only specific Subdirectories")
-                                
+
     ### OLD OVERRIDE ###
     #bpy.types.WindowManager.fontselector_folder_override = bpy.props.StringProperty(
     #                                                    name = "Folder Override",
@@ -100,8 +128,12 @@ def register():
     bpy.types.INFO_MT_file_export.append(menu_export_favorites)
 
 def unregister():
-    try: bpy.utils.unregister_module(__name__)
-    except: traceback.print_exc()
+    
+    ### OPERATORS ###
+
+    from bpy.utils import unregister_class
+    for cls in reversed(classes) :
+        unregister_class(cls)
 
     ### PROPS ###
 
