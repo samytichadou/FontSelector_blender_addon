@@ -98,7 +98,7 @@ class FontUIList(bpy.types.UIList):
         row.separator()
         
         # sort by subfolder
-        row.prop(self, 'subdirectories_sorting', text = '', icon = 'FILESEL')
+        row.prop(self, 'subdirectories_sorting', text = '', icon = 'FILE_FOLDER')
         # sort invert
         row.prop(self, 'use_filter_sort_reverse', text = '', icon = 'ARROW_LEFTRIGHT')
 
@@ -108,7 +108,7 @@ class FontUIList(bpy.types.UIList):
         row.separator()
 
         # show subfolder option
-        row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILESEL')
+        row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILE_FOLDER')
         # show fake user
         row.prop(self, 'show_fake_user', text = '', icon = 'FONT_DATA')
         # show favorite
