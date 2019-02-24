@@ -120,5 +120,5 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
 
 # get addon preferences
 def get_addon_preferences():
-    addon = bpy.context.user_preferences.addons.get(addon_name)
+    addon = bpy.context.preferences.addons.get(addon_name)
     return getattr(addon, "preferences", None)
