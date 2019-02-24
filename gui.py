@@ -36,7 +36,7 @@ class FontSelectorPanel(bpy.types.Panel):
                 row = layout.row()
                 row.label('Refresh to get List of available Fonts', icon = 'INFO')
             else: 
-                row.operator("fontselector.check_changes", text = '', icon = 'LAMP')
+                row.operator("fontselector.check_changes", text = '', icon = 'OUTLINER_OB_LIGHT')
                 row.separator()
                 row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
 

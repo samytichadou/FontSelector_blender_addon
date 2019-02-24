@@ -72,7 +72,7 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
 
         box = col.box()
         row = box.row(align = True)
-        row.label(icon = 'SCRIPTWIN')
+        row.label(icon = 'PREFERENCES')
         row.prop(self, 'prefs_folderpath', text = 'External Preferences Path')
         
         box = col.box()
@@ -96,10 +96,10 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
         row.label("Font Folders", icon = 'FILE_FONT')
         if len(dupelist) > 0 :
             row.label('Dupe Warning', icon = 'ERROR')
-        row.operator("fontselector.add_fp", text = "Add Font Folder", icon = 'ZOOMIN')
+        row.operator("fontselector.add_fp", text = "Add Font Folder", icon = 'ADD')
         row.separator()
         row.operator("fontselector.save_fpprefs", text = 'Save', icon = 'DISK_DRIVE')
-        row.operator("fontselector.load_fpprefs", text = 'Load', icon = 'LOAD_FACTORY')
+        row.operator("fontselector.load_fpprefs", text = 'Load', icon = 'LOOP_BACK')
         
         idx = 0
         for i in font_list :
@@ -114,7 +114,7 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
 
         box = col.box()
         row = box.row(align = True)
-        row.label("Development", icon = 'MOD_SCREW')
+        row.label("Development", icon = 'MODIFIER_ON')
         row.prop(self, 'debug_value')
             
 
