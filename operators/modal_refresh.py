@@ -278,9 +278,10 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         # load favorites
         load_favorites()
 
-        # toggle override
-        if wm.fontselector_override :
-            wm.fontselector_override = False
+        ### OLD OVERRIDE ###
+        ## toggle override
+        #if wm.fontselector_override :
+        #    wm.fontselector_override = False
 
         # update font in viewport if possible
         try :
