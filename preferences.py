@@ -82,20 +82,20 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
 
         box = col.box()
         row = box.row(align = True)
-        row.label("Progress Bar", icon = 'TIME')
+        row.label(text = "Progress Bar", icon = 'TIME')
         row.prop(self, 'progress_bar_color', text = '')
         row.prop(self, 'progress_bar_size', text = 'Size')
         
         box = col.box()
         row = box.row(align = True)
-        row.label('Number of Font list rows', icon = 'COLLAPSEMENU')
+        row.label(text = 'Number of Font list rows', icon = 'COLLAPSEMENU')
         row.prop(self, 'row_number', text = '')
         
         box = col.box()
         row = box.row(align = True)
-        row.label("Font Folders", icon = 'FILE_FONT')
+        row.label(text = "Font Folders", icon = 'FILE_FONT')
         if len(dupelist) > 0 :
-            row.label('Dupe Warning', icon = 'ERROR')
+            row.label(text = 'Dupe Warning', icon = 'ERROR')
         row.operator("fontselector.add_fp", text = "Add Font Folder", icon = 'ADD')
         row.separator()
         row.operator("fontselector.save_fpprefs", text = 'Save', icon = 'DISK_DRIVE')
@@ -114,7 +114,7 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
 
         box = col.box()
         row = box.row(align = True)
-        row.label("Development", icon = 'MODIFIER_ON')
+        row.label(text = "Development", icon = 'MODIFIER_ON')
         row.prop(self, 'debug_value')
             
 

@@ -28,13 +28,13 @@ class FontSelectorPanel(bpy.types.Panel):
         wm = bpy.data.window_managers['WinMan']
         
         if len(fplist)==0:
-            layout.label('Add Font Folder in Addon Preference', icon = 'INFO')
+            layout.label(text = 'Add Font Folder in Addon Preference', icon = 'INFO')
         else:
             row = layout.row(align = True)
             row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
             if wm.fontselector_list == 0 :
                 row = layout.row()
-                row.label('Refresh to get List of available Fonts', icon = 'INFO')
+                row.label(text = 'Refresh to get List of available Fonts', icon = 'INFO')
             else: 
                 row.operator("fontselector.check_changes", text = '', icon = 'OUTLINER_OB_LIGHT')
                 row.separator()
@@ -47,7 +47,7 @@ class FontSelectorPanel(bpy.types.Panel):
                 #    row.operator('fontselector.load_fontlist', text = '', icon ='CANCEL')
                 #else :
                 #    row.operator('fontselector.override_folder', text = '', icon ='HAND')
-                #row.label(wm.fontselector_foldername_override)
+                #row.label(text = wm.fontselector_foldername_override)
                 row = layout.row()
                 row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
 
@@ -55,7 +55,7 @@ class FontSelectorPanel(bpy.types.Panel):
                 #if not activedata.fontselector_override :
                 #    row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
                 #else :
-                #    row.label('Folder Override', icon = 'INFO')
+                #    row.label(text = 'Folder Override', icon = 'INFO')
                 #    row.separator()
                 #    row.operator('fontselector.install_font', text = '', icon = 'FILE_FONT')
                 #    row = layout.row()
