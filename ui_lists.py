@@ -33,10 +33,10 @@ class FontUIList(bpy.types.UIList):
 
         if item.missingfont :
             row.label(icon = 'ERROR')
-        row.label(item.name)
+        row.label(text = item.name)
 
         if self.show_subdirectory_name :
-            row.label(item.subdirectory)
+            row.label(text = item.subdirectory)
 
         if self.show_fake_user :
             if item.index == text_index :
