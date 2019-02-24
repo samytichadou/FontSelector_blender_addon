@@ -21,10 +21,13 @@ def update_change_font(self, context) :
         chkerror = 0
 
         fontlist = wm.fontselector_list
-        if wm.fontselector_override :
-            idx = active.data.fontselector_override_index
-        else :
-            idx = active.data.fontselector_index
+        idx = active.data.fontselector_index
+
+        ### OLD OVERRIDE ###
+        #if wm.fontselector_override :
+        #    idx = active.data.fontselector_override_index
+        #else :
+        #    idx = active.data.fontselector_index
         
         #error handling for not updated list
         try :
@@ -47,10 +50,12 @@ def update_change_font(self, context) :
                 for obj in selected :
                     #check if font is already changed
                     if font != obj.data.font :
-                        if wm.fontselector_override :
-                            obj.data.fontselector_override_index = idx
-                        else :
-                            obj.data.fontselector_index = idx
+                        ### OLD OVERRIDE ###
+                        #if wm.fontselector_override :
+                        #    obj.data.fontselector_override_index = idx
+                        #else :
+                        #    obj.data.fontselector_index = idx
+                        obj.data.fontselector_index = idx
                         change_font(obj, font)
 
         #reset global variable                        

@@ -72,20 +72,24 @@ def register():
         bpy.props.EnumProperty(items = get_subdirectories_items, 
                                 name = "Subdirectories",
                                 description = "Display only specific Subdirectories")
-    bpy.types.WindowManager.fontselector_override = bpy.props.BoolProperty()
-    bpy.types.WindowManager.fontselector_folder_override = bpy.props.StringProperty(
-                                                        name = "Folder Override",
-                                                        default = '',
-                                                        description = "Folder for local override of the Font Folders preferences",
-                                                        subtype = "DIR_PATH",
-                                                        update = update_change_folder_override
-                                                        )
-    bpy.types.WindowManager.fontselector_foldername_override = bpy.props.StringProperty(default = "")
+                                
+    ### OLD OVERRIDE ###
+    #bpy.types.WindowManager.fontselector_folder_override = bpy.props.StringProperty(
+    #                                                    name = "Folder Override",
+    #                                                    default = '',
+    #                                                    description = "Folder for local override of the Font Folders preferences",
+    #                                                    subtype = "DIR_PATH",
+    #                                                    update = update_change_folder_override
+    #                                                    )
+    #bpy.types.WindowManager.fontselector_foldername_override = bpy.props.StringProperty(default = "")
 
     bpy.types.TextCurve.fontselector_index = \
         bpy.props.IntProperty(update = update_change_font)
-    bpy.types.TextCurve.fontselector_override_index = \
-        bpy.props.IntProperty(update = update_change_font)
+
+    ### OLD OVERRIDE ###
+    #bpy.types.TextCurve.fontselector_override = bpy.props.BoolProperty()
+    #bpy.types.TextCurve.fontselector_override_index = \
+    #    bpy.props.IntProperty(update = update_change_font)
 
     ### HANDLER ###
 
@@ -104,12 +108,16 @@ def unregister():
     del bpy.types.WindowManager.fontselector_list
     del bpy.types.WindowManager.fontselector_sub
     del bpy.types.WindowManager.fontselector_subdirectories
-    del bpy.types.WindowManager.fontselector_override
-    del bpy.types.WindowManager.fontselector_folder_override
-    del bpy.types.WindowManager.fontselector_foldername_override
+
+    ### OLD OVERRIDE ###
+    #del bpy.types.WindowManager.fontselector_folder_override
+    #del bpy.types.WindowManager.fontselector_foldername_override
 
     del bpy.types.TextCurve.fontselector_index
-    del bpy.types.TextCurve.fontselector_override_index
+
+    ### OLD OVERRIDE ###
+    #del bpy.types.TextCurve.fontselector_override
+    #del bpy.types.TextCurve.fontselector_override_index
     
     ### HANDLER
 
