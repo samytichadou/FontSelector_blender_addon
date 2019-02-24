@@ -6,20 +6,22 @@ from .functions.update_functions import get_subdirectories_items
 #font list
 class FontUIList(bpy.types.UIList):
 
-    show_subdirectory_name = bpy.props.BoolProperty(name = "Show Subdirectories", description = "Show Subdirectories")
-    show_favorite_icon = bpy.props.BoolProperty(name = "Show Favorites", description = "Show Favorites")
-    show_fake_user = bpy.props.BoolProperty(name = "Show Fake User", description = "Show Fake User")
+    show_subdirectory_name : bpy.props.BoolProperty(name = "Show Subdirectories", description = "Show Subdirectories")
+    show_favorite_icon : bpy.props.BoolProperty(name = "Show Favorites", description = "Show Favorites")
+    show_fake_user : bpy.props.BoolProperty(name = "Show Fake User", description = "Show Fake User")
 
-    subdirectories_filter = bpy.props.EnumProperty(items = get_subdirectories_items, 
+    subdirectories_filter : bpy.props.EnumProperty(items = get_subdirectories_items, 
                                                 name = "Subdirectories",
                                                 description = "Display only specific Subdirectories")
-    favorite_filter = bpy.props.BoolProperty(name = "Favorites Filter", description = "Show Only Favorites")
-    invert_filter = bpy.props.BoolProperty(name = "Invert Filter", description = "Invert Filter")
-    fake_user_filter = bpy.props.BoolProperty(name = "Fake User Filter", description = "Fake User Filter")
+    favorite_filter : bpy.props.BoolProperty(name = "Favorites Filter", description = "Show Only Favorites")
+    invert_filter : bpy.props.BoolProperty(name = "Invert Filter", description = "Invert Filter")
+    fake_user_filter : bpy.props.BoolProperty(name = "Fake User Filter", description = "Fake User Filter")
 
-    subdirectories_sorting = bpy.props.BoolProperty(name = "Sort by Subdirectories", description = "Sort by Subdirectories")
+    subdirectories_sorting : bpy.props.BoolProperty(name = "Sort by Subdirectories", description = "Sort by Subdirectories")
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
+        layout.use_property_split = True # Active single-column layout
+        
         #self.use_filter_show = True
         wm = bpy.data.window_managers['WinMan']
         text_index = bpy.context.active_object.data.fontselector_index
@@ -40,11 +42,15 @@ class FontUIList(bpy.types.UIList):
 
         if self.show_fake_user :
             if item.index == text_index :
-                row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = 'FONT_DATA', emboss = True)
+                if bpy.data.fonts[item.name].use_fake_user :
+                    icon = 'FAKE_USER_ON'
+                else :
+                    icon = 'FAKE_USER_OFF'
+                row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = icon)
             else :
                 try :
                     if bpy.data.fonts[item.name].use_fake_user :
-                        row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = 'FONT_DATA', emboss = True)
+                        row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = 'FAKE_USER_ON')
                     else :
                         row.label(icon = 'RADIOBUT_OFF')
                 except KeyError :
@@ -79,7 +85,7 @@ class FontUIList(bpy.types.UIList):
         row.operator('fontselector.open_subdirectory', text = '', icon = 'FILE_FOLDER')
         row.separator()
         # show only fake user
-        row.prop(self, 'fake_user_filter', text = '', icon = 'FONT_DATA')
+        row.prop(self, 'fake_user_filter', text = '', icon = 'FAKE_USER_ON')
         # show only favorites
         row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
 
@@ -110,7 +116,7 @@ class FontUIList(bpy.types.UIList):
         # show subfolder option
         row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILE_FOLDER')
         # show fake user
-        row.prop(self, 'show_fake_user', text = '', icon = 'FONT_DATA')
+        row.prop(self, 'show_fake_user', text = '', icon = 'FAKE_USER_ON')
         # show favorite
         row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
 

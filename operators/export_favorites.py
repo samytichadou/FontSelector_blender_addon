@@ -12,10 +12,10 @@ class FontSelectorExportFavorites(bpy.types.Operator, ExportHelper) :
     bl_label = "Export Fonts"
     bl_description = "Export Favorites of Fake User Fonts"
     filename_ext = ""
-    filepath = bpy.props.StringProperty(default = "favorite_fonts")
+    filepath : bpy.props.StringProperty(default = "favorite_fonts")
 
-    zip_toggle = bpy.props.BoolProperty(name = "Zip Compression")
-    export_mode = bpy.props.EnumProperty(name = "Fonts to Export",
+    zip_toggle : bpy.props.BoolProperty(name = "Zip Compression")
+    export_mode : bpy.props.EnumProperty(name = "Fonts to Export",
                                     items={
                                     ('FAVORITES', 'Favorites', 'Export Favorite Fonts'),
                                     ('FAKE_USER', 'Fake User', 'Export Fonts with Fake User'),

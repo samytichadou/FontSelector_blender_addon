@@ -20,6 +20,8 @@ class FontSelectorPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
+        layout.use_property_split = True # Active single-column layout
+        
         #get addon prefs
         addon_preferences = get_addon_preferences()
         rownumber = addon_preferences.row_number

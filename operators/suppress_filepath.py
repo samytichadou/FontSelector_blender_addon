@@ -8,7 +8,8 @@ class FontSelectorSuppressFP(bpy.types.Operator):
     bl_label = ""
     bl_description = "Suppress Font Filepath"
     bl_options = {'REGISTER', 'UNDO'}
-    index = bpy.props.IntProperty()
+    
+    index : bpy.props.IntProperty()
     
     @classmethod
     def poll(cls, context):

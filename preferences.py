@@ -9,7 +9,7 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
     bl_idname = addon_name
     
     # UI
-    row_number = bpy.props.IntProperty(
+    row_number : bpy.props.IntProperty(
                     default = 5,
                     min = 3,
                     max = 50,
@@ -17,10 +17,10 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
                     )
     
     # FONT FOLDERS
-    font_folders = bpy.props.CollectionProperty(type = FontFolders)
+    font_folders : bpy.props.CollectionProperty(type = FontFolders)
     
     # PREFS
-    prefs_folderpath = bpy.props.StringProperty(
+    prefs_folderpath : bpy.props.StringProperty(
             name = "Preferences Folder Path",
             default = os.path.join(bpy.utils.user_resource('CONFIG'), "font_selector_prefs"),
             description = "Folder where Font Selector Preferences will be stored",
@@ -28,16 +28,16 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
             )
 
     # PROGRESS BAR
-    progress_bar_color = bpy.props.FloatVectorProperty(
+    progress_bar_color : bpy.props.FloatVectorProperty(
             name = "Progress Bar Color", 
-            size = 4,
+            size = 3,
             min = 0.0,
             max = 1.0,
-            default = [1, 1, 1, 1],
+            default = [1, 1, 1],
             subtype = 'COLOR'
             )
 
-    progress_bar_size = bpy.props.IntProperty(
+    progress_bar_size : bpy.props.IntProperty(
             name = "Progress Bar Size", 
             min = 1,
             max = 100,
@@ -45,13 +45,13 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
             )
 
     # DEBUG
-    debug_value = bpy.props.BoolProperty(
+    debug_value : bpy.props.BoolProperty(
             name = "Debug Toggle", 
             default = False
             )
     
     # STARTUP BEHAVIOR
-    startup_check_behavior = bpy.props.EnumProperty(
+    startup_check_behavior : bpy.props.EnumProperty(
         name = "Startup Check", 
         default = 'AUTOMATIC_UPDATE',
         items = (

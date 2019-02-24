@@ -38,7 +38,7 @@ def update_change_font(self, context) :
         if chkerror == 0 :
             #get selected
             for obj in scn.objects :
-                if obj.select == True and obj.type == 'FONT' :
+                if obj.select_get() and obj.type == 'FONT' :
                     selected.append(obj)
             
             #blender font exception

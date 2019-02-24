@@ -1,8 +1,10 @@
 import bpy
 import os
 import time
-import bgl
+import gpu
 import sys
+
+from gpu_extras.batch import batch_for_shader
 
 from ..functions.misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font, update_progress
 from ..preferences import get_addon_preferences
@@ -19,18 +21,6 @@ total = 0
 
 ### UI ###
 
-# draw box in open gl function
-def draw_box(x, y, w, h, color):
-    bgl.glColor4f(*color)
-    bgl.glEnable(bgl.GL_BLEND)
-    bgl.glBegin(bgl.GL_QUADS)
-    
-    bgl.glVertex2f(x + w, y + h)
-    bgl.glVertex2f(x, y + h)
-    bgl.glVertex2f(x, y)
-    bgl.glVertex2f(x + w, y)
-    bgl.glEnd()
-
 # callback for loading bar in 3D view 
 def draw_callback_px(self, context):
     # get color and size of progress bar
@@ -40,36 +30,23 @@ def draw_callback_px(self, context):
 
     # Progress Bar
     width = context.area.width
-    #height = context.area.height
-    x = 0
-    y = 0
+
     completion = count / total
     size = int(width * completion)
-    #color_bar_back = [1.0, 1.0, 1.0, 0.1]
-    #color_font = [1.0, 1.0, 1.0, 1.0]
 
-    #draw_box(x, y, width, bar_thickness, color_bar_back)
-    #draw_box(x, y, size, bar_thickness, color_bar)
-    bgl.glColor4f(*color_bar)
-    bgl.glEnable(bgl.GL_BLEND)
-    bgl.glBegin(bgl.GL_QUADS)
-    
-    bgl.glVertex2f(x + size, y + bar_thickness)
-    bgl.glVertex2f(x, y + bar_thickness)
-    bgl.glVertex2f(x, y)
-    bgl.glVertex2f(x + size, y)
+    vertices = (
+        (0, 0), (size, 0),
+        (0, bar_thickness), (size, bar_thickness))
 
-    # Text
-    #bgl.glColor4f(*color_font)
-    #font_id = 0  # XXX, need to find out how best to get this.
-    #text = "Fonts Loading"
-    #xfont = width / 2 - 60
-    #yfont = 10
-    #blf.position(font_id, xfont, yfont, 0)
-    #blf.size(font_id, 18, 72)
-    #blf.draw(font_id, text)
+    indices = (
+        (0, 1, 2), (2, 1, 3))
 
-    bgl.glEnd()
+    shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+    batch = batch_for_shader(shader, 'TRIS', {"pos": vertices}, indices=indices)
+
+    shader.bind()
+    shader.uniform_float("color", color_bar)
+    batch.draw(shader)
 
 ### MODAL ###
 

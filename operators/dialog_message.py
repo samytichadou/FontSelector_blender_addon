@@ -16,8 +16,8 @@ class FontSelectorDialogMessage(bpy.types.Operator):
     bl_label = "FontSelector Dialog"
     bl_options = {'INTERNAL'}
  
-    code = bpy.props.IntProperty()
-    customstring = bpy.props.StringProperty()
+    code : bpy.props.IntProperty()
+    customstring : bpy.props.StringProperty()
  
     def execute(self, context):
         return {'FINISHED'}
