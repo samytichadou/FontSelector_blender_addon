@@ -34,7 +34,7 @@ def change_font(obj, font):
         obj.data.font = new_font
         
         #set object font property
-        obj.data.fontselector_font = new_font.name
+        obj.data.fontselector_font = font.name
 
         #toggle missing if True
         if obj.data.fontselector_font_missing :

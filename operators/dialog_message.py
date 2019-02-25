@@ -70,4 +70,5 @@ class FontSelectorDialogMessage(bpy.types.Operator):
         # persmission denied for font installation
         elif self.code == 8 :
             self.layout.label(text = missing_font, icon = 'ERROR')
+            self.layout.label(text = check_locate_font)
             self.layout.label(text = self.customstring)
