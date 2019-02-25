@@ -10,6 +10,7 @@ from ..global_messages import *
 # 5 = font installed, refreshing invitation
 # 6 = persmission denied for font installation
 # 7 = no existing font list, please refresh
+# 8 = missing font in new list, check text object
 
 class FontSelectorDialogMessage(bpy.types.Operator):
     bl_idname = "fontselector.dialog_message"
@@ -28,40 +29,45 @@ class FontSelectorDialogMessage(bpy.types.Operator):
     def draw(self, context):
         # startup changes in font folder message
         if self.code == 1 :
-            self.layout.label(changes_msg, icon = 'ERROR')
+            self.layout.label(text = changes_msg, icon = 'ERROR')
             self.layout.operator("fontselector.modal_refresh", icon='FILE_REFRESH')
         
         # error subdirectory font folder doesn't exist anymore
         elif self.code == 2 :
-            self.layout.label(subdirectory_error, icon = 'ERROR')
-            self.layout.label(changes_msg)
+            self.layout.label(text = subdirectory_error, icon = 'ERROR')
+            self.layout.label(text = changes_msg)
             self.layout.operator("fontselector.modal_refresh", icon='FILE_REFRESH')
 
         # saved font folders with deleted inexistent folder
         elif self.code == 3 :
-            self.layout.label(fontfolder_saved)
-            self.layout.label(fontfolder_deleted, icon = 'ERROR')
+            self.layout.label(text = fontfolder_saved)
+            self.layout.label(text = fontfolder_deleted, icon = 'ERROR')
             for folder in self.customstring.split(", ") :
-                self.layout.label(folder)
+                self.layout.label(text = folder)
 
         # unable to save font folder, no existent one
         elif self.code == 4 :
-            self.layout.label(fontfolder_not_saved, icon = 'ERROR')
-            self.layout.label(fontfolder_deleted)
+            self.layout.label(text = fontfolder_not_saved, icon = 'ERROR')
+            self.layout.label(text = fontfolder_deleted)
             for folder in self.customstring.split(", ") :
-                self.layout.label(folder)
+                self.layout.label(text = folder)
 
         # font installed, refreshing invitation
         elif self.code == 5 :
-            self.layout.label(font_installed, icon = 'INFO')
+            self.layout.label(text = font_installed, icon = 'INFO')
             self.layout.operator("fontselector.modal_refresh", icon='FILE_REFRESH')
         
         # persmission denied for font installation
         elif self.code == 6 :
-            self.layout.label(permission_denied, icon = 'ERROR')
-            self.layout.label(self.customstring)
+            self.layout.label(text = permission_denied, icon = 'ERROR')
+            self.layout.label(text = self.customstring)
 
         # error subdirectory font folder doesn't exist anymore
         elif self.code == 7 :
-            self.layout.label(no_font_list_msg, icon = 'ERROR')
+            self.layout.label(text = no_font_list_msg, icon = 'ERROR')
             self.layout.operator("fontselector.modal_refresh", icon='FILE_REFRESH')
+
+        # persmission denied for font installation
+        elif self.code == 8 :
+            self.layout.label(text = missing_font, icon = 'ERROR')
+            self.layout.label(text = self.customstring)

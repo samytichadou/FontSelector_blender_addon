@@ -2,6 +2,7 @@ refresh_msg = "Font List Refreshed"
 cancel_refresh_msg = "Refresh List Cancelled"
 start_refreshing_msg = "Font List Refreshing"
 no_font_list_msg = "No existing Font List"
+missing_font = "Missing Font in New List, check for objects :"
 
 changes_msg = "Changes in Font Folders"
 no_changes_msg = "Font Folders Up to Date"
