@@ -26,11 +26,6 @@ class FontUIList(bpy.types.UIList):
         wm = bpy.data.window_managers['WinMan']
         text_index = bpy.context.active_object.data.fontselector_index
 
-        ### OLD OVERRIDE ###
-        #if not wm.fontselector_override :
-        #    text_index = bpy.context.active_object.data.fontselector_index
-        #else :
-        #    text_index = bpy.context.active_object.data.fontselector_override_index
         row = layout.row(align = True)
 
         if item.missingfont :
@@ -60,11 +55,6 @@ class FontUIList(bpy.types.UIList):
             icon = 'SOLO_ON' if item.favorite else 'SOLO_OFF'
             row.prop(item, "favorite", text = "", icon = icon, emboss = True)
 
-        ### OLD OVERRIDE ###
-        #if self.show_favorite_icon and not wm.fontselector_override :
-        #    icon = 'SOLO_ON' if item.favorite else 'SOLO_OFF'
-        #    row.prop(item, "favorite", text = "", icon = icon, emboss = True)
-
 
     def draw_filter(self, context, layout):
 
@@ -88,11 +78,6 @@ class FontUIList(bpy.types.UIList):
         row.prop(self, 'fake_user_filter', text = '', icon = 'FAKE_USER_ON')
         # show only favorites
         row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
-
-        ### OLD OVERRIDE ###
-        #if not wm.fontselector_override :
-        #    # show only favorites
-        #    row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
         
         # invert filtering
         row.prop(self, 'invert_filter', text = '', icon = 'ARROW_LEFTRIGHT')
@@ -119,11 +104,6 @@ class FontUIList(bpy.types.UIList):
         row.prop(self, 'show_fake_user', text = '', icon = 'FAKE_USER_ON')
         # show favorite
         row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
-
-        ### OLD OVERRIDE ###
-        #if not wm.fontselector_override :
-        #    # show favorite
-        #    row.prop(self, 'show_favorite_icon', text = '', icon = 'SOLO_OFF')
         
 
     # Called once to filter/reorder items.
@@ -169,9 +149,6 @@ class FontUIList(bpy.types.UIList):
                             flt_flags[idx] = 0
 
             # favs filtering
-
-            ### OLD OVERRIDE ###
-            #if self.favorite_filter and not wm.fontselector_override :
 
             if self.favorite_filter :
                 for idx, font in enumerate(col) :
