@@ -12,6 +12,7 @@ from ..functions.json_functions import initialize_json_datas, add_fonts_json, ad
 from ..functions.load_json import load_json_font_file
 from ..functions.load_favorites import load_favorites
 from ..functions.update_functions import update_change_font
+from ..functions.change_list_update import change_list_update
 
 from ..global_variable import json_file
 from ..global_messages import start_refreshing_msg, progress_print_statement, cancel_refresh_msg, refresh_msg
@@ -101,8 +102,8 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         #data_font_list = bpy.data.fonts
 
         for folder in fplist :
-            if folder.folderpath != "" :
-                absolute_folder = absolute_path(folder.folderpath)
+            absolute_folder = absolute_path(folder.folderpath)
+            if os.path.isdir(absolute_folder) :
                 self.size_total += get_size(absolute_folder) 
                 fontpath_list, subdir_list = get_all_font_files(absolute_folder)
                 for font in fontpath_list :
@@ -114,8 +115,6 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         if os.path.isfile(self.json_output) :
             # turn relevant json files into old
             os.rename(self.json_output, self.json_old)
-
-        #create subdir list
 
         #clean unused
         remove_unused_font()
@@ -166,7 +165,7 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                         update_progress(progress_print_statement, count + 1, total)
                         if self.debug :
                             print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
-                    except RuntimeError:
+                    except RuntimeError :
                         self.avoid_list.append(name)
                         self.corrupted.append([path, subdir, name])
                         update_progress(progress_print_statement, count + 1, total)
@@ -215,6 +214,9 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         global count
         total = 0
         count = 0
+        del self.avoid_list[:]
+        del self.corrupted[:]
+        del self.json_font_list[:]
         del self.font_list[:]
         del self.subdirectories[:]
 
@@ -228,8 +230,8 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         wm = context.window_manager
         wm.event_timer_remove(self._timer)
 
-        collection_font_list = bpy.data.window_managers['WinMan'].fontselector_list
-        collection_subdir_list = bpy.data.window_managers['WinMan'].fontselector_sub
+        collection_font_list = wm.fontselector_list
+        collection_subdir_list = wm.fontselector_sub
 
         # initialize json
         datas = initialize_json_datas()
@@ -255,10 +257,8 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         # load favorites
         load_favorites()
 
-        ### OLD OVERRIDE ###
-        ## toggle override
-        #if wm.fontselector_override :
-        #    wm.fontselector_override = False
+        # relink fonts
+        change_list_update()
 
         # update font in viewport if possible
         try :
@@ -271,9 +271,12 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         global count
         total = 0
         count = 0
+        del self.avoid_list[:]
+        del self.corrupted[:]
+        del self.json_font_list[:]
         del self.font_list[:]
         del self.subdirectories[:]
-
+        
         # redraw area
         try:
             for area in context.screen.areas:
@@ -281,8 +284,6 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                     area.tag_redraw()
         except AttributeError:
             pass
-
-        # if subdir no longer exists, select All
 
         # return finish state to user
         self.report({'INFO'}, refresh_msg)

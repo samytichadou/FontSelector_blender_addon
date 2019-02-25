@@ -32,6 +32,14 @@ def change_font(obj, font):
             new_font = bpy.data.fonts.load(filepath=font.filepath)
 
         obj.data.font = new_font
+        
+        #set object font property
+        obj.data.fontselector_font = new_font.name
+
+        #toggle missing if True
+        if obj.data.fontselector_font_missing :
+            obj.data.fontselector_font_missing = False
+        
     #no font file
     else:
         font.missingfont=True

@@ -62,7 +62,7 @@ def update_change_font(self, context) :
 
         #reset global variable                        
         first_active_object = ""
- 
+
 #update save favorites
 def update_save_favorites(self, context) :
     active = bpy.context.active_object

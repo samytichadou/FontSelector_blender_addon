@@ -33,17 +33,22 @@ class FontSelectorPanel(bpy.types.Panel):
         if len(fplist)==0:
             layout.label(text = 'Add Font Folder in Addon Preference', icon = 'INFO')
 
-        # no list
         else:
             row = layout.row(align = True)
             row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
+
+            # no list
             if len(wm.fontselector_list) == 0 :
                 row = layout.row()
                 row.label(text = 'Refresh to get List of available Fonts', icon = 'INFO')
+
             else: 
                 row.operator("fontselector.check_changes", text = '', icon = 'OUTLINER_OB_LIGHT')
                 row.separator()
                 row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
+                if activedata.fontselector_font_missing :
+                    row.separator()
+                    row.label(text = "Missing : " + activedata.fontselector_font, icon = "ERROR")
 
                 row = layout.row()
                 row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
