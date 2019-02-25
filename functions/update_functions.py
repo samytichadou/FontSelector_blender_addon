@@ -37,6 +37,8 @@ def update_change_font(self, context) :
 
         if chkerror == 0 :
             #get selected
+            if active.type == 'FONT' and not active.select_get() :
+                selected.append(active)
             for obj in scn.objects :
                 if obj.select_get() and obj.type == 'FONT' :
                     selected.append(obj)
