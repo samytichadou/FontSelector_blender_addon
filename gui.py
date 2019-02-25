@@ -29,12 +29,15 @@ class FontSelectorPanel(bpy.types.Panel):
         activedata = bpy.context.active_object.data
         wm = bpy.data.window_managers['WinMan']
         
+        # no font folder
         if len(fplist)==0:
             layout.label(text = 'Add Font Folder in Addon Preference', icon = 'INFO')
+
+        # no list
         else:
             row = layout.row(align = True)
             row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
-            if wm.fontselector_list == 0 :
+            if len(wm.fontselector_list) == 0 :
                 row = layout.row()
                 row.label(text = 'Refresh to get List of available Fonts', icon = 'INFO')
             else: 
@@ -42,23 +45,5 @@ class FontSelectorPanel(bpy.types.Panel):
                 row.separator()
                 row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
 
-                ### OLD OVERRIDE ###
-                #row.separator()
-                #row.prop(wm, 'fontselector_folder_override', text = '', icon = 'FILESEL', icon_only = True)
-                #if activedata.fontselector_override :
-                #    row.operator('fontselector.load_fontlist', text = '', icon ='CANCEL')
-                #else :
-                #    row.operator('fontselector.override_folder', text = '', icon ='HAND')
-                #row.label(text = wm.fontselector_foldername_override)
                 row = layout.row()
                 row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
-
-                ### OLD OVERRIDE ###
-                #if not activedata.fontselector_override :
-                #    row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
-                #else :
-                #    row.label(text = 'Folder Override', icon = 'INFO')
-                #    row.separator()
-                #    row.operator('fontselector.install_font', text = '', icon = 'FILE_FONT')
-                #    row = layout.row()
-                #    row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_override_index", rows = rownumber)
