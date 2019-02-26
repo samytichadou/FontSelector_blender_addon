@@ -29,7 +29,7 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
 
     # PROGRESS BAR
     progress_bar_color : bpy.props.FloatVectorProperty(
-            name = "Progress Bar Color", 
+            name = "Progress Bar", 
             size = 3,
             min = 0.0,
             max = 1.0,
@@ -38,7 +38,7 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
             )
     
     progress_bar_background_color : bpy.props.FloatVectorProperty(
-            name = "Progress Bar Background Color", 
+            name = "Background", 
             size = 3,
             min = 0.0,
             max = 1.0,
@@ -94,6 +94,7 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
         row.label(text = "Progress Bar", icon = 'TIME')
         row.prop(self, 'progress_bar_color', text = '')
         row.prop(self, 'progress_bar_size', text = 'Size')
+        row.prop(self, 'progress_bar_background_color')
         
         box = col.box()
         row = box.row(align = True)
