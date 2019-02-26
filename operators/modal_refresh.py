@@ -2,6 +2,7 @@ import bpy
 import os
 import time
 import gpu
+import blf
 import sys
 
 from gpu_extras.batch import batch_for_shader
@@ -15,7 +16,7 @@ from ..functions.update_functions import update_change_font
 from ..functions.change_list_update import change_list_update
 
 from ..global_variable import json_file
-from ..global_messages import start_refreshing_msg, progress_print_statement, cancel_refresh_msg, refresh_msg
+from ..global_messages import start_refreshing_msg, progress_print_statement, cancel_refresh_msg, refresh_msg, modal_refreshing
 
 count = 0
 total = 0
@@ -27,6 +28,7 @@ def draw_callback_px(self, context):
     # get color and size of progress bar
     addon_preferences = get_addon_preferences()
     color_bar = addon_preferences.progress_bar_color
+    background = addon_preferences.progress_bar_background_color
     bar_thickness = addon_preferences.progress_bar_size
 
     # Progress Bar
@@ -35,19 +37,40 @@ def draw_callback_px(self, context):
     completion = count / total
     size = int(width * completion)
 
-    vertices = (
-        (0, 0), (size, 0),
-        (0, bar_thickness), (size, bar_thickness))
+    # rectangle background
+    vertices_2 = (
+        (0, 0), (width, 0),
+        (0, bar_thickness + 20), (width, bar_thickness + 20))
 
     indices = (
         (0, 1, 2), (2, 1, 3))
+
+    shader2 = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+    batch2 = batch_for_shader(shader2, 'TRIS', {"pos": vertices_2}, indices=indices)
+
+    shader2.bind()
+    shader2.uniform_float("color", [*background, 1])
+    batch2.draw(shader2)
+
+    # rectangle 1
+    vertices = (
+        (0, 0), (size, 0),
+        (0, bar_thickness), (size, bar_thickness))
 
     shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
     batch = batch_for_shader(shader, 'TRIS', {"pos": vertices}, indices=indices)
 
     shader.bind()
-    shader.uniform_float("color", color_bar)
+    shader.uniform_float("color", [*color_bar, 1])
     batch.draw(shader)
+
+    # Text
+    text = modal_refreshing
+
+    blf.color(0, *color_bar, 1)
+    blf.size(0, 12, 72)
+    blf.position(0, 10, bar_thickness + 5, 0)
+    blf.draw(0, text) 
 
 ### MODAL ###
 

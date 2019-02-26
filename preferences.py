@@ -36,6 +36,15 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
             default = [1, 1, 1],
             subtype = 'COLOR'
             )
+    
+    progress_bar_background_color : bpy.props.FloatVectorProperty(
+            name = "Progress Bar Background Color", 
+            size = 3,
+            min = 0.0,
+            max = 1.0,
+            default = [0.2, 0.2, 0.2],
+            subtype = 'COLOR'
+            )
 
     progress_bar_size : bpy.props.IntProperty(
             name = "Progress Bar Size", 

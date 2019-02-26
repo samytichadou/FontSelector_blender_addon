@@ -5,6 +5,8 @@ no_font_list_msg = "No existing Font List"
 missing_font = "Missing Font in New List"
 check_locate_font = "Check objects and locate the font"
 
+modal_refreshing = "Font Selector Refreshing - Esc to Cancel"
+
 font_file_error = "Font File does not exist"
 
 changes_msg = "Changes in Font Folders"
