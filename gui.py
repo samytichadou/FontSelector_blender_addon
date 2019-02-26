@@ -49,6 +49,7 @@ class FontSelectorPanel(bpy.types.Panel):
                 if activedata.fontselector_font_missing :
                     row.separator()
                     row.label(text = "Missing : " + activedata.fontselector_font, icon = "ERROR")
+                    row.operator("fontselector.open_font_folder", text = "", icon = 'FILE_FOLDER')
 
                 row = layout.row()
                 row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)

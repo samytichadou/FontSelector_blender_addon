@@ -3,7 +3,7 @@ import os
 import platform
 import subprocess
 
-from ..functions.misc_functions import absolute_path
+from ..functions.misc_functions import absolute_path, open_folder_in_explorer
 
 class FontSelectorOpenSubdirectory(bpy.types.Operator):
     bl_idname = "fontselector.open_subdirectory"
@@ -28,12 +28,7 @@ class FontSelectorOpenSubdirectory(bpy.types.Operator):
                     path = absolute_path(sub.filepath)
                     break
             try :
-                if platform.system() == "Windows":
-                    os.startfile(path)
-                elif platform.system() == "Darwin":
-                    subprocess.Popen(["open", path])
-                else:
-                    subprocess.Popen(["xdg-open", path])
+                open_folder_in_explorer(path)
             except FileNotFoundError :
                 bpy.ops.fontselector.dialog_message('INVOKE_DEFAULT', code = 2)
 

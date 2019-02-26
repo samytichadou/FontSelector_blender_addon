@@ -11,6 +11,7 @@ from ..global_messages import *
 # 6 = persmission denied for font installation
 # 7 = no existing font list, please refresh
 # 8 = missing font in new list, check text object
+# 9 = error font doesn't exist anymore
 
 class FontSelectorDialogMessage(bpy.types.Operator):
     bl_idname = "fontselector.dialog_message"
@@ -72,3 +73,7 @@ class FontSelectorDialogMessage(bpy.types.Operator):
             self.layout.label(text = missing_font, icon = 'ERROR')
             self.layout.label(text = check_locate_font)
             self.layout.label(text = self.customstring)
+
+        # error subdirectory font folder doesn't exist anymore
+        elif self.code == 9 :
+            self.layout.label(text = font_file_error, icon = 'ERROR')

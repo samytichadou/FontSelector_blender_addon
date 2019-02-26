@@ -57,6 +57,7 @@ from .operators.remove_unused_fonts import *
 from .operators.save_favorites import *
 from .operators.save_preferences import *
 from .operators.suppress_filepath import *
+from .operators.open_font_folder import *
 
 
 # register
@@ -79,7 +80,8 @@ classes = (FontSelectorFontList,
             FontSelectorRemoveUnused,
             FontSelectorSaveFavorites,
             FontSelectorSaveFPPrefs,
-            FontSelectorSuppressFP
+            FontSelectorSuppressFP,
+            FontSelectorOpenFontFolder
             )
 
 def register():

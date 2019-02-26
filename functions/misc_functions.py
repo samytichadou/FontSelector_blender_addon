@@ -1,8 +1,19 @@
 import bpy
 import os
 import sys
+import platform
+import subprocess
 
 from ..global_variable import extensions
+
+# open folder in explorer
+def open_folder_in_explorer(path) :
+        if platform.system() == "Windows":
+                os.startfile(path)
+        elif platform.system() == "Darwin":
+                subprocess.Popen(["open", path])
+        else:
+                subprocess.Popen(["xdg-open", path])
 
 # export menu
 def menu_export_favorites(self, context) :
