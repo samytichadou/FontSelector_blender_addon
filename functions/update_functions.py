@@ -2,6 +2,7 @@ import bpy
 import os
 
 from .change_font import change_font
+from .change_font_strip import change_font_strip
 from .misc_functions import clear_collection
 
 first_active_object = ""
@@ -13,8 +14,8 @@ def update_change_font(self, context) :
     #check if the loop is run through the active object or other selected ones
     if first_active_object == "" :
 
-        active = first_active_object = bpy.context.active_object
-        scn = bpy.context.scene
+        active = first_active_object = context.active_object
+        scn = context.scene
         wm = bpy.data.window_managers['WinMan']
         
         selected = []
@@ -23,12 +24,6 @@ def update_change_font(self, context) :
         fontlist = wm.fontselector_list
         idx = active.data.fontselector_index
 
-        ### OLD OVERRIDE ###
-        #if wm.fontselector_override :
-        #    idx = active.data.fontselector_override_index
-        #else :
-        #    idx = active.data.fontselector_index
-        
         #error handling for not updated list
         try :
             font = fontlist[idx]
@@ -51,12 +46,7 @@ def update_change_font(self, context) :
             else :
                 for obj in selected :
                     #check if font is already changed
-                    if font != obj.data.font :
-                        ### OLD OVERRIDE ###
-                        #if wm.fontselector_override :
-                        #    obj.data.fontselector_override_index = idx
-                        #else :
-                        #    obj.data.fontselector_index = idx
+                    if font.name != obj.data.font.name :
                         obj.data.fontselector_index = idx
                         change_font(obj, font)
 
@@ -78,8 +68,50 @@ def get_subdirectories_items(self, context) :
         subdir_list.append((sub.name, sub.name, sub.filepath))
     return subdir_list
 
-#get name of override folder
-def update_change_folder_override(self, context) :
-    wm = bpy.data.window_managers['WinMan']
-    folder_path = wm.fontselector_folder_override
-    wm.fontselector_foldername_override = os.path.basename(os.path.dirname(folder_path))
+#update change font strip
+def update_change_font_strip(self, context) :
+    global first_active_object
+
+    #check if the loop is run through the active object or other selected ones
+    if first_active_object == "" :
+        active_strip = first_active_object = context.scene.sequence_editor.active_strip
+
+        wm = bpy.data.window_managers['WinMan']
+        
+        selected = []
+        chkerror = 0
+
+        fontlist = wm.fontselector_list
+        idx = active_strip.fontselector_index
+        scn = context.scene
+        seq = scn.sequence_editor.sequences_all
+        
+        #error handling for not updated list
+        try :
+            font = fontlist[idx]
+        except IndexError :
+            chkerror = 1
+
+        if chkerror == 0 :
+            #get selected
+            if active_strip.select :
+                selected.append(active_strip)
+            for strip in seq :
+                if strip.type == 'TEXT' and strip.select :
+                    selected.append(strip)
+            
+            #blender font exception
+            if fontlist[idx].name == 'Bfont' :
+                for obj in selected :
+                    obj.data.font = bpy.data.fonts['Bfont']
+
+            #regular change of font
+            else :
+                for strip in selected :
+                    #check if font is already changed
+                    if font.name != strip.font.name :
+                        strip.fontselector_index = idx
+                        change_font_strip(strip, font)
+
+        #reset global variable                        
+        first_active_object = ""

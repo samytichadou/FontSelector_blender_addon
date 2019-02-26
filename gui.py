@@ -30,9 +30,10 @@ class FontSelectorPanel(Panel):
 class SEQUENCER_PT_font_selector(Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
+    bl_category = "Strip"
     bl_label = "Font Selection"
-    bl_parent_id = "SEQUENCER_PT_effect"
-    bl_options = {'DEFAULT_CLOSED'}
+    #bl_parent_id = "SEQUENCER_PT_effect"
+    #bl_options = {'DEFAULT_CLOSED'}
 
     @staticmethod
     def has_sequencer(context):

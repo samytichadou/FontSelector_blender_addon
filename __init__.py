@@ -39,7 +39,7 @@ import bpy
 
 from .functions.misc_functions import menu_export_favorites
 from .startup_handler import fontselector_startup
-from .functions.update_functions import update_change_font, get_subdirectories_items, update_change_folder_override
+from .functions.update_functions import update_change_font, get_subdirectories_items, update_change_font_strip
 
 
 from .properties import *
@@ -118,7 +118,7 @@ def register():
 
     # TEXT STRIP PROPS
     bpy.types.TextSequence.fontselector_index = \
-        bpy.props.IntProperty(update = update_change_font)
+        bpy.props.IntProperty(update = update_change_font_strip)
 
     bpy.types.TextSequence.fontselector_font = \
         bpy.props.StringProperty()

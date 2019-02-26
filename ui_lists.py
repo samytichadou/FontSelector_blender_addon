@@ -21,10 +21,9 @@ class FontUIList(bpy.types.UIList):
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         layout.use_property_split = True # Active single-column layout
-        
         #self.use_filter_show = True
-        wm = bpy.data.window_managers['WinMan']
-        text_index = bpy.context.active_object.data.fontselector_index
+
+        #text_index = bpy.context.active_object.data.fontselector_index
 
         row = layout.row(align = True)
 
@@ -36,7 +35,7 @@ class FontUIList(bpy.types.UIList):
             row.label(text = item.subdirectory)
 
         if self.show_fake_user :
-            if item.index == text_index :
+            if item.index == active_data.fontselector_index :
                 if bpy.data.fonts[item.name].use_fake_user :
                     icon = 'FAKE_USER_ON'
                 else :

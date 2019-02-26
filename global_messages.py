@@ -3,7 +3,7 @@ cancel_refresh_msg = "Refresh List Cancelled"
 start_refreshing_msg = "Font List Refreshing"
 no_font_list_msg = "No existing Font List"
 missing_font = "Missing Font in New List"
-check_locate_font = "Check objects and locate the font"
+check_locate_font = "Check objects/strips and locate the font"
 
 modal_refreshing = "Font Selector Refreshing - Esc to Cancel"
 
