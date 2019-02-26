@@ -59,47 +59,50 @@ class FontUIList(bpy.types.UIList):
 
 
     def draw_filter(self, context, layout):
-
         wm = bpy.data.window_managers['WinMan']
 
-        # FILTER
-        box = layout.box()
-        row = box.row(align = True)
-        row.label(icon = 'VIEWZOOM')
-        row.separator()
+        layout.use_property_split = True # Active single-column layout
+        flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
 
+        # FILTER p1
+        box = flow.box()
+        row = box.row(align=True)
+        row.label(icon = 'VIEWZOOM')
         # search classic
         row.prop(self, 'filter_name', text = '')
-        row.separator()
+
+        # FILTER p3
+        box = flow.box()
+        row = box.row(align=True)
+        row.label(icon = 'OUTLINER_OB_GROUP_INSTANCE')
         # filter by subfolder
-        #row.prop(self, 'subdirectories_filter', text = '')
         row.prop(wm, 'fontselector_subdirectories', text = '')
         row.operator('fontselector.open_subdirectory', text = '', icon = 'FILE_FOLDER')
-        row.separator()
+
+        # FILTER p2
+        box = flow.box()
+        row = box.row(align=True)
+        row.label(icon = 'FILTER')
         # show only fake user
         row.prop(self, 'fake_user_filter', text = '', icon = 'FAKE_USER_ON')
         # show only favorites
         row.prop(self, 'favorite_filter', text = '', icon = 'SOLO_ON')
-        
         # invert filtering
         row.prop(self, 'invert_filter', text = '', icon = 'ARROW_LEFTRIGHT')
 
         # SORT
-        box = layout.box()
-        row = box.row(align = True)
+        box = flow.box()
+        row = box.row(align=True)
         row.label(icon = 'SORTSIZE')
-        row.separator()
-        
         # sort by subfolder
         row.prop(self, 'subdirectories_sorting', text = '', icon = 'FILE_FOLDER')
         # sort invert
         row.prop(self, 'use_filter_sort_reverse', text = '', icon = 'ARROW_LEFTRIGHT')
 
         # VIEW
-        row.separator()
+        box = flow.box()
+        row = box.row(align=True)
         row.label(icon = 'RESTRICT_VIEW_OFF')
-        row.separator()
-
         # show subfolder option
         row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILE_FOLDER')
         # show fake user
