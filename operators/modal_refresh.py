@@ -153,7 +153,7 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         # redraw area
         try:
             for area in context.screen.areas:
-                if area.type == 'PROPERTIES':
+                if area.type == 'PROPERTIES' :
                     area.tag_redraw()
         except AttributeError:
             pass

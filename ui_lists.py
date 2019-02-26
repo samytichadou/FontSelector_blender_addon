@@ -36,11 +36,14 @@ class FontUIList(bpy.types.UIList):
 
         if self.show_fake_user :
             if item.index == active_data.fontselector_index :
-                if bpy.data.fonts[item.name].use_fake_user :
-                    icon = 'FAKE_USER_ON'
-                else :
-                    icon = 'FAKE_USER_OFF'
-                row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = icon)
+                try :
+                    if bpy.data.fonts[item.name].use_fake_user :
+                        icon = 'FAKE_USER_ON'
+                    else :
+                        icon = 'FAKE_USER_OFF'
+                    row.prop(bpy.data.fonts[item.name], 'use_fake_user', text = "", icon = icon)
+                except KeyError :
+                    row.label(icon = 'RADIOBUT_OFF')
             else :
                 try :
                     if bpy.data.fonts[item.name].use_fake_user :
