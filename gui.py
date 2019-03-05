@@ -45,6 +45,7 @@ class SEQUENCER_PT_font_selector(Panel):
             return False
         try :
             strip = context.scene.sequence_editor.active_strip
+            strip.name
         except AttributeError:
             return False
 
