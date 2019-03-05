@@ -102,16 +102,21 @@ def update_change_font_strip(self, context) :
             
             #blender font exception
             if fontlist[idx].name == 'Bfont' :
-                for obj in selected :
-                    obj.data.font = bpy.data.fonts['Bfont']
+                for strip in selected :
+                    strip.font = bpy.data.fonts['Bfont']
 
             #regular change of font
             else :
                 for strip in selected :
-                    #check if font is already changed
-                    if font.name != strip.font.name :
+                    #check if there is a strip font
+                    if strip.font is None :
                         strip.fontselector_index = idx
                         change_font_strip(strip, font)
+                    else :
+                        #check if font is already changed
+                        if font.name != strip.font.name :
+                            strip.fontselector_index = idx
+                            change_font_strip(strip, font)
 
         #reset global variable                        
         first_active_object = ""
