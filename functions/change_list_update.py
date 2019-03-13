@@ -14,7 +14,6 @@ def change_list_update() :
     # 3d text object
     for obj in bpy.data.objects :
         if obj.type == 'FONT' and obj.data.fontselector_font != "" :
-
             # relink if possible
             old_font = obj.data.fontselector_font
             chk_font_exists = 0
@@ -27,7 +26,7 @@ def change_list_update() :
             if chk_font_exists == 0 :
                 obj.data.fontselector_font_missing = True
                 # prevent automatic changes via index
-                obj.data.fontselector_index = len(fontlist)
+                obj.data.fontselector_index = -1
                 missing_list += "Object : " + obj.name
 
     # strip text
