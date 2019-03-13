@@ -7,8 +7,9 @@ import sys
 
 from gpu_extras.batch import batch_for_shader
 
-from ..functions.misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font, update_progress
 from ..preferences import get_addon_preferences
+
+from ..functions.misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font, update_progress
 from ..functions.json_functions import initialize_json_datas, add_fonts_json, add_subdirectories_json, add_size_json, create_json_file
 from ..functions.load_json import load_json_font_file
 from ..functions.load_favorites import load_favorites
@@ -279,6 +280,9 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
         # load favorites
         load_favorites()
+
+        #TODO#
+        # add exclusion objects to prevent unwanted font changes
 
         # relink fonts
         change_list_update()
