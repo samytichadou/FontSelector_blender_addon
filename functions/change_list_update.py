@@ -13,7 +13,7 @@ def change_list_update() :
 
     # 3d text object
     for obj in bpy.data.objects :
-        if obj.type == 'FONT' :
+        if obj.type == 'FONT' and obj.data.fontselector_font != "" :
 
             # relink if possible
             old_font = obj.data.fontselector_font
@@ -34,7 +34,7 @@ def change_list_update() :
     for scn in bpy.data.scenes :
         seq = scn.sequence_editor.sequences_all
         for strip in seq :
-            if strip.type == 'TEXT' :
+            if strip.type == 'TEXT' and strip.fontselector_font != "" :
 
                 #relink if possible
                 old_font = strip.fontselector_font
