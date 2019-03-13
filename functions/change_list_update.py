@@ -19,6 +19,8 @@ def change_list_update() :
             chk_font_exists = 0
             for font in fontlist :
                 if font.name == old_font :
+                    #TODO#
+                    #index change causes font changes error with selected or active font when refreshing
                     obj.data.fontselector_index = font.index
                     change_font(obj, font)
                     chk_font_exists = 1
