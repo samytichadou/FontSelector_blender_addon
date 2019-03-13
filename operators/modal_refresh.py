@@ -284,10 +284,10 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         change_list_update()
 
         # update font in viewport if possible
-        try :
-            update_change_font(self, context)
-        except AttributeError :
-            pass
+        #try :
+        #    update_change_font(self, context)
+        #except AttributeError :
+        #    pass
 
         # reset variables
         global total
