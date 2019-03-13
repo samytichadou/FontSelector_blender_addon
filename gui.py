@@ -64,6 +64,7 @@ def draw_general_gui(layout, activedata):
     
     #get addon prefs
     addon_preferences = get_addon_preferences()
+    debug = addon_preferences.debug_value
     rownumber = addon_preferences.row_number
     fplist = addon_preferences.font_folders
     
@@ -90,6 +91,15 @@ def draw_general_gui(layout, activedata):
                 row.separator()
                 row.label(text = "Missing : " + activedata.fontselector_font, icon = "ERROR")
                 row.operator("fontselector.open_font_folder", text = "", icon = 'FILE_FOLDER')
+
+            # debug font
+            if debug :
+                box = layout.box()
+                box.label(text = "DEBUG")
+                row = box.row()
+                row.label(text = "font : " + activedata.fontselector_font)
+                row = box.row()
+                row.label(text = "index : " + str(activedata.fontselector_index))
 
             row = layout.row()
             row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
