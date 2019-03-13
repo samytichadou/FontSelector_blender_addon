@@ -108,7 +108,7 @@ def register():
 
     # TEXT OBJECT PROPS
     bpy.types.TextCurve.fontselector_index = \
-        bpy.props.IntProperty(update = update_change_font)
+        bpy.props.IntProperty(update = update_change_font, default = -1)
 
     bpy.types.TextCurve.fontselector_font = \
         bpy.props.StringProperty()
@@ -118,7 +118,7 @@ def register():
 
     # TEXT STRIP PROPS
     bpy.types.TextSequence.fontselector_index = \
-        bpy.props.IntProperty(update = update_change_font_strip)
+        bpy.props.IntProperty(update = update_change_font_strip, default = -1)
 
     bpy.types.TextSequence.fontselector_font = \
         bpy.props.StringProperty()
