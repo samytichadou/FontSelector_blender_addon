@@ -7,6 +7,7 @@ from .functions.misc_functions import get_size, absolute_path, create_dir
 from .functions.load_favorites import load_favorites
 from .functions.check_size import check_size_changes
 from .functions.load_json import load_json_font_file
+from .functions.change_list_update import change_list_update
 
 from .global_variable import json_file, json_favorites
 from .global_messages import print_statement, settings_loaded_msg, changes_msg, no_changes_msg
@@ -23,7 +24,9 @@ def fontselector_startup(scene):
     font_collection = bpy.data.window_managers['WinMan'].fontselector_list
     subdir_collection = bpy.data.window_managers['WinMan'].fontselector_sub
 
-    #check preference path exist
+    chk_no_need_relink_font = 0
+
+    #check if preference path exist
     if not os.path.isdir(prefpath) :
         create_dir(prefpath)
 
@@ -35,6 +38,7 @@ def fontselector_startup(scene):
 
             if chk_changes :
                 print(print_statement + changes_msg)
+                chk_no_need_relink_font = 1
 
                 if behavior == 'AUTOMATIC_UPDATE' :
                     bpy.ops.fontselector.modal_refresh()
@@ -54,6 +58,10 @@ def fontselector_startup(scene):
         # load favorite list
         if os.path.isfile(json_favorites_file) and len(font_collection) > 0 :
             load_favorites()
+
+        # try to relink fonts correctly if needed
+        if chk_no_need_relink_font == 0 :
+            change_list_update()
         
         # return state to user
         print(print_statement + settings_loaded_msg)

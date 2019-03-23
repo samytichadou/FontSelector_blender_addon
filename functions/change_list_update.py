@@ -1,9 +1,10 @@
 import bpy
+import os
 
 
 from .change_font import change_font
 from .change_font_strip import change_font_strip
-from .misc_functions import avoid_changes_selected
+from .misc_functions import avoid_changes_selected, absolute_path, create_warning_font
 
 
 # change font when change in list to relink fonts
@@ -24,13 +25,23 @@ def change_list_update() :
                 chk_font_exists = 0
                 for font in fontlist :
                     if font.name == old_font :
-                        #TODO#
-                        #index change causes font changes error with selected or active font when refreshing
                         obj.data.fontselector_index = font.index
                         change_font(obj, font)
                         chk_font_exists = 1
                         break
+                
+                # missing
                 if chk_font_exists == 0 :
+
+                    # check if file exist, if not, remove datablock and put warning font instead
+                    abspath = absolute_path(obj.data.font.filepath)
+                    if not os.path.isfile(abspath) :
+                        # remove datablock
+                        vector_font = obj.data.font
+                        bpy.data.fonts.remove(vector_font, do_unlink=True)
+                        # warning font
+                        obj.data.font = create_warning_font()
+
                     obj.data.fontselector_font_missing = True
                     # prevent automatic changes via index
                     obj.data.fontselector_index = -1
@@ -52,6 +63,16 @@ def change_list_update() :
                         chk_font_exists = 1
                         break
                 if chk_font_exists == 0 :
+
+                    # check if file exist, if not, remove datablock and put warning font instead
+                    abspath = absolute_path(strip.font.filepath)
+                    if not os.path.isfile(abspath) :
+                        # remove datablock
+                        vector_font = strip.font
+                        bpy.data.fonts.remove(vector_font, do_unlink=True)
+                        # warning font
+                        strip.font = create_warning_font()
+
                     strip.fontselector_font_missing = True
                     # prevent automatic changes via index
                     strip.fontselector_index = -1

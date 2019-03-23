@@ -4,7 +4,7 @@ import sys
 import platform
 import subprocess
 
-from ..global_variable import extensions
+from ..global_variable import extensions, warning_font_path
 
 # open folder in explorer
 def open_folder_in_explorer(path) :
@@ -109,5 +109,13 @@ def avoid_changes_selected() :
             if strip.type == 'TEXT' and strip.select :
                 strip.fontselector_avoid_changes = True
                 avoid_list.append(strip)
-                
+
     return avoid_list
+
+# create warning font datablock
+def create_warning_font() :
+    try :
+        datablock = bpy.data.fonts['FontSelector_symbols_warning']
+    except KeyError :
+        datablock = bpy.data.fonts.load(filepath = warning_font_path)
+    return datablock
