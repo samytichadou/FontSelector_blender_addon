@@ -32,10 +32,10 @@ def update_change_font(self, context) :
 
         if chkerror == 0 :
             #get selected
-            if active.type == 'FONT' and not active.select_get() :
+            if active.type == 'FONT' and not active.select_get() and not active.data.fontselector_avoid_changes :
                 selected.append(active)
             for obj in scn.objects :
-                if obj.select_get() and obj.type == 'FONT' :
+                if obj.select_get() and obj.type == 'FONT' and not active.data.fontselector_avoid_changes :
                     selected.append(obj)
             
             #blender font exception
@@ -94,10 +94,10 @@ def update_change_font_strip(self, context) :
 
         if chkerror == 0 :
             #get selected
-            if active_strip.select :
+            if active_strip.select and not active_strip.fontselector_avoid_changes :
                 selected.append(active_strip)
             for strip in seq :
-                if strip.type == 'TEXT' and strip.select :
+                if strip.type == 'TEXT' and strip.select and not strip.fontselector_avoid_changes :
                     selected.append(strip)
             
             #blender font exception
