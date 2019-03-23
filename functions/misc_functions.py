@@ -91,3 +91,23 @@ def update_progress(job_title, count, total_count) :
     if progress >= 1: msg += " Fonts Treated\r\n"
     sys.stdout.write(msg)
     sys.stdout.flush()
+
+# turn on avoid_changes props for selected object
+def avoid_changes_selected() :
+    avoid_list = []
+
+    # text objects
+    for obj in bpy.data.objects :
+        if obj.type == 'FONT' and obj.select_get :
+            obj.data.fontselector_avoid_changes = True
+            avoid_list.append(obj.data)
+
+    # text strips
+    for scn in bpy.data.scenes :
+        seq = scn.sequence_editor.sequences_all
+        for strip in seq :
+            if strip.type == 'TEXT' and strip.select :
+                strip.fontselector_avoid_changes = True
+                avoid_list.append(strip)
+                
+    return avoid_list
