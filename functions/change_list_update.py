@@ -49,7 +49,7 @@ def change_list_update() :
                 if chk_font_exists == 0 :
                     strip.fontselector_font_missing = True
                     # prevent automatic changes via index
-                    strip.fontselector_index = len(fontlist)
+                    strip.fontselector_index = -1
                     missing_list += "Strip : " + strip.name
     
     # warning message
