@@ -100,6 +100,8 @@ def draw_general_gui(layout, activedata):
                 row.label(text = "font : " + activedata.fontselector_font)
                 row = box.row()
                 row.label(text = "index : " + str(activedata.fontselector_index))
+                row = box.row()
+                row.label(text = "avoid : " + str(activedata.fontselector_avoid_changes))
 
             row = layout.row()
             row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
