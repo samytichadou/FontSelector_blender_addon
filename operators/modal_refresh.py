@@ -78,7 +78,7 @@ def draw_callback_px(self, context):
 # refresh operator modal
 class FontSelectorModalRefresh(bpy.types.Operator):
     bl_idname = "fontselector.modal_refresh"
-    bl_label = "Refresh Font List Modal"
+    bl_label = "Refresh Fonts"
     bl_description = "Refresh Font List"
 
 
