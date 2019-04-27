@@ -102,7 +102,7 @@ class FontUIList(bpy.types.UIList):
         # VIEW
         box = flow.box()
         row = box.row(align=True)
-        row.label(icon = 'RESTRICT_VIEW_OFF')
+        row.label(icon = 'HIDE_OFF')
         # show subfolder option
         row.prop(self, 'show_subdirectory_name', text = '', icon = 'FILE_FOLDER')
         # show fake user
