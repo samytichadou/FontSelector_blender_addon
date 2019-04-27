@@ -74,7 +74,7 @@ class FontUIList(bpy.types.UIList):
         # FILTER p3
         box = flow.box()
         row = box.row(align=True)
-        row.label(icon = 'OUTLINER_OB_GROUP_INSTANCE')
+        row.label(icon = 'FILE_FOLDER')
         # filter by subfolder
         row.prop(wm, 'fontselector_subdirectories', text = '')
         row.operator('fontselector.open_subdirectory', text = '', icon = 'FILE_FOLDER')
