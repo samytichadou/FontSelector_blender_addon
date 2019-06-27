@@ -172,12 +172,17 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                     if name == filtered :
                         chk_local_dupe = 1
                         update_progress(progress_print_statement, count + 1, total)
-                        if self.debug :
-                            print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
+                        
+                        ###DEBUG###
+                        if self.debug : print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " filtered out")
+                        
                         break
 
                 if chk_local_dupe == 0 :
                     try:
+                        ###DEBUG###
+                        if self.debug : print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " about to be treated")
+                        
                         # load font in blender datas to get name
                         datafont = bpy.data.fonts.load(filepath = path)
                         # append to json font list [name, filepath, subdir]
@@ -187,14 +192,17 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                         # append in filter list
                         self.avoid_list.append(name)
                         update_progress(progress_print_statement, count + 1, total)
-                        if self.debug :
-                            print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
+                        
+                        ###DEBUG###
+                        if self.debug : print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " imported")
+                        
                     except RuntimeError :
                         self.avoid_list.append(name)
                         self.corrupted.append([path, subdir, name])
                         update_progress(progress_print_statement, count + 1, total)
-                        if self.debug :
-                            print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
+                        
+                        ###DEBUG###
+                        if self.debug : print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
 
                 #print(self.font_list[count])
                 #print(str(count+1)+"/"+str(total))
