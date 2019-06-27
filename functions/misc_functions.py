@@ -104,11 +104,14 @@ def avoid_changes_selected() :
 
     # text strips
     for scn in bpy.data.scenes :
-        seq = scn.sequence_editor.sequences_all
-        for strip in seq :
-            if strip.type == 'TEXT' and strip.select :
-                strip.fontselector_avoid_changes = True
-                avoid_list.append(strip)
+        try :
+            seq = scn.sequence_editor.sequences_all
+            for strip in seq :
+                if strip.type == 'TEXT' and strip.select :
+                    strip.fontselector_avoid_changes = True
+                    avoid_list.append(strip)
+        except AttributeError :
+            pass
 
     return avoid_list
 
