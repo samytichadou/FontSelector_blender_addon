@@ -108,7 +108,7 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                     fontcheck.append(font)
         except IndexError :
             pass
-        return len(fontcheck)>0
+        return len(fontcheck)>0 and not context.window_manager.fontselector_isrefreshing
 
 
     def __init__(self):
@@ -146,6 +146,9 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         #check if external folder exist and create it if not
         create_dir(prefpath)
 
+        # set isrefreshing prop
+        bpy.context.window_manager.fontselector_isrefreshing = True
+
         self.report({'INFO'}, start_refreshing_msg) 
 
     def modal(self, context, event):
@@ -153,9 +156,14 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
         # redraw area
         try:
-            for area in context.screen.areas:
-                if area.type == 'PROPERTIES' :
-                    area.tag_redraw()
+            wm = context.window_manager
+            for w in wm.windows :
+                for area in w.screen.areas :
+                    if area.type == 'PROPERTIES' :
+                        area.tag_redraw()
+            #for area in context.screen.areas:
+            #    if area.type == 'PROPERTIES' :
+            #        area.tag_redraw()
         except AttributeError:
             pass
 
@@ -185,8 +193,15 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                         
                         # load font in blender datas to get name
                         datafont = bpy.data.fonts.load(filepath = path)
+                        # get proper name
+                        try :
+                            name = datafont.name
+                        except UnicodeDecodeError :
+                            data = str(datafont.id_data).split("VectorFont")[1]
+                            rawname = data.translate ({ord(c): "" for c in '"()<>'})
+                            name = rawname.translate ({ord(c): " " for c in "!@#$%^&*()[]{};:,./<>?\|`~-=_+"})
                         # append to json font list [name, filepath, subdir]
-                        self.json_font_list.append([datafont.name, path, subdir])
+                        self.json_font_list.append([name, path, subdir])
                         # delete font
                         bpy.data.fonts.remove(datafont, do_unlink=True)
                         # append in filter list
@@ -204,9 +219,6 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                         ###DEBUG###
                         if self.debug : print(str(count+1) + "/" + str(total) + " fonts treated --- " + name + " corrupted, filtered out")
 
-                #print(self.font_list[count])
-                #print(str(count+1)+"/"+str(total))
-
                 count += 1
                 self._updating = False
                 return {'PASS_THROUGH'}
@@ -215,7 +227,7 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                 return {'FINISHED'}
 
         # handle cancelling
-        elif event.type in {'ESC'} :
+        elif event.type in {'ESC'} or not wm.fontselector_isrefreshing :
             self.cancel(context)
             return {'CANCELLED'}
         
@@ -256,6 +268,9 @@ class FontSelectorModalRefresh(bpy.types.Operator):
         print()
         print(cancel_refresh_msg)
         self.report({'INFO'}, cancel_refresh_msg)
+
+        # set isrefreshing prop
+        wm.fontselector_isrefreshing = False
 
     def finish(self, context):
         bpy.types.SpaceProperties.draw_handler_remove(self._handle, 'WINDOW')
@@ -322,3 +337,6 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
         # return finish state to user
         self.report({'INFO'}, refresh_msg)
+
+        # set isrefreshing prop
+        wm.fontselector_isrefreshing = False
