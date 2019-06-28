@@ -21,7 +21,7 @@ Created by Samy Tichadou (tonton)
 bl_info = {  
  "name": "Font Selector",  
  "author": "Samy Tichadou (tonton)",  
- "version": (2, 0),  
+ "version": (2, 1),  
  "blender": (2, 80, 0),  
  "location": "Properties > Font > Font selection",  
  "description": "Select Fonts directly in the property panel",  
