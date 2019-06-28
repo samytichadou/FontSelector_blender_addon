@@ -99,6 +99,9 @@ def register():
     # GLOBAL PROPS
     bpy.types.WindowManager.fontselector_list = \
         bpy.props.CollectionProperty(type = FontSelectorFontList)
+    bpy.types.WindowManager.fontselector_isrefreshing = \
+        bpy.props.BoolProperty(name = "Stop Refreshing",
+                                description="Stop Refreshing Font List")
     bpy.types.WindowManager.fontselector_sub = \
         bpy.props.CollectionProperty(type = FontSelectorFontSubs)
     bpy.types.WindowManager.fontselector_subdirectories = \
@@ -154,6 +157,7 @@ def unregister():
     del bpy.types.WindowManager.fontselector_list
     del bpy.types.WindowManager.fontselector_sub
     del bpy.types.WindowManager.fontselector_subdirectories
+    del bpy.types.WindowManager.fontselector_isrefreshing
 
     # TEXT OBJECT PROPS
     del bpy.types.TextCurve.fontselector_index

@@ -68,7 +68,7 @@ def draw_general_gui(layout, activedata):
     rownumber = addon_preferences.row_number
     fplist = addon_preferences.font_folders
     
-    wm = bpy.data.window_managers['WinMan']
+    wm = bpy.context.window_manager
     
     # no font folder
     if len(fplist)==0:
@@ -76,7 +76,10 @@ def draw_general_gui(layout, activedata):
 
     else:
         row = layout.row(align = True)
-        row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
+        if wm.fontselector_isrefreshing:
+            row.prop(wm, 'fontselector_isrefreshing', text = "", icon = 'CANCEL')
+        else:
+            row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
 
         # no list
         if len(wm.fontselector_list) == 0 :
