@@ -108,6 +108,10 @@ def register():
         bpy.props.EnumProperty(items = get_subdirectories_items, 
                                 name = "Subdirectories",
                                 description = "Display only specific Subdirectories")
+    bpy.types.WindowManager.fontselector_search = \
+        bpy.props.StringProperty(name = "Font Search",
+                                description = "Type to Search for Available Fonts",
+                                options={'TEXTEDIT_UPDATE','SKIP_SAVE'})
 
     # TEXT OBJECT PROPS
     bpy.types.TextCurve.fontselector_index = \
@@ -158,6 +162,7 @@ def unregister():
     del bpy.types.WindowManager.fontselector_sub
     del bpy.types.WindowManager.fontselector_subdirectories
     del bpy.types.WindowManager.fontselector_isrefreshing
+    del bpy.types.WindowManager.fontselector_search
 
     # TEXT OBJECT PROPS
     del bpy.types.TextCurve.fontselector_index

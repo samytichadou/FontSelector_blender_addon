@@ -6,6 +6,7 @@ from .functions.update_functions import get_subdirectories_items
 #font list
 class FontUIList(bpy.types.UIList):
 
+    show_extra_filters : bpy.props.BoolProperty(name = "Show Filters", description = "Show Filters")
     show_subdirectory_name : bpy.props.BoolProperty(name = "Show Subdirectories", description = "Show Subdirectories")
     show_favorite_icon : bpy.props.BoolProperty(name = "Show Favorites", description = "Show Favorites")
     show_fake_user : bpy.props.BoolProperty(name = "Show Fake User", description = "Show Fake User")
@@ -18,10 +19,13 @@ class FontUIList(bpy.types.UIList):
     fake_user_filter : bpy.props.BoolProperty(name = "Fake User Filter", description = "Fake User Filter")
 
     subdirectories_sorting : bpy.props.BoolProperty(name = "Sort by Subdirectories", description = "Sort by Subdirectories")
-    
+
+    def __init__(self):
+        wm = bpy.context.window_manager
+        self.filter_name = wm.fontselector_search
+
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         layout.use_property_split = True # Active single-column layout
-        #self.use_filter_show = True
 
         #text_index = bpy.context.active_object.data.fontselector_index
 
@@ -62,23 +66,15 @@ class FontUIList(bpy.types.UIList):
         wm = context.window_manager
 
         layout.use_property_split = True # Active single-column layout
-        flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
 
         # FILTER p1
-        box = flow.box()
-        row = box.row(align=True)
-        row.label(icon = 'VIEWZOOM')
-        # search classic
-        row.prop(self, 'filter_name', text = '')
-
-        # FILTER p3
-        box = flow.box()
-        row = box.row(align=True)
+        row = layout.row(align=True)
         row.label(icon = 'FILE_FOLDER')
         # filter by subfolder
         row.prop(wm, 'fontselector_subdirectories', text = '')
         row.operator('fontselector.open_subdirectory', text = '', icon = 'FILE_FOLDER')
 
+        flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
         # FILTER p2
         box = flow.box()
         row = box.row(align=True)

@@ -107,4 +107,7 @@ def draw_general_gui(layout, activedata):
                 row.label(text = "avoid : " + str(activedata.fontselector_avoid_changes))
 
             row = layout.row()
+            row.prop(wm, 'fontselector_search', text="", icon='VIEWZOOM')
+
+            row = layout.row()
             row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
