@@ -75,21 +75,12 @@ def draw_general_gui(layout, activedata):
         layout.label(text = 'Add Font Folder in Addon Preference', icon = 'INFO')
 
     else:
-        row = layout.row(align = True)
-        if wm.fontselector_isrefreshing:
-            row.prop(wm, 'fontselector_isrefreshing', text = "", icon = 'CANCEL')
-        else:
-            row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
-
         # no list
         if len(wm.fontselector_list) == 0 :
             row = layout.row()
             row.label(text = 'Refresh to get List of available Fonts', icon = 'INFO')
 
         else: 
-            row.operator("fontselector.check_changes", text = '', icon = 'OUTLINER_OB_LIGHT')
-            row.separator()
-            row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
             if activedata.fontselector_font_missing :
                 row.separator()
                 row.label(text = "Missing : " + activedata.fontselector_font, icon = "ERROR")
@@ -111,3 +102,11 @@ def draw_general_gui(layout, activedata):
 
             row = layout.row()
             row.template_list("FONTSELECTOR_UL_uilist", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
+
+            row = layout.row(align = True)
+            if wm.fontselector_isrefreshing:
+                row.prop(wm, 'fontselector_isrefreshing', text = "", icon = 'CANCEL')
+            else:
+                row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
+            row.operator("fontselector.check_changes", text = '', icon = 'OUTLINER_OB_LIGHT')
+            row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
