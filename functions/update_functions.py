@@ -16,7 +16,7 @@ def update_change_font(self, context) :
 
         active = first_active_object = context.active_object
         scn = context.scene
-        wm = bpy.data.window_managers['WinMan']
+        wm = context.window_manager
         
         selected = []
         chkerror = 0
@@ -83,7 +83,7 @@ def update_change_font_strip(self, context) :
         if seq != '' :
             active_strip = first_active_object = context.scene.sequence_editor.active_strip
 
-            wm = bpy.data.window_managers['WinMan']
+            wm = context.window_manager
             
             selected = []
             chkerror = 0

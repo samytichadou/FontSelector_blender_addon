@@ -29,7 +29,7 @@ class FontSelectorLoadFontList(bpy.types.Operator):
         addon_preferences = get_addon_preferences()
         prefpath = absolute_path(addon_preferences.prefs_folderpath)
         json_path = os.path.join(prefpath, json_file)
-        wm = bpy.data.window_managers['WinMan']
+        wm = context.window_manager
 
         collection_font_list = wm.fontselector_list
         collection_subdir_list = wm.fontselector_sub

@@ -9,7 +9,7 @@ from .misc_functions import avoid_changes_selected, absolute_path, create_warnin
 
 # change font when change in list to relink fonts
 def change_list_update() :
-    wm = bpy.data.window_managers['WinMan']
+    wm = bpy.context.window_manager
     fontlist = wm.fontselector_list
     missing_list = ""
 

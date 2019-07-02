@@ -17,11 +17,11 @@ class FontSelectorOverrideFolder(bpy.types.Operator):
     
     @classmethod
     def poll(cls, context):
-        wm = bpy.data.window_managers['WinMan']
+        wm = context.window_manager
         return wm.fontselector_folder_override != "" and not wm.fontselector_override
     
     def execute(self, context):
-        wm = bpy.data.window_managers['WinMan']
+        wm = context.window_manager
         collection_font_list = wm.fontselector_list
         collection_subdir_list = wm.fontselector_sub
         override_folder = absolute_path(wm.fontselector_folder_override)

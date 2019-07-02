@@ -59,7 +59,7 @@ class FontUIList(bpy.types.UIList):
 
 
     def draw_filter(self, context, layout):
-        wm = bpy.data.window_managers['WinMan']
+        wm = context.window_manager
 
         layout.use_property_split = True # Active single-column layout
         flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
@@ -132,7 +132,7 @@ class FontUIList(bpy.types.UIList):
         col = getattr(data, propname)
 
         subdirectories_filter = bpy.data.window_managers['WinMan'].fontselector_subdirectories
-        wm = bpy.data.window_managers['WinMan']
+        wm = context.window_manager
         
         ### FILTERING ###
 

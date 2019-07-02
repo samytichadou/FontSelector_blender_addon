@@ -25,7 +25,7 @@ class FontSelectorInstallFont(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context) :
-        wm = bpy.data.window_managers['WinMan']
+        wm = context.window_manager
         fontlist = wm.fontselector_list
         try :
             os.path.isfile(fontlist[bpy.context.active_object.data.fontselector_override_index].filepath)
@@ -64,7 +64,7 @@ class FontSelectorInstallFont(bpy.types.Operator):
 
     def execute(self, context) :
         if not self.dupe :
-            wm = bpy.data.window_managers['WinMan']
+            wm = context.window_manager
             fontlist = wm.fontselector_list
 
             font_path = fontlist[bpy.context.active_object.data.fontselector_override_index].filepath
