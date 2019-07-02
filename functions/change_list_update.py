@@ -49,7 +49,10 @@ def change_list_update() :
 
     # strip text
     for scn in bpy.data.scenes :
-        seq = scn.sequence_editor.sequences_all
+        try :
+            seq = scn.sequence_editor.sequences_all
+        except AttributeError :
+            break
         for strip in seq :
             if strip.type == 'TEXT' and strip.fontselector_font != "" :
 

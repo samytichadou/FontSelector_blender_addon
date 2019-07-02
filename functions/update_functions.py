@@ -74,49 +74,55 @@ def update_change_font_strip(self, context) :
 
     #check if the loop is run through the active object or other selected ones
     if first_active_object == "" :
-        active_strip = first_active_object = context.scene.sequence_editor.active_strip
-
-        wm = bpy.data.window_managers['WinMan']
-        
-        selected = []
-        chkerror = 0
-
-        fontlist = wm.fontselector_list
-        idx = active_strip.fontselector_index
-        scn = context.scene
-        seq = scn.sequence_editor.sequences_all
-        
-        #error handling for not updated list
+        #check if sequencer exist
         try :
-            font = fontlist[idx]
-        except IndexError :
-            chkerror = 1
+            scn = context.scene
+            seq = scn.sequence_editor.sequences_all
+        except AttributeError :
+            seq = ''
+        if seq != '' :
+            active_strip = first_active_object = context.scene.sequence_editor.active_strip
 
-        if chkerror == 0 :
-            #get selected
-            if active_strip.select and not active_strip.fontselector_avoid_changes :
-                selected.append(active_strip)
-            for strip in seq :
-                if strip.type == 'TEXT' and strip.select and not strip.fontselector_avoid_changes :
-                    selected.append(strip)
+            wm = bpy.data.window_managers['WinMan']
             
-            #blender font exception
-            if fontlist[idx].name == 'Bfont' :
-                for strip in selected :
-                    strip.font = bpy.data.fonts['Bfont']
+            selected = []
+            chkerror = 0
 
-            #regular change of font
-            else :
-                for strip in selected :
-                    #check if there is a strip font
-                    if strip.font is None :
-                        strip.fontselector_index = idx
-                        change_font_strip(strip, font)
-                    else :
-                        #check if font is already changed
-                        if font.name != strip.font.name :
+            fontlist = wm.fontselector_list
+            idx = active_strip.fontselector_index
+            
+            #error handling for not updated list
+            try :
+                font = fontlist[idx]
+            except IndexError :
+                chkerror = 1
+
+            if chkerror == 0 :
+                #get selected
+                if active_strip.select and not active_strip.fontselector_avoid_changes :
+                    selected.append(active_strip)
+                if seq != '' :
+                    for strip in seq :
+                        if strip.type == 'TEXT' and strip.select and not strip.fontselector_avoid_changes :
+                            selected.append(strip)
+                
+                #blender font exception
+                if fontlist[idx].name == 'Bfont' :
+                    for strip in selected :
+                        strip.font = bpy.data.fonts['Bfont']
+
+                #regular change of font
+                else :
+                    for strip in selected :
+                        #check if there is a strip font
+                        if strip.font is None :
                             strip.fontselector_index = idx
                             change_font_strip(strip, font)
+                        else :
+                            #check if font is already changed
+                            if font.name != strip.font.name :
+                                strip.fontselector_index = idx
+                                change_font_strip(strip, font)
 
         #reset global variable                        
         first_active_object = ""
