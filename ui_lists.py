@@ -4,7 +4,7 @@ from .preferences import get_addon_preferences
 from .functions.update_functions import get_subdirectories_items
 
 #font list
-class FontUIList(bpy.types.UIList):
+class FONTSELECTOR_UL_uilist(bpy.types.UIList):
 
     show_extra_filters : bpy.props.BoolProperty(name = "Show Filters", description = "Show Filters")
     show_subdirectory_name : bpy.props.BoolProperty(name = "Show Subdirectories", description = "Show Subdirectories")

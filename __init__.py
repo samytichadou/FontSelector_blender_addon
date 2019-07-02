@@ -67,9 +67,9 @@ from .operators.open_font_folder import *
 classes = (FontSelectorFontList, 
             FontSelectorFontSubs, 
             FontFolders,
-            FontSelectorPanel,
+            FONTSELECTOR_PT_propertiespanel,
             FontSelectorAddonPrefs,
-            FontUIList,
+            FONTSELECTOR_UL_uilist,
             FontSelectorAddFP,
             FontSelectorCheckChanges,
             FontSelectorDialogMessage,
@@ -83,7 +83,7 @@ classes = (FontSelectorFontList,
             FontSelectorSaveFPPrefs,
             FontSelectorSuppressFP,
             FontSelectorOpenFontFolder,
-            SEQUENCER_PT_font_selector
+            FONTSELECTOR_PT_sequencerpanel
             )
 
 def register():

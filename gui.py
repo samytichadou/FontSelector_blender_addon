@@ -5,7 +5,7 @@ from bpy.types import Panel
 from.preferences import get_addon_preferences
 
 # Properties Panel GUI
-class FontSelectorPanel(Panel):
+class FONTSELECTOR_PT_propertiespanel(Panel):
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_category = "Font Selector"
@@ -27,7 +27,7 @@ class FontSelectorPanel(Panel):
         draw_general_gui(layout, activedata)
 
 # Sequencer Panel GUI
-class SEQUENCER_PT_font_selector(Panel):
+class FONTSELECTOR_PT_sequencerpanel(Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
     bl_category = "Strip"
@@ -110,4 +110,4 @@ def draw_general_gui(layout, activedata):
             row.prop(wm, 'fontselector_search', text="", icon='VIEWZOOM')
 
             row = layout.row()
-            row.template_list("FontUIList", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
+            row.template_list("FONTSELECTOR_UL_uilist", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
