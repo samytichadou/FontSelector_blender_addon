@@ -20,13 +20,12 @@ class FONTSELECTOR_UL_uilist(bpy.types.UIList):
 
     subdirectories_sorting : bpy.props.BoolProperty(name = "Sort by Subdirectories", description = "Sort by Subdirectories")
 
-    def __init__(self):
-        wm = bpy.context.window_manager
-        self.filter_name = wm.fontselector_search
-
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
+        wm = context.window_manager
+        self.filter_name = wm.fontselector_search
+        
         layout.use_property_split = True # Active single-column layout
-
+    
         #text_index = bpy.context.active_object.data.fontselector_index
 
         row = layout.row(align = True)
