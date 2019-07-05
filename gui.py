@@ -80,10 +80,10 @@ def draw_general_gui(layout, activedata):
             row = layout.row()
             row.label(text = 'Refresh to get List of available Fonts', icon = 'INFO')
             row = layout.row()
-            if wm.fontselector_isrefreshing:
-                row.prop(wm, 'fontselector_isrefreshing', text = "", icon = 'CANCEL')
-            else:
-                row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
+            if wm.fontselector_isrefreshing :
+                row.operator('fontselector.refresh_toggle', icon = 'CANCEL')
+            else :
+                row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
 
         else: 
             if activedata.fontselector_font_missing :
@@ -102,16 +102,20 @@ def draw_general_gui(layout, activedata):
                 row = box.row()
                 row.label(text = "avoid : " + str(activedata.fontselector_avoid_changes))
 
-            row = layout.row()
+            col = layout.column(align=True)
+            row = col.row()
             row.prop(wm, 'fontselector_search', text="", icon='VIEWZOOM')
 
-            row = layout.row()
+            row = col.row()
             row.template_list("FONTSELECTOR_UL_uilist", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
 
-            row = layout.row(align = True)
-            if wm.fontselector_isrefreshing:
-                row.prop(wm, 'fontselector_isrefreshing', text = "", icon = 'CANCEL')
-            else:
-                row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
-            row.operator("fontselector.check_changes", text = '', icon = 'OUTLINER_OB_LIGHT')
-            row.operator("fontselector.remove_unused", text = "", icon = 'UNLINKED')
+            flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
+            row = flow.row(align = True)
+            if wm.fontselector_isrefreshing :
+                row.operator('fontselector.refresh_toggle', icon = 'CANCEL')
+            else :
+                row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
+            row = flow.row(align = True)
+            row.operator("fontselector.check_changes", text = "Check", icon = 'OUTLINER_OB_LIGHT')
+            row = flow.row(align = True)
+            row.operator("fontselector.remove_unused", text = "Clean", icon = 'UNLINKED')

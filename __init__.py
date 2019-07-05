@@ -59,6 +59,7 @@ from .operators.save_favorites import *
 from .operators.save_preferences import *
 from .operators.suppress_filepath import *
 from .operators.open_font_folder import *
+from .operators.refresh_operator_toggle import *
 
 
 # register
@@ -83,7 +84,8 @@ classes = (FontSelectorFontList,
             FontSelectorSaveFPPrefs,
             FontSelectorSuppressFP,
             FontSelectorOpenFontFolder,
-            FONTSELECTOR_PT_sequencerpanel
+            FONTSELECTOR_PT_sequencerpanel,
+            FontSelectorRefreshToggle
             )
 
 def register():
