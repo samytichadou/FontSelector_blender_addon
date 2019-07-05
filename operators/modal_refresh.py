@@ -79,7 +79,8 @@ def draw_callback_px(self, context):
 class FontSelectorModalRefresh(bpy.types.Operator):
     bl_idname = "fontselector.modal_refresh"
     bl_label = "Refresh Fonts"
-    bl_description = "Refresh Font List"
+    bl_description = "Modal Refresh of Font List"
+    bl_options = {'INTERNAL'}
 
 
     _updating = False
