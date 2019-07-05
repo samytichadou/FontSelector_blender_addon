@@ -80,7 +80,7 @@ def draw_general_gui(layout, activedata):
             row = layout.row()
             row.label(text = 'Refresh to get List of available Fonts', icon = 'INFO')
             row = layout.row()
-             if wm.fontselector_isrefreshing:
+            if wm.fontselector_isrefreshing:
                 row.prop(wm, 'fontselector_isrefreshing', text = "", icon = 'CANCEL')
             else:
                 row.operator("fontselector.modal_refresh", text = "", icon = 'FILE_REFRESH')
