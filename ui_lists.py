@@ -128,7 +128,6 @@ class FONTSELECTOR_UL_uilist(bpy.types.UIList):
         col = getattr(data, propname)
 
         subdirectories_filter = bpy.data.window_managers['WinMan'].fontselector_subdirectories
-        wm = context.window_manager
         
         ### FILTERING ###
 
