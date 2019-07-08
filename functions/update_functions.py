@@ -35,8 +35,11 @@ def update_change_font(self, context) :
             if active.type == 'FONT' and not active.select_get() and not active.data.fontselector_avoid_changes :
                 selected.append(active)
             for obj in scn.objects :
-                if obj.select_get() and obj.type == 'FONT' and not active.data.fontselector_avoid_changes :
-                    selected.append(obj)
+                try :
+                    if obj.select_get() and obj.type == 'FONT' and not active.data.fontselector_avoid_changes :
+                        selected.append(obj)
+                except RuntimeError :
+                    pass
             
             #blender font exception
             if fontlist[idx].name == 'Bfont' :
