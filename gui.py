@@ -87,9 +87,9 @@ def draw_general_gui(layout, activedata):
 
         else: 
             if activedata.fontselector_font_missing :
-                row.separator()
+                row = layout.row()
                 row.label(text = "Missing : " + activedata.fontselector_font, icon = "ERROR")
-                row.operator("fontselector.open_font_folder", text = "", icon = 'FILE_FOLDER')
+                #row.operator("fontselector.open_font_folder", text = "", icon = 'FILE_FOLDER')
 
             # debug font
             if debug :
