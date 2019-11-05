@@ -12,7 +12,7 @@ def update_change_font(self, context) :
     global first_active_object
 
     #check if the loop is run through the active object
-    if first_active_object == "" :
+    if first_active_object == "" and context.active_object.type=="FONT":
 
         active = first_active_object = context.active_object
         scn = context.scene
