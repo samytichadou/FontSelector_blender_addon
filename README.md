@@ -1,4 +1,4 @@
-# FontSelector_blender_addon
+# FontSelector - easy font management inside Blender
 
 Font Selector is a simple addon to add font functionality to blender.
 
