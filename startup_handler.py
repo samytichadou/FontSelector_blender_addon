@@ -6,6 +6,8 @@ from .preferences import get_addon_preferences
 from .functions.misc_functions import get_size, absolute_path, create_dir
 from .functions.load_favorites import load_favorites
 from .functions.check_size import check_size_changes
+from .functions.check_desync_fonts import checkDesyncFonts
+from .functions.resync_fonts import resyncFont, resyncStrip
 from .functions.load_json import load_json_font_file
 from .functions.change_list_update import change_list_update
 
@@ -59,8 +61,12 @@ def fontselector_startup(scene):
         if os.path.isfile(json_favorites_file) and len(font_collection) > 0 :
             load_favorites()
 
+        # try to sync fonts if needed
+        checkDesyncFonts()
+        # print desync state
+
         # try to relink fonts correctly if needed
-        if chk_no_need_relink_font == 0 :
+        if chk_no_need_relink_font == 1 :
             change_list_update()
         
         # return state to user

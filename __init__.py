@@ -125,6 +125,9 @@ def register():
     bpy.types.TextCurve.fontselector_font_missing = \
         bpy.props.BoolProperty(default = False)
 
+    bpy.types.TextCurve.fontselector_desync_font = \
+        bpy.props.BoolProperty(default = False)
+
     bpy.types.TextCurve.fontselector_avoid_changes = \
         bpy.props.BoolProperty(default = False)
 
@@ -136,6 +139,9 @@ def register():
         bpy.props.StringProperty()
 
     bpy.types.TextSequence.fontselector_font_missing = \
+        bpy.props.BoolProperty(default = False)
+
+    bpy.types.TextSequence.fontselector_desync_font = \
         bpy.props.BoolProperty(default = False)
 
     bpy.types.TextSequence.fontselector_avoid_changes = \
@@ -170,12 +176,14 @@ def unregister():
     del bpy.types.TextCurve.fontselector_index
     del bpy.types.TextCurve.fontselector_font
     del bpy.types.TextCurve.fontselector_font_missing
+    del bpy.types.TextCurve.fontselector_desync_font
     del bpy.types.TextCurve.fontselector_avoid_changes
 
     # TEXT STRIPS PROPS
     del bpy.types.TextSequence.fontselector_index
     del bpy.types.TextSequence.fontselector_font
     del bpy.types.TextSequence.fontselector_font_missing
+    del bpy.types.TextCurve.fontselector_desync_font
     del bpy.types.TextSequence.fontselector_avoid_changes
     
     ### HANDLER
