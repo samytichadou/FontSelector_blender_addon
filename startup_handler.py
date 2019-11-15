@@ -7,7 +7,6 @@ from .functions.misc_functions import get_size, absolute_path, create_dir
 from .functions.load_favorites import load_favorites
 from .functions.check_size import check_size_changes
 from .functions.check_desync_fonts import checkDesyncFonts
-from .functions.resync_fonts import resyncFont, resyncStrip
 from .functions.load_json import load_json_font_file
 from .functions.change_list_update import change_list_update
 
