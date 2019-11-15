@@ -89,7 +89,10 @@ def draw_general_gui(layout, activedata):
             if activedata.fontselector_font_missing :
                 row = layout.row()
                 row.label(text = "Missing : " + activedata.fontselector_font, icon = "ERROR")
-                #row.operator("fontselector.open_font_folder", text = "", icon = 'FILE_FOLDER')
+
+            if activedata.fontselector_desync_font :
+                row = layout.row()
+                row.label(text = "Desync Font : " + activedata.font.name, icon = "ORPHAN_DATA")
 
             # debug font
             if debug :

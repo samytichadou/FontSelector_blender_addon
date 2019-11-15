@@ -2,6 +2,7 @@ import bpy
 import os
 
 from ..functions.check_size import check_size_changes
+from ..functions.check_desync_fonts import checkDesyncFonts
 from ..preferences import get_addon_preferences
 from ..functions.misc_functions import absolute_path
 
@@ -24,6 +25,7 @@ class FontSelectorCheckChanges(bpy.types.Operator):
         return len(fplist)>0 and prefs!="" and os.path.isfile(json)
     
     def execute(self, context):
+        # font folders
         chk_changes = check_size_changes()
 
         if chk_changes :
@@ -31,5 +33,9 @@ class FontSelectorCheckChanges(bpy.types.Operator):
             
         else :
             self.report({'INFO'}, no_changes_msg)
+            print(print_statement + no_changes_msg)
 
+        # font objects
+        checkDesyncFonts()
+        # print desync state            
         return {'FINISHED'}
