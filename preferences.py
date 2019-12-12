@@ -77,39 +77,21 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
         
         dupelist = [x for x in temp_list if temp_list.count(x) >= 2]
 
-        col = layout.column(align = True)
-
-        box = col.box()
-        row = box.row(align = True)
-        row.label(icon = 'PREFERENCES')
-        row.prop(self, 'prefs_folderpath', text = 'External Preferences Path')
+        col = layout.column(align = False)
         
-        box = col.box()
-        row = box.row(align = True)
-        row.label(icon = 'BLENDER')
-        row.prop(self, 'startup_check_behavior')
-
-        box = col.box()
-        row = box.row(align = True)
-        row.label(text = "Progress Bar", icon = 'TIME')
-        row.prop(self, 'progress_bar_color', text = '')
-        row.prop(self, 'progress_bar_size', text = 'Size')
-        row.prop(self, 'progress_bar_background_color')
-        
-        box = col.box()
-        row = box.row(align = True)
-        row.label(text = 'Number of Font list rows', icon = 'COLLAPSEMENU')
-        row.prop(self, 'row_number', text = '')
-        
+        # font folders
         box = col.box()
         row = box.row(align = True)
         row.label(text = "Font Folders", icon = 'FILE_FONT')
         if len(dupelist) > 0 :
             row.label(text = 'Dupe Warning', icon = 'ERROR')
-        row.operator("fontselector.add_fp", text = "Add Font Folder", icon = 'ADD')
+        row.operator("fontselector.add_fp", text = "Add", icon = 'ADD')
         row.separator()
         row.operator("fontselector.save_fpprefs", text = 'Save', icon = 'DISK_DRIVE')
         row.operator("fontselector.load_fpprefs", text = 'Load', icon = 'LOOP_BACK')
+        row.separator()
+        if context.window_manager.fontselector_isrefreshing: row.operator('fontselector.refresh_toggle', text = "", icon = 'CANCEL')
+        else: row.operator('fontselector.refresh_toggle', text = "", icon = 'FILE_REFRESH')
         
         idx = 0
         for i in font_list :
@@ -121,11 +103,34 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
             op = row.operator("fontselector.suppress_fp", text = '', icon = 'X', emboss = False)
             op.index = idx
             idx += 1
-
+        
+        # startup behavior
         box = col.box()
         row = box.row(align = True)
-        row.label(text = "Development", icon = 'MODIFIER_ON')
+        row.label(icon = 'BLENDER')
+        row.prop(self, 'startup_check_behavior', text = "On startup")
+
+        # progress bar
+        box = col.box()
+        row = box.row(align = True)
+        row.label(text = "Progress Bar", icon = 'TIME')
+        row.prop(self, 'progress_bar_color', text = '')
+        row.prop(self, 'progress_bar_size', text = 'Size')
+        row.prop(self, 'progress_bar_background_color')
+        
+        # font list row
+        box = col.box()
+        row = box.row(align = True)
+        row.label(text = 'Font list rows', icon = 'COLLAPSEMENU')
+        row.prop(self, 'row_number', text = '')
+        
+        # extra settings
+        box = col.box()
+        row = box.row(align = True)
+        row.label(text = "Extra Settings", icon = 'MODIFIER_ON')
         row.prop(self, 'debug_value')
+        row = box.row(align = True)
+        row.prop(self, 'prefs_folderpath', text = 'Preferences Path')
             
 
 # get addon preferences
