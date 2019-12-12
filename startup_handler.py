@@ -60,13 +60,12 @@ def fontselector_startup(scene):
         if os.path.isfile(json_favorites_file) and len(font_collection) > 0 :
             load_favorites()
 
-        # try to sync fonts if needed
-        checkDesyncFonts()
-        # print desync state
-
         # try to relink fonts correctly if needed
         if chk_no_need_relink_font == 1 :
             change_list_update()
+
+        # try to sync fonts if needed
+        checkDesyncFonts()
         
         # return state to user
         print(print_statement + settings_loaded_msg)

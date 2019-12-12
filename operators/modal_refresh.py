@@ -15,6 +15,7 @@ from ..functions.load_json import load_json_font_file
 from ..functions.load_favorites import load_favorites
 from ..functions.update_functions import update_change_font
 from ..functions.change_list_update import change_list_update
+from ..functions.check_desync_fonts import checkDesyncFonts
 
 from ..global_variable import json_file
 from ..global_messages import start_refreshing_msg, progress_print_statement, cancel_refresh_msg, refresh_msg, modal_refreshing
@@ -162,9 +163,6 @@ class FontSelectorModalRefresh(bpy.types.Operator):
                 for area in w.screen.areas :
                     if area.type == 'PROPERTIES' :
                         area.tag_redraw()
-            #for area in context.screen.areas:
-            #    if area.type == 'PROPERTIES' :
-            #        area.tag_redraw()
         except AttributeError:
             pass
 
@@ -307,6 +305,9 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
         #TODO#
         # add exclusion objects to prevent unwanted font changes
+
+        # try to sync fonts if needed
+        checkDesyncFonts()
 
         # relink fonts
         change_list_update()

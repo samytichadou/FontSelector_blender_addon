@@ -92,7 +92,10 @@ def draw_general_gui(layout, activedata):
 
             if activedata.fontselector_desync_font :
                 row = layout.row()
-                row.label(text = "Desync Font : " + activedata.font.name, icon = "ORPHAN_DATA")
+                if activedata.font is not None:
+                    row.label(text = "Desync Font : " + activedata.font.name, icon = "ORPHAN_DATA")
+                else:
+                    row.label(text = "Desync Font", icon = "ORPHAN_DATA")
 
             # debug font
             if debug :

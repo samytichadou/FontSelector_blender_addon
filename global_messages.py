@@ -24,6 +24,10 @@ subdirectory_error = "Font Subdirectory does not exist"
 
 export_finished = "Fonts Exported"
 
+resync = " - Font resync"
+
+desync = " - Font desynced, unable to resync"
+
 ### OVERRIDE ##
 
 override_loaded_msg = "Override Folder Loaded"

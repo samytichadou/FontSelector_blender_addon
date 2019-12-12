@@ -37,5 +37,5 @@ class FontSelectorCheckChanges(bpy.types.Operator):
 
         # font objects
         checkDesyncFonts()
-        # print desync state            
+    
         return {'FINISHED'}
