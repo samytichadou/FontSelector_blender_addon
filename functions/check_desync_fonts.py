@@ -1,7 +1,6 @@
 import bpy
 
 from ..global_messages import resync, desync, print_statement
-from .misc_functions import absolute_path
 
 # check for desync fonts
 def checkDesyncFonts():
@@ -15,7 +14,7 @@ def checkDesyncFonts():
                 #try resync
                 chk_resync = 0
                 for font in collection_font_list:
-                    if font.filepath == absolute_path(obj.data.font.filepath):
+                    if font.name == obj.data.font.name:
                         obj.data.fontselector_index = font.index
                         print(print_statement + obj.name + resync)
                         obj.data.fontselector_font = obj.data.font.name
@@ -36,7 +35,7 @@ def checkDesyncFonts():
                         #try resync
                         chk_resync = 0
                         for font in collection_font_list:
-                            if font.filepath == absolute_path(strip.font.filepath):
+                            if font.name == strip.font.name:
                                 strip.fontselector_index = font.index
                                 print(print_statement + strip.name + resync)
                                 strip.fontselector_font = strip.font.name
