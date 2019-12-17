@@ -4,6 +4,8 @@ Font Selector is a simple addon to add font functionality to blender.
 
 It allows you to dynamically visualize available fonts applied to a text object without the painful process of importing a font through filebrowser.
 
+WARNING : 
+The "master" branch of font selector is the experimental one, to get stable version of it, please download latest release from this page : https://github.com/samytichadou/FontSelector_blender_addon/releases
 
 
 Here are Font Selector's features :
@@ -25,6 +27,3 @@ Here are Font Selector's features :
 - Origin directories and subdirectories of the font are stored, you can display them in the classic list, or toggle with the subdirectory Mode, organising the fonts by these directories !
 
 - The addon now filtered the corrupted font file out, and store their name in a file in order to not try to import them again ! You can manually add some font to filter through the addon preferences !
-
-WARNING : 
-The "master" branch of font selector is the experimental one, to get stable version of it, please download latest release from this page : https://github.com/samytichadou/FontSelector_blender_addon/releases
