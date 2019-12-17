@@ -9,6 +9,7 @@ from .functions.check_size import check_size_changes
 from .functions.check_desync_fonts import checkDesyncFonts
 from .functions.load_json import load_json_font_file
 from .functions.change_list_update import change_list_update
+from .functions.set_os import setOs
 
 from .global_variable import json_file, json_favorites
 from .global_messages import print_statement, settings_loaded_msg, changes_msg, no_changes_msg
@@ -26,6 +27,9 @@ def fontselector_startup(scene):
     subdir_collection = bpy.data.window_managers['WinMan'].fontselector_sub
 
     chk_no_need_relink_font = 0
+
+    # set OS
+    setOs()
 
     #check if preference path exist
     if not os.path.isdir(prefpath) :
@@ -45,6 +49,7 @@ def fontselector_startup(scene):
                     bpy.ops.fontselector.modal_refresh()
 
                 else :
+                    load_json_font_file(json_list_file, font_collection, subdir_collection)
                     bpy.ops.fontselector.dialog_message('INVOKE_DEFAULT', code = 1)
 
             else :

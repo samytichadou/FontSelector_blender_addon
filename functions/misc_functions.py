@@ -6,12 +6,6 @@ import subprocess
 
 from ..global_variable import extensions, warning_font_path
 
-# get os
-def getOs():
-    if platform.system() == "Windows": os = "windows"
-    elif platform.system() == "Darwin": os = "mac"
-    else: os = "linux"
-    return os
 
 # open folder in explorer
 def open_folder_in_explorer(path) :

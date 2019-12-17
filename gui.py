@@ -70,58 +70,53 @@ def draw_general_gui(layout, activedata):
     
     wm = bpy.context.window_manager
     
-    # no font folder
-    if len(fplist)==0:
-        layout.label(text = 'Add Font Folder in Addon Preference', icon = 'INFO')
+    # no list
+    if len(wm.fontselector_list) == 0 :
+        row = layout.row()
+        row.label(text = 'Refresh to get List of available Fonts', icon = 'INFO')
+        row = layout.row()
+        if wm.fontselector_isrefreshing :
+            row.operator('fontselector.refresh_toggle', icon = 'CANCEL')
+        else :
+            row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
 
-    else:
-        # no list
-        if len(wm.fontselector_list) == 0 :
+    else: 
+        if activedata.fontselector_font_missing :
             row = layout.row()
-            row.label(text = 'Refresh to get List of available Fonts', icon = 'INFO')
+            row.label(text = "Missing : " + activedata.fontselector_font, icon = "ERROR")
+
+        if activedata.fontselector_desync_font :
             row = layout.row()
-            if wm.fontselector_isrefreshing :
-                row.operator('fontselector.refresh_toggle', icon = 'CANCEL')
-            else :
-                row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
+            if activedata.font is not None:
+                row.label(text = "Desync Font : " + activedata.font.name, icon = "ORPHAN_DATA")
+            else:
+                row.label(text = "Desync Font", icon = "ORPHAN_DATA")
 
-        else: 
-            if activedata.fontselector_font_missing :
-                row = layout.row()
-                row.label(text = "Missing : " + activedata.fontselector_font, icon = "ERROR")
+        # debug font
+        if debug :
+            box = layout.box()
+            box.label(text = "DEBUG")
+            row = box.row()
+            row.label(text = "font : " + activedata.fontselector_font)
+            row = box.row()
+            row.label(text = "index : " + str(activedata.fontselector_index))
+            row = box.row()
+            row.label(text = "avoid : " + str(activedata.fontselector_avoid_changes))
 
-            if activedata.fontselector_desync_font :
-                row = layout.row()
-                if activedata.font is not None:
-                    row.label(text = "Desync Font : " + activedata.font.name, icon = "ORPHAN_DATA")
-                else:
-                    row.label(text = "Desync Font", icon = "ORPHAN_DATA")
+        col = layout.column(align=True)
+        row = col.row()
+        row.prop(wm, 'fontselector_search', text="", icon='VIEWZOOM')
 
-            # debug font
-            if debug :
-                box = layout.box()
-                box.label(text = "DEBUG")
-                row = box.row()
-                row.label(text = "font : " + activedata.fontselector_font)
-                row = box.row()
-                row.label(text = "index : " + str(activedata.fontselector_index))
-                row = box.row()
-                row.label(text = "avoid : " + str(activedata.fontselector_avoid_changes))
+        row = col.row()
+        row.template_list("FONTSELECTOR_UL_uilist", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
 
-            col = layout.column(align=True)
-            row = col.row()
-            row.prop(wm, 'fontselector_search', text="", icon='VIEWZOOM')
-
-            row = col.row()
-            row.template_list("FONTSELECTOR_UL_uilist", "", wm, "fontselector_list", activedata, "fontselector_index", rows = rownumber)
-
-            flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
-            row = flow.row(align = True)
-            if wm.fontselector_isrefreshing :
-                row.operator('fontselector.refresh_toggle', icon = 'CANCEL')
-            else :
-                row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
-            row = flow.row(align = True)
-            row.operator("fontselector.check_changes", text = "Check", icon = 'OUTLINER_OB_LIGHT')
-            row = flow.row(align = True)
-            row.operator("fontselector.remove_unused", text = "Clean", icon = 'UNLINKED')
+        flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
+        row = flow.row(align = True)
+        if wm.fontselector_isrefreshing :
+            row.operator('fontselector.refresh_toggle', icon = 'CANCEL')
+        else :
+            row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
+        row = flow.row(align = True)
+        row.operator("fontselector.check_changes", text = "Check", icon = 'OUTLINER_OB_LIGHT')
+        row = flow.row(align = True)
+        row.operator("fontselector.remove_unused", text = "Clean", icon = 'UNLINKED')

@@ -19,10 +19,9 @@ class FontSelectorCheckChanges(bpy.types.Operator):
     def poll(cls, context):
         #get addon prefs
         addon_preferences = get_addon_preferences()
-        fplist = addon_preferences.font_folders
         prefs = addon_preferences.prefs_folderpath
         json = os.path.join(prefs, json_file)
-        return len(fplist)>0 and prefs!="" and os.path.isfile(json)
+        return prefs!="" and os.path.isfile(json)
     
     def execute(self, context):
         # font folders

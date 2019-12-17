@@ -9,16 +9,21 @@ from gpu_extras.batch import batch_for_shader
 
 from ..preferences import get_addon_preferences
 
-from ..functions.misc_functions import get_all_font_files, create_dir, absolute_path, clear_collection, get_size, remove_unused_font, update_progress
-from ..functions.json_functions import initialize_json_datas, add_fonts_json, add_subdirectories_json, add_size_json, create_json_file
+from ..functions.misc_functions import get_all_font_files, create_dir, absolute_path, \
+                                        clear_collection, get_size, remove_unused_font, \
+                                        update_progress
+from ..functions.json_functions import initialize_json_datas, add_fonts_json, \
+                                        add_subdirectories_json, add_size_json, \
+                                        create_json_file
 from ..functions.load_json import load_json_font_file
 from ..functions.load_favorites import load_favorites
 from ..functions.update_functions import update_change_font
 from ..functions.change_list_update import change_list_update
 from ..functions.check_desync_fonts import checkDesyncFonts
 
-from ..global_variable import json_file
-from ..global_messages import start_refreshing_msg, progress_print_statement, cancel_refresh_msg, refresh_msg, modal_refreshing
+from ..global_variable import json_file, win_folder, mac_folder, linux_folder
+from ..global_messages import start_refreshing_msg, progress_print_statement, \
+                                cancel_refresh_msg, refresh_msg, modal_refreshing
 
 count = 0
 total = 0
@@ -100,18 +105,7 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        addon_preferences = get_addon_preferences()
-        fontcheck = []      
-        fplist = addon_preferences.font_folders
-        try :
-            for f in fplist :
-                absolute_folder = absolute_path(f.folderpath)
-                for font in get_all_font_files(absolute_folder) :
-                    fontcheck.append(font)
-        except IndexError :
-            pass
-        return len(fontcheck)>0 and not context.window_manager.fontselector_isrefreshing
-
+        return not context.window_manager.fontselector_isrefreshing
 
     def __init__(self):
 
@@ -125,17 +119,37 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
         fplist = addon_preferences.font_folders
         prefpath = absolute_path(addon_preferences.prefs_folderpath)
-        #data_font_list = bpy.data.fonts
-
-        for folder in fplist :
-            absolute_folder = absolute_path(folder.folderpath)
-            if os.path.isdir(absolute_folder) :
-                self.size_total += get_size(absolute_folder) 
-                fontpath_list, subdir_list = get_all_font_files(absolute_folder)
+        
+        # add default font folder
+        wm = bpy.context.window_manager
+        default_folders = []
+        if wm.fontselector_os == "Windows": 
+            for folder in win_folder: default_folders.append(folder)
+        elif wm.fontselector_os == "Darwin":
+            for folder in mac_folder: default_folders.append(folder)
+        else:
+            for folder in linux_folder: default_folders.append(folder)
+        for folder in default_folders:
+            if os.path.isdir(folder) :
+                self.size_total += get_size(folder) 
+                fontpath_list, subdir_list = get_all_font_files(folder)
                 for font in fontpath_list :
                     self.font_list.append(font)
                 for subdir in subdir_list :
                     self.subdirectories.append(subdir)
+
+        # add custom font folder
+        for folder in fplist :
+            absolute_folder = absolute_path(folder.folderpath)
+            if absolute_folder not in default_folders:
+                if os.path.isdir(absolute_folder) :
+                    self.size_total += get_size(absolute_folder) 
+                    fontpath_list, subdir_list = get_all_font_files(absolute_folder)
+                    for font in fontpath_list :
+                        self.font_list.append(font)
+                    for subdir in subdir_list :
+                        self.subdirectories.append(subdir)
+
         total = len(self.font_list)
         
         if os.path.isfile(self.json_output) :

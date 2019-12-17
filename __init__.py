@@ -50,7 +50,6 @@ from .operators.add_filepath import *
 from .operators.check_changes import *
 from .operators.dialog_message import *
 from .operators.export_favorites import *
-from .operators.load_fontlist import *
 from .operators.load_preferences import *
 from .operators.modal_refresh import *
 from .operators.open_folder import *
@@ -75,7 +74,6 @@ classes = (FontSelectorFontList,
             FontSelectorCheckChanges,
             FontSelectorDialogMessage,
             FontSelectorExportFavorites,
-            FontSelectorLoadFontList,
             FontSelectorLoadFPPrefs,
             FontSelectorModalRefresh,
             FontSelectorOpenSubdirectory,
@@ -114,6 +112,15 @@ def register():
         bpy.props.StringProperty(name = "Font Search",
                                 description = "Type to Search for Available Fonts",
                                 options={'TEXTEDIT_UPDATE','SKIP_SAVE'})
+
+    bpy.types.WindowManager.fontselector_os = \
+        bpy.props.EnumProperty(
+            name = "OS used",
+            items = (
+                ('WINDOWS', "Windows", ""),
+                ('MAC', "Mac", ""),
+                ('LINUX', "Linux", ""),
+                ))  
 
     # TEXT OBJECT PROPS
     bpy.types.TextCurve.fontselector_index = \
@@ -171,6 +178,7 @@ def unregister():
     del bpy.types.WindowManager.fontselector_subdirectories
     del bpy.types.WindowManager.fontselector_isrefreshing
     del bpy.types.WindowManager.fontselector_search
+    del bpy.types.WindowManager.fontselector_os
 
     # TEXT OBJECT PROPS
     del bpy.types.TextCurve.fontselector_index

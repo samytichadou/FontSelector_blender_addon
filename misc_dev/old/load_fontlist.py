@@ -21,6 +21,7 @@ class FontSelectorLoadFontList(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         addon_preferences = get_addon_preferences()
+        debug = addon_preferences.debug_value
         prefs = absolute_path(addon_preferences.prefs_folderpath)
         json_path = os.path.join(prefs, json_file)
         return os.path.isfile(json_path)
@@ -42,6 +43,7 @@ class FontSelectorLoadFontList(bpy.types.Operator):
         clear_collection(collection_subdir_list)
 
         # load json
+        if debug: print("loading")
         load_json_font_file(json_path, collection_font_list, collection_subdir_list)
 
         # load favorites

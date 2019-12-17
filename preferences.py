@@ -2,6 +2,8 @@ import bpy
 import os
 
 from .properties import FontFolders
+from .global_variable import win_folder,mac_folder,linux_folder
+
 
 addon_name = os.path.basename(os.path.dirname(__file__))
 
@@ -69,9 +71,14 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
             ('MANUAL', "Manual", "No Startup Check, Font List has to be manually refreshed"),
             ))
             
+
     def draw(self, context) :
         layout = self.layout
         font_list = self.font_folders
+        wm = context.window_manager
+        if wm.fontselector_os == 'WINDOWS': default_folders = win_folder
+        elif wm.fontselector_os == 'MAC': default_folders = mac_folder
+        else: default_folders = linux_folder
 
         temp_list = [f.folderpath for f in font_list]
         
@@ -79,20 +86,33 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
 
         col = layout.column(align = False)
         
+        # default font folders
+        box = col.box()
+        row = box.row()
+        row.label(text = wm.fontselector_os + " Default Font Folder : ", icon = "FILE_FOLDER")
+        col2 = box.column(align=True)
+        for folder in default_folders:
+            row = col2.row()
+            row.label(text = folder)
+        row = box.row()
+        if context.window_manager.fontselector_isrefreshing:
+            row.operator('fontselector.refresh_toggle', icon = 'CANCEL')
+        else:
+            row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
+
         # font folders
         box = col.box()
         row = box.row(align = True)
-        row.label(text = "Font Folders", icon = 'FILE_FONT')
+        row.label(text = "Custom Font Folders", icon = 'FILE_FONT')
         if len(dupelist) > 0 :
             row.label(text = 'Dupe Warning', icon = 'ERROR')
+
+        row = box.row(align = True)
         row.operator("fontselector.add_fp", text = "Add", icon = 'ADD')
         row.separator()
         row.operator("fontselector.save_fpprefs", text = 'Save', icon = 'DISK_DRIVE')
         row.operator("fontselector.load_fpprefs", text = 'Load', icon = 'LOOP_BACK')
-        row.separator()
-        if context.window_manager.fontselector_isrefreshing: row.operator('fontselector.refresh_toggle', text = "", icon = 'CANCEL')
-        else: row.operator('fontselector.refresh_toggle', text = "", icon = 'FILE_REFRESH')
-        
+
         idx = 0
         for i in font_list :
             sub_box = box.box()

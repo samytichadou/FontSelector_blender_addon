@@ -17,3 +17,8 @@ script_file = os.path.realpath(__file__)
 
 ress_path = os.path.join(os.path.dirname(script_file), "ress")
 warning_font_path = os.path.join(ress_path, "FontSelector_Warning_Font.otf")
+
+#default font folder
+win_folder = {r"C:\Windows\Fonts"}
+mac_folder = {r"/Library/Fonts",r"/System/Library/Fonts"}
+linux_folder = {r"/usr/share/fonts"}
