@@ -6,14 +6,21 @@ import subprocess
 
 from ..global_variable import extensions, warning_font_path
 
+# get os
+def getOs():
+    if platform.system() == "Windows": os = "windows"
+    elif platform.system() == "Darwin": os = "mac"
+    else: os = "linux"
+    return os
+
 # open folder in explorer
 def open_folder_in_explorer(path) :
-        if platform.system() == "Windows":
-                os.startfile(path)
-        elif platform.system() == "Darwin":
-                subprocess.Popen(["open", path])
-        else:
-                subprocess.Popen(["xdg-open", path])
+    if platform.system() == "Windows":
+        os.startfile(path)
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", path])
+    else:
+        subprocess.Popen(["xdg-open", path])
 
 # export menu
 def menu_export_favorites(self, context) :
@@ -21,14 +28,14 @@ def menu_export_favorites(self, context) :
 
 # clear collection
 def clear_collection(collection) :
-        if len(collection)>=1:
-            for i in range(len(collection)-1,-1,-1):
-                collection.remove(i)
+    if len(collection)>=1:
+        for i in range(len(collection)-1,-1,-1):
+            collection.remove(i)
 
 # absolute path
 def absolute_path(path) :
-        apath = os.path.abspath(bpy.path.abspath(path))
-        return apath
+    apath = os.path.abspath(bpy.path.abspath(path))
+    return apath
 
 # get size of folder and subdir in bytes
 def get_size(folderpath) :
@@ -41,40 +48,40 @@ def get_size(folderpath) :
 
 # create directory if doesn't exist
 def create_dir(dir_path) :
-        if os.path.isdir(dir_path) == False :
-                os.makedirs(dir_path)
+    if os.path.isdir(dir_path) == False :
+            os.makedirs(dir_path)
 
 # remove unused font datablocks and return number of fonts removed
 def remove_unused_font() :
-        removed_fonts_count = 0
-        for f in bpy.data.fonts :
-            if f.users == 0 :
-                removed_fonts_count += 1
-                bpy.data.fonts.remove(f, do_unlink=True)
-        return removed_fonts_count
+    removed_fonts_count = 0
+    for f in bpy.data.fonts :
+        if f.users == 0 :
+            removed_fonts_count += 1
+            bpy.data.fonts.remove(f, do_unlink=True)
+    return removed_fonts_count
 
 # get all font files in dir and subdir ((font path, font subdir, file name)(subdir name, subdir path))
 def get_all_font_files(base_dir) :
-        font_files_list = []
-        subdir_list = []
-        for (root, directories, filenames) in os.walk(base_dir) :
-                for file in filenames :
-                        extension = os.path.splitext(file)[1]
-                        if any(extension == ext for ext in extensions) :
+    font_files_list = []
+    subdir_list = []
+    for (root, directories, filenames) in os.walk(base_dir) :
+        for file in filenames :
+            extension = os.path.splitext(file)[1]
+            if any(extension == ext for ext in extensions) :
 
-                                dupe_check = 0
-                                font_path = os.path.join(root, file)
-                                subdir = os.path.basename(os.path.dirname(font_path))
-                                font_files_list.append([font_path, subdir, file])
+                dupe_check = 0
+                font_path = os.path.join(root, file)
+                subdir = os.path.basename(os.path.dirname(font_path))
+                font_files_list.append([font_path, subdir, file])
 
-                                # create the subdir list
-                                for dir in subdir_list :
-                                        if dir[0] == subdir :
-                                                dupe_check = 1
-                                                break
-                                if dupe_check == 0 :
-                                        subdir_list.append([subdir, root])
-        return font_files_list, subdir_list
+                # create the subdir list
+                for dir in subdir_list :
+                    if dir[0] == subdir :
+                        dupe_check = 1
+                        break
+                if dupe_check == 0 :
+                    subdir_list.append([subdir, root])
+    return font_files_list, subdir_list
 
 # suppress existing file
 def suppress_existing_file(filepath) :
