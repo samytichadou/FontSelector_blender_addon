@@ -76,11 +76,9 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
         layout = self.layout
         font_list = self.font_folders
         wm = context.window_manager
-        if wm.fontselector_os == 'WINDOWS': default_folders = win_folder
-        elif wm.fontselector_os == 'MAC': default_folders = mac_folder
-        else: default_folders = linux_folder
-
+        
         temp_list = [f.folderpath for f in font_list]
+        for f in wm.fontselector_defaultfolders: temp_list.append(f.folderpath)
         
         dupelist = [x for x in temp_list if temp_list.count(x) >= 2]
 
@@ -89,14 +87,14 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
         # default font folders
         box = col.box()
         row = box.row()
-        row.label(text = wm.fontselector_os + " Default Font Folder : ", icon = "FILE_FOLDER")
+        row.label(text = wm.fontselector_os + " Default Font Folders", icon = "FILE_FOLDER")
         col2 = box.column(align=True)
-        for folder in default_folders:
+        for folder in wm.fontselector_defaultfolders:
             row = col2.row()
-            row.label(text = folder)
+            row.label(text = folder.folderpath)
         row = box.row()
         if context.window_manager.fontselector_isrefreshing:
-            row.operator('fontselector.refresh_toggle', icon = 'CANCEL')
+            row.operator('fontselector.refresh_toggle', text = "Cancel", icon = 'CANCEL')
         else:
             row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
 

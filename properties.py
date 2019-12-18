@@ -25,3 +25,11 @@ class FontFolders(bpy.types.PropertyGroup) :
             description = "Folders where Fonts are stored",
             subtype = "DIR_PATH",
             )
+
+class FontSelectorDefaultFolders(bpy.types.PropertyGroup) :
+    '''name : StringProperty() '''
+    folderpath : bpy.props.StringProperty(
+            name = "Folder path",
+            description = "Folders where Fonts are stored",
+            subtype = "DIR_PATH",
+            )

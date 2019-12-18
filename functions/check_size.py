@@ -4,8 +4,8 @@ import os
 from .json_functions import read_json
 from .misc_functions import get_size, absolute_path
 from ..preferences import get_addon_preferences
+from ..global_variable import json_file
 
-from ..global_variable import json_file, win_folder, mac_folder, linux_folder
 
 # check size change and return true or false
 def check_size_changes() :
@@ -22,11 +22,8 @@ def check_size_changes() :
         datas = read_json(json_output)
 
         # default folders
-        if wm.fontselector_os == 'WINDOWS': default_folders = win_folder
-        elif wm.fontselector_os == 'MAC': default_folders = mac_folder
-        else: default_folders = linux_folder
-        for fp in default_folders:
-            size += get_size(fp)
+        for fp in wm.fontselector_defaultfolders:
+            size += get_size(fp.folderpath)
 
         # custom folders
         for fp in addon_preferences.font_folders:

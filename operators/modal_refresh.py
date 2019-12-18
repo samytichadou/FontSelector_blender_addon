@@ -20,8 +20,7 @@ from ..functions.load_favorites import load_favorites
 from ..functions.update_functions import update_change_font
 from ..functions.change_list_update import change_list_update
 from ..functions.check_desync_fonts import checkDesyncFonts
-
-from ..global_variable import json_file, win_folder, mac_folder, linux_folder
+from ..global_variable import json_file
 from ..global_messages import start_refreshing_msg, progress_print_statement, \
                                 cancel_refresh_msg, refresh_msg, modal_refreshing
 
@@ -119,20 +118,15 @@ class FontSelectorModalRefresh(bpy.types.Operator):
 
         fplist = addon_preferences.font_folders
         prefpath = absolute_path(addon_preferences.prefs_folderpath)
+        default_folders = []
         
         # add default font folder
         wm = bpy.context.window_manager
-        default_folders = []
-        if wm.fontselector_os == "Windows": 
-            for folder in win_folder: default_folders.append(folder)
-        elif wm.fontselector_os == "Darwin":
-            for folder in mac_folder: default_folders.append(folder)
-        else:
-            for folder in linux_folder: default_folders.append(folder)
-        for folder in default_folders:
-            if os.path.isdir(folder) :
-                self.size_total += get_size(folder) 
-                fontpath_list, subdir_list = get_all_font_files(folder)
+        for folder in wm.fontselector_defaultfolders:
+            if os.path.isdir(folder.folderpath) :
+                default_folders.append(folder.folderpath)
+                self.size_total += get_size(folder.folderpath) 
+                fontpath_list, subdir_list = get_all_font_files(folder.folderpath)
                 for font in fontpath_list :
                     self.font_list.append(font)
                 for subdir in subdir_list :

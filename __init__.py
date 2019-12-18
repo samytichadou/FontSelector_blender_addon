@@ -67,6 +67,7 @@ from .operators.refresh_operator_toggle import *
 classes = (FontSelectorFontList, 
             FontSelectorFontSubs, 
             FontFolders,
+            FontSelectorDefaultFolders,
             FONTSELECTOR_PT_propertiespanel,
             FontSelectorAddonPrefs,
             FONTSELECTOR_UL_uilist,
@@ -99,15 +100,19 @@ def register():
     # GLOBAL PROPS
     bpy.types.WindowManager.fontselector_list = \
         bpy.props.CollectionProperty(type = FontSelectorFontList)
+
     bpy.types.WindowManager.fontselector_isrefreshing = \
         bpy.props.BoolProperty(name = "Stop Refreshing",
                                 description="Stop Refreshing Font List")
+
     bpy.types.WindowManager.fontselector_sub = \
         bpy.props.CollectionProperty(type = FontSelectorFontSubs)
+
     bpy.types.WindowManager.fontselector_subdirectories = \
         bpy.props.EnumProperty(items = get_subdirectories_items, 
                                 name = "Subdirectories",
                                 description = "Display only specific Subdirectories")
+
     bpy.types.WindowManager.fontselector_search = \
         bpy.props.StringProperty(name = "Font Search",
                                 description = "Type to Search for Available Fonts",
@@ -121,6 +126,9 @@ def register():
                 ('MAC', "Mac", ""),
                 ('LINUX', "Linux", ""),
                 ))  
+
+    bpy.types.WindowManager.fontselector_defaultfolders = \
+        bpy.props.CollectionProperty(type = FontSelectorDefaultFolders)
 
     # TEXT OBJECT PROPS
     bpy.types.TextCurve.fontselector_index = \
@@ -179,6 +187,7 @@ def unregister():
     del bpy.types.WindowManager.fontselector_isrefreshing
     del bpy.types.WindowManager.fontselector_search
     del bpy.types.WindowManager.fontselector_os
+    del bpy.types.WindowManager.fontselector_defaultfolders
 
     # TEXT OBJECT PROPS
     del bpy.types.TextCurve.fontselector_index
