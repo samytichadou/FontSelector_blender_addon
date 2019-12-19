@@ -200,7 +200,7 @@ def unregister():
     del bpy.types.TextSequence.fontselector_index
     del bpy.types.TextSequence.fontselector_font
     del bpy.types.TextSequence.fontselector_font_missing
-    del bpy.types.TextCurve.fontselector_desync_font
+    del bpy.types.TextSequence.fontselector_desync_font
     del bpy.types.TextSequence.fontselector_avoid_changes
     
     ### HANDLER
