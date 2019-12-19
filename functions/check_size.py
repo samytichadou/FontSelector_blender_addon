@@ -27,7 +27,7 @@ def check_size_changes() :
 
         # custom folders
         for fp in addon_preferences.font_folders:
-            if fp.folderpath != "" :
+            if fp.folderpath != "" and os.path.isdir(fp.folderpath):
                 size += get_size(absolute_path(fp.folderpath))
 
         # size check
