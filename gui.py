@@ -37,12 +37,11 @@ class FONTSELECTOR_PT_sequencerpanel(Panel):
 
     @staticmethod
     def has_sequencer(context):
-        return (context.space_data.view_type in {'SEQUENCER', 'SEQUENCER_PREVIEW'})
+        return (context.space_data.type in {'SEQUENCER', 'SEQUENCER_PREVIEW'})
 
     @classmethod
     def poll(cls, context):
-        if not cls.has_sequencer(context):
-            return False
+        if not cls.has_sequencer(context): return False
         try :
             strip = context.scene.sequence_editor.active_strip
             strip.name
@@ -120,3 +119,30 @@ def draw_general_gui(layout, activedata):
         row.operator("fontselector.check_changes", text = "Check", icon = 'OUTLINER_OB_LIGHT')
         row = flow.row(align = True)
         row.operator("fontselector.remove_unused", text = "Clean", icon = 'UNLINKED')
+
+
+# 3D floating panel GUI
+class FONTSELECTOR_OP_3dfloatingpanel(bpy.types.Operator):
+    bl_idname = "fontselector.3d_floating_panel"
+    bl_label = "FontSelector Floating Panel"
+    #bl_options = {'INTERNAL'}
+
+    @classmethod
+    def poll(cls, context):
+        active = bpy.context.active_object
+        if active is not None:
+            active_type = active.type
+        else:
+            active_type = ""
+        return active_type == 'FONT'
+ 
+    def execute(self, context):
+        return {'FINISHED'}
+ 
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+ 
+    def draw(self, context):
+        layout = self.layout
+        activedata = context.active_object.data
+        draw_general_gui(layout, activedata)

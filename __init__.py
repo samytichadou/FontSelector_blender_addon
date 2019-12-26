@@ -84,6 +84,7 @@ classes = (FontSelectorFontList,
             FontSelectorSuppressFP,
             FontSelectorOpenFontFolder,
             FONTSELECTOR_PT_sequencerpanel,
+            FONTSELECTOR_OP_3dfloatingpanel,
             FontSelectorRefreshToggle
             )
 
