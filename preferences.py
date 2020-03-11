@@ -94,15 +94,21 @@ class FontSelectorAddonPrefs(bpy.types.AddonPreferences) :
         col = layout.column(align = True)
         
         if self.preference_page == 'FONTFOLDERS':
-
-            # default font folders
+            
+            # font folders operators
             box = col.box()
             row = box.row()
-            row.label(text = wm.fontselector_os + " Default Font Folders", icon = "FILE_FOLDER")
             if context.window_manager.fontselector_isrefreshing:
                 row.operator('fontselector.refresh_toggle', text = "Cancel", icon = 'CANCEL')
             else:
                 row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
+            row.operator("fontselector.check_changes", text = "Check", icon = 'OUTLINER_OB_LIGHT')
+            row.operator("fontselector.remove_unused", text = "Clean", icon = 'UNLINKED')
+            
+            # default font folders
+            box = col.box()
+            row = box.row()
+            row.label(text = " Default Font Folders", icon = "FILE_FOLDER")
             col2 = box.column(align=True)
             for folder in wm.fontselector_defaultfolders:
                 row = col2.row()
