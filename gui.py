@@ -3,6 +3,7 @@ import bpy
 from bpy.types import Panel
 
 from.preferences import get_addon_preferences
+import operators.modal_refresh
 
 # Properties Panel GUI
 class FONTSELECTOR_PT_propertiespanel(Panel):
@@ -25,6 +26,7 @@ class FONTSELECTOR_PT_propertiespanel(Panel):
         layout = self.layout
         activedata = context.active_object.data
         draw_general_gui(layout, activedata)
+
 
 # Sequencer Panel GUI
 class FONTSELECTOR_PT_sequencerpanel(Panel):
@@ -117,8 +119,6 @@ def draw_general_gui(layout, activedata):
             row.operator('fontselector.refresh_toggle', icon = 'FILE_REFRESH')
         row = flow.row(align = True)
         row.operator("fontselector.check_changes", text = "Check", icon = 'OUTLINER_OB_LIGHT')
-        row = flow.row(align = True)
-        row.operator("fontselector.remove_unused", text = "Clean", icon = 'UNLINKED')
 
 # popover 3d view function
 def popover_view3d_function(self, context):

@@ -84,7 +84,7 @@ classes = (FontSelectorFontList,
             FontSelectorSuppressFP,
             FontSelectorOpenFontFolder,
             FONTSELECTOR_PT_sequencerpanel,
-            FontSelectorRefreshToggle
+            FontSelectorRefreshToggle,
             )
 
 def register():
