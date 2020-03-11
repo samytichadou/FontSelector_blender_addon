@@ -84,7 +84,6 @@ classes = (FontSelectorFontList,
             FontSelectorSuppressFP,
             FontSelectorOpenFontFolder,
             FONTSELECTOR_PT_sequencerpanel,
-            FONTSELECTOR_OP_3dfloatingpanel,
             FontSelectorRefreshToggle
             )
 
@@ -167,9 +166,9 @@ def register():
 
     bpy.app.handlers.load_post.append(fontselector_startup)
     
-    ### EXPORT MENU ###
-
+    ### MENUS ###
     bpy.types.TOPBAR_MT_file_export.append(menu_export_favorites)
+    bpy.types.VIEW3D_MT_editor_menus.append(popover_view3d_function)
 
 def unregister():
     
@@ -208,6 +207,6 @@ def unregister():
 
     bpy.app.handlers.load_post.remove(fontselector_startup)
     
-    ### EXPORT MENU ###
-
+    ### MENU ###
     bpy.types.TOPBAR_MT_file_export.remove(menu_export_favorites)
+    bpy.types.VIEW3D_MT_editor_menus.remove(popover_view3d_function)

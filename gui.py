@@ -120,29 +120,11 @@ def draw_general_gui(layout, activedata):
         row = flow.row(align = True)
         row.operator("fontselector.remove_unused", text = "Clean", icon = 'UNLINKED')
 
-
-# 3D floating panel GUI
-class FONTSELECTOR_OP_3dfloatingpanel(bpy.types.Operator):
-    bl_idname = "fontselector.3d_floating_panel"
-    bl_label = "FontSelector Floating Panel"
-    #bl_options = {'INTERNAL'}
-
-    @classmethod
-    def poll(cls, context):
-        active = bpy.context.active_object
-        if active is not None:
-            active_type = active.type
-        else:
-            active_type = ""
-        return active_type == 'FONT'
- 
-    def execute(self, context):
-        return {'FINISHED'}
- 
-    def invoke(self, context, event):
-        return context.window_manager.invoke_props_dialog(self)
- 
-    def draw(self, context):
-        layout = self.layout
-        activedata = context.active_object.data
-        draw_general_gui(layout, activedata)
+# popover 3d view function
+def popover_view3d_function(self, context):
+    if bpy.context.active_object is not None and bpy.context.active_object.type == 'FONT':
+        self.layout.popover(
+                panel="FONTSELECTOR_PT_propertiespanel",
+                #icon='FILE_FONT',
+                text="Font",
+            )
