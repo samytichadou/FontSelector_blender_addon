@@ -1,11 +1,14 @@
 import bpy,os,platform
 
 from ..global_variable import win_folder, mac_folder, linux_folder
+from .misc_functions import clear_collection
 
 # set default font folder
 def setOs():
     wm = bpy.context.window_manager
     default_folders_list = wm.fontselector_defaultfolders
+
+    clear_collection(default_folders_list)
 
     if platform.system() == "Windows": 
         wm.fontselector_os = 'WINDOWS'
