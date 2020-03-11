@@ -3,7 +3,7 @@ import bpy
 from bpy.types import Panel
 
 from.preferences import get_addon_preferences
-import operators.modal_refresh
+
 
 # Properties Panel GUI
 class FONTSELECTOR_PT_propertiespanel(Panel):
