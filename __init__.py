@@ -23,7 +23,9 @@ Created by Samy Tichadou (tonton)
 ##################################
 
 from . import   (
+    addon_prefs,
     properties,
+    load_fonts,
 )
 
 
@@ -32,7 +34,11 @@ from . import   (
 
 def register():
     properties.register()
+    addon_prefs.register()
+    load_fonts.register()
 
 def unregister():
     properties.unregister()
+    addon_prefs.unregister()
+    load_fonts.unregister()
     
