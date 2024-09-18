@@ -26,6 +26,9 @@ from . import   (
     addon_prefs,
     properties,
     load_fonts,
+    ui_list,
+    gui,
+    reload_operator,
 )
 
 
@@ -36,9 +39,15 @@ def register():
     properties.register()
     addon_prefs.register()
     load_fonts.register()
+    ui_list.register()
+    gui.register()
+    reload_operator.register()
 
 def unregister():
     properties.unregister()
     addon_prefs.unregister()
     load_fonts.unregister()
+    ui_list.unregister()
+    gui.unregister()
+    reload_operator.unregister()
     
