@@ -8,6 +8,9 @@ from bpy.app.handlers import persistent
 from .addon_prefs import get_addon_preferences
 
 
+# TODO If list changed, relink fonts
+
+
 # Font format
 font_formats = [
     ".otf",
@@ -120,7 +123,7 @@ def refresh_fonts_json():
     # Refresh needed
     if datas is None or datas["size"] != size:
         
-        print(f"FONTSELECTOR --- Changes detected, refreshing fonts")
+        print("FONTSELECTOR --- Changes detected, refreshing fonts")
         
         fonts = []
         
@@ -148,14 +151,14 @@ def refresh_fonts_json():
         
         return datas, True
     
-    print(f"FONTSELECTOR --- No changes detected")
+    print("FONTSELECTOR --- No changes detected")
     
     return datas, False
 
 
 def reload_font_collections(font_datas):
     
-    print(f"FONTSELECTOR --- Reloading collections")
+    print("FONTSELECTOR --- Reloading collections")
     
     props = bpy.context.window_manager.fontselector_properties.fonts
     

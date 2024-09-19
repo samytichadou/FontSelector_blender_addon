@@ -1,13 +1,11 @@
 import bpy
 
 
-# TODO Selected, not only active
-# TODO Sequencer panel
 # TODO Popover
 
 
 # general GUI
-def draw_fontselector_gui(layout, activedata):
+def draw_fontselector_gui(layout, active_datas):
     
     props = bpy.context.window_manager.fontselector_properties
     
@@ -18,9 +16,9 @@ def draw_fontselector_gui(layout, activedata):
     row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
 
     row = col.row()
-    row.template_list("FONTSELECTOR_UL_uilist", "", props, "fonts", props, "font_index", rows = 5)
+    row.template_list("FONTSELECTOR_UL_uilist", "", props, "fonts", active_datas, "font_index", rows = 5)
 
-
+    
 # Properties Panel GUI
 class FONTSELECTOR_PT_properties_panel(bpy.types.Panel):
     bl_space_type = 'PROPERTIES'
@@ -31,19 +29,38 @@ class FONTSELECTOR_PT_properties_panel(bpy.types.Panel):
     
     @classmethod
     def poll(cls, context):
-        active=bpy.context.active_object
-        if active is not None:
-            return active.type == 'FONT'
-
+        return context.active_object.type == "FONT"
+    
     def draw(self, context):
         layout = self.layout
-        activedata = context.active_object.data
-        draw_fontselector_gui(layout, activedata)
+        active_datas = context.active_object.data.fontselector_object_properties
+        draw_fontselector_gui(layout, active_datas)
 
+
+# Sequencer Panel GUI
+class FONTSELECTOR_PT_sequencer_panel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_parent_id = "SEQUENCER_PT_effect"
+    bl_category = "Strip"
+    bl_label = "Font Selection"
+    
+    @classmethod
+    def poll(cls, context):
+        strip = context.active_sequence_strip
+        return strip.type == 'TEXT'
+    
+    def draw(self, context):
+        layout = self.layout
+        active_datas = context.active_sequence_strip.fontselector_object_properties
+        draw_fontselector_gui(layout, active_datas)
+        
 
 ### REGISTER ---
 def register():
     bpy.utils.register_class(FONTSELECTOR_PT_properties_panel)
+    bpy.utils.register_class(FONTSELECTOR_PT_sequencer_panel)
 
 def unregister():
     bpy.utils.unregister_class(FONTSELECTOR_PT_properties_panel)
+    bpy.utils.unregister_class(FONTSELECTOR_PT_sequencer_panel)
