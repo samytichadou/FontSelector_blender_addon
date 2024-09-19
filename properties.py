@@ -4,26 +4,22 @@ import os
     
 class FONTSELECTOR_PR_fonts_properties(bpy.types.PropertyGroup):
     
-    filepath : bpy.props.StringProperty(
+    filepath: bpy.props.StringProperty(
         name = "Filepath",
     )
-    favorite : bpy.props.BoolProperty(
+    favorite: bpy.props.BoolProperty(
         name = "Favorite",
     )
-    font_family : bpy.props.StringProperty(
+    font_family: bpy.props.StringProperty(
         name = "Font Family",
     )
-    font_type : bpy.props.StringProperty(
+    font_type: bpy.props.StringProperty(
         name = "Font Type",
     )
 
 
 class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
 
-    font_search : bpy.props.StringProperty(
-        options = {"TEXTEDIT_UPDATE"},
-    )
-    
     fonts : bpy.props.CollectionProperty(
         type=FONTSELECTOR_PR_fonts_properties,
     )
@@ -160,6 +156,9 @@ def font_selection_callback(self, context):
     
 class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
 
+    font_search: bpy.props.StringProperty(
+        options = {"TEXTEDIT_UPDATE"},
+    )
     font_index : bpy.props.IntProperty(
         update = font_selection_callback,
     )
