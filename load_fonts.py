@@ -20,18 +20,21 @@ font_formats = [
 
 def get_os_folders():
     # Linux: Linux
-    # Mac: Darwin
     # Windows: Windows
-    os = platform.system()
-    if os == "Linux":
+    # Mac: Darwin
+    osys = platform.system()
+    if osys == "Linux":
         return [
-            r"/usr/share/fonts",
+            r"/usr/share/fonts", # Debian Ubuntu
+            r"/usr/X11R6/lib/X11/fonts", # RH
+            os.path.join(os.environ['HOME'], r".local/share/fonts"), # Fedora
+            os.path.join(os.environ['HOME'], ".fonts"), # Debian Ubuntu
         ]
-    elif os == "Windows":
+    elif osys == "Windows":
         return [
             r"C:\Windows\Fonts",
         ]
-    elif os == "Darwin":
+    elif osys == "Darwin":
         return [
             r"/Library/Fonts",
             r"/System/Library/Fonts",
@@ -54,6 +57,12 @@ def get_font_list_from_folder(folderpath):
     
     font_list = []
     
+    # Invalid folder
+    if not os.path.isdir(folderpath):
+        print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
+        return font_list
+    
+    # Check for font files
     for root, dirs, files in os.walk(folderpath):
         
         for file in files:
@@ -113,6 +122,12 @@ def refresh_fonts_json():
     folders = []
     
     for folderpath in get_os_folders():
+        
+        # Invalid folder
+        if not os.path.isdir(folderpath):
+            print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
+            continue
+            
         size += get_folder_size(folderpath)
         folders.append(folderpath)
         
