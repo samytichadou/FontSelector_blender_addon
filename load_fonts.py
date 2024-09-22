@@ -32,7 +32,9 @@ def get_os_folders():
         ]
     elif osys == "Windows":
         return [
-            r"C:\Windows\Fonts",
+            # r"C:\Windows\Fonts",
+            os.path.join(os.environ['windir'], "fonts"), # System wide install
+            os.path.join(os.environ['LOCALAPPDATA'], r"\Microsoft\Windows\Fonts"), # User install
         ]
     elif osys == "Darwin":
         return [
