@@ -7,6 +7,7 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "fontselector.reload_fonts"
     bl_label = "Reload Fonts"
+    bl_options = {'INTERNAL'}
 
     @classmethod
     def poll(cls, context):
