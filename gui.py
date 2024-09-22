@@ -1,7 +1,10 @@
 import bpy
 
+from .addon_prefs import get_addon_preferences
+
 
 # TODO Popover
+
 
 
 # Fontselector panel
@@ -32,6 +35,24 @@ class FONTSELECTOR_panel(bpy.types.Panel):
             
         else:
             row.template_list("FONTSELECTOR_UL_uilist_object", "", props, "fonts", active_datas, "font_index", rows = 5)
+
+
+def viewport_popover_draw(self, context):
+    if get_addon_preferences().properties_panel\
+    and context.active_object.type == "FONT":
+        self.layout.popover(panel="FONTSELECTOR_PT_viewport_popover", text="", icon="FILE_FONT")
+   
+
+# 3D viewport popover
+class FONTSELECTOR_PT_viewport_popover(FONTSELECTOR_panel):
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'HEADER'
+    bl_ui_units_x = 10
+    
+    @classmethod
+    def poll(cls, context):
+        if get_addon_preferences().properties_panel:
+            return context.active_object.type == "FONT"
         
     
 # Properties Panel GUI
@@ -44,7 +65,8 @@ class FONTSELECTOR_PT_properties_panel(FONTSELECTOR_panel):
     
     @classmethod
     def poll(cls, context):
-        return context.active_object.type == "FONT"
+        if get_addon_preferences().properties_panel:
+            return context.active_object.type == "FONT"
     
 
 # Sequencer Panel GUI
@@ -60,15 +82,20 @@ class FONTSELECTOR_PT_sequencer_panel(FONTSELECTOR_panel):
     
     @classmethod
     def poll(cls, context):
-        strip = context.active_sequence_strip
-        return strip.type == 'TEXT'
+        if get_addon_preferences().sequencer_panel:
+            strip = context.active_sequence_strip
+            return strip.type == 'TEXT'
        
 
 ### REGISTER ---
 def register():
+    bpy.types.VIEW3D_MT_editor_menus.append(viewport_popover_draw)
+    bpy.utils.register_class(FONTSELECTOR_PT_viewport_popover)
     bpy.utils.register_class(FONTSELECTOR_PT_properties_panel)
     bpy.utils.register_class(FONTSELECTOR_PT_sequencer_panel)
 
 def unregister():
+    bpy.types.VIEW3D_MT_editor_menus.remove(viewport_popover_draw)
+    bpy.utils.unregister_class(FONTSELECTOR_PT_viewport_popover)
     bpy.utils.unregister_class(FONTSELECTOR_PT_properties_panel)
     bpy.utils.unregister_class(FONTSELECTOR_PT_sequencer_panel)
