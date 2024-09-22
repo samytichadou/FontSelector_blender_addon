@@ -20,7 +20,8 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
             else:
                 icon = 'SOLO_OFF'
             row.prop(item, "favorite", text = "", icon = icon, emboss = True)
-            
+
+
     def draw_filter(self, context, layout):
         
         # TODO UI
@@ -30,6 +31,7 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         row.prop(self, "invert_filter", text="", icon="ARROW_LEFTRIGHT")
         row.separator()
         row.prop(self, "show_favorite", text="", icon="SOLO_OFF")
+
         
     def filter_items(self, context, data, propname):
         # This function gets the collection property (as the usual tuple (data, propname)), and must return two lists:

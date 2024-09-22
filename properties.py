@@ -32,7 +32,7 @@ def get_font(font_props):
         print(f"FONTSELECTOR --- Invalid font : {font_props.filepath}, please refresh")
         return None
     
-    print(f"FONTSELECTOR --- Getting {font_props.name}")
+    print(f"FONTSELECTOR --- Getting {font_props.filepath}")
     
     # Local
     try:
@@ -115,10 +115,10 @@ def font_selection_callback(self, context):
     global no_callback
     
     if no_callback:
-        print(f"FONTSELECTOR --- Update function cancelled - {self.id_data}")
+        print("FONTSELECTOR --- Update function cancelled")
         return
     
-    print(f"FONTSELECTOR --- Update function - {self.id_data}")
+    print("FONTSELECTOR --- Update function")
     
     target_font_props = context.window_manager.fontselector_properties.fonts[self.font_index]
     

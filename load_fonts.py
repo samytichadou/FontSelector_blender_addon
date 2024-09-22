@@ -155,7 +155,7 @@ def refresh_fonts_json(force_refresh = False):
             )
         
         # Alphabetical order
-        fonts.sort(key=lambda x: x['name'], reverse=False)      
+        fonts.sort(key=lambda x: x['name'].lower(), reverse=False)
         
         datas = {
             "size" : size,
