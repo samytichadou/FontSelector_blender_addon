@@ -118,7 +118,7 @@ def get_existing_datas():
     return read_json(filepath)
 
 
-def refresh_fonts_json():
+def refresh_fonts_json(force_refresh = False):
     
     size = 0
     folders = []
@@ -137,10 +137,12 @@ def refresh_fonts_json():
         
     datas = get_existing_datas()
     
-    # Refresh needed
-    if datas is None or datas["size"] != size:
+    # Refresh
+    if datas is None\
+    or datas["size"] != size\
+    or force_refresh:
         
-        print("FONTSELECTOR --- Changes detected, refreshing fonts")
+        print("FONTSELECTOR --- Refreshing fonts datas")
         
         fonts = []
         
@@ -168,7 +170,7 @@ def refresh_fonts_json():
         
         return datas, True
     
-    print("FONTSELECTOR --- No changes detected")
+    print("FONTSELECTOR --- Keeping fonts datas")
     
     return datas, False
 

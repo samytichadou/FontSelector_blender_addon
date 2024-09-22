@@ -14,16 +14,11 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
 
     def execute(self, context):
         
-        datas, change = lf.refresh_fonts_json()
+        datas, change = lf.refresh_fonts_json(True)
         
-        if change:
-            lf.reload_font_collections(datas)
+        lf.reload_font_collections(datas)
             
-            self.report({'INFO'}, "Font changes detected, reloading")
-            
-        else:
-            
-            self.report({'INFO'}, "No font changes detected")
+        self.report({'INFO'}, "Fonts reloaded")
             
         return {'FINISHED'}
 
