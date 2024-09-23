@@ -18,6 +18,8 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
         datas, change = lf.refresh_fonts_json(True)
         
         lf.reload_font_collections(datas)
+        
+        lf.relink_font_objects()
             
         self.report({'INFO'}, "Fonts reloaded")
             

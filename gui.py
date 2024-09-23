@@ -3,7 +3,7 @@ import bpy
 from .addon_prefs import get_addon_preferences
 
 
-# TODO Fix search errors
+# TODO Fix search menu errors
 
 
 ### Fontselector common panel UI ###

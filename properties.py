@@ -24,6 +24,8 @@ class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
         type=FONTSELECTOR_PR_fonts_properties,
     )
     
+    no_callback : bpy.props.BoolProperty()
+    
 
 def get_font(font_props):
     
@@ -107,20 +109,17 @@ def change_strips_font(
             props.font_name = target_font.name
 
 
-# Global variable to prevent callback
-no_callback = False
-
 def font_selection_callback(self, context):
     
-    global no_callback
+    font_props = context.window_manager.fontselector_properties
     
-    if no_callback:
+    if font_props.no_callback:
         print("FONTSELECTOR --- Update function cancelled")
         return
     
     print("FONTSELECTOR --- Update function")
     
-    target_font_props = context.window_manager.fontselector_properties.fonts[self.font_index]
+    target_font_props = font_props.fonts[self.font_index]
     
     # Import font
     target_font = get_font(target_font_props)
@@ -129,7 +128,7 @@ def font_selection_callback(self, context):
     if target_font is None:
         return
     
-    no_callback = True
+    font_props.no_callback = True
     
     # Find object or strip
     if isinstance(self.id_data, bpy.types.TextCurve):
@@ -148,7 +147,7 @@ def font_selection_callback(self, context):
             context,
         )
             
-    no_callback = False
+    font_props.no_callback = False
     
     # Clear old fonts
     clear_font_datas()
@@ -164,7 +163,7 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
     )
     font_name : bpy.props.StringProperty()
     
-    
+
 ### REGISTER ---
 def register():
     bpy.utils.register_class(FONTSELECTOR_PR_fonts_properties)

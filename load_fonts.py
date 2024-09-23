@@ -8,7 +8,8 @@ from bpy.app.handlers import persistent
 from .addon_prefs import get_addon_preferences
 
 
-# TODO If list changed, relink fonts
+# TODO Add mac extra font folders
+# TODO use /etc/fonts/font.conf on linux to get font dirs ?
 
 
 # Font format
@@ -26,6 +27,7 @@ def get_os_folders():
     if osys == "Linux":
         return [
             r"/usr/share/fonts", # Debian Ubuntu
+            r"/usr/local/share/fonts", # Debian Ubuntu
             r"/usr/X11R6/lib/X11/fonts", # RH
             os.path.join(os.environ['HOME'], r".local/share/fonts"), # Fedora
             os.path.join(os.environ['HOME'], ".fonts"), # Debian Ubuntu
@@ -190,13 +192,71 @@ def reload_font_collections(font_datas):
         new.font_family = font["family"]
         new.font_type = font["type"]
 
+
+def get_font_from_name(font_name):
+    idx = 0
+    for font in bpy.context.window_manager.fontselector_properties.fonts:
+        if font.name == font_name:
+            return font, idx
+        idx += 1
+    return None, None
+
+
+def relink_font_objects():
+    
+    print("FONTSELECTOR --- Relinking font objects")
+    
+    obj_list = []
+    
+    # Get text curves
+    for obj in bpy.data.curves:
+        obj_list.append(obj)
+    
+    # Get text strips
+    for scn in bpy.data.scenes:
+        if scn.sequence_editor:
+            for strip in scn.sequence_editor.sequences_all:
+                if strip.type == "TEXT":
+                    obj_list.append(strip)
+    
+    # Prevent index callback
+    font_props = bpy.context.window_manager.fontselector_properties
+    font_props.no_callback = True
+        
+    # Relink
+    for obj in obj_list:
+        
+        props = obj.fontselector_object_properties
+        
+        font, index = get_font_from_name(props.font_name)
+        
+        # Missing font
+        if font is None:
+            print(f"FONTSELECTOR --- Unable to relink : {props.font_name}")
+            
+            props.font_index = -1
+            continue
+        
+        # Reload old missing font
+        if props.font_index == -1:
+            try:
+                bpy.data.fonts[font.name].filepath = font.filepath
+            except KeyError:
+                print(f"FONTSELECTOR --- Unable to reload : {font.filepath}")
+            
+        props.font_index = index
+    
+    font_props.no_callback = False
+                    
     
 @persistent
 def startup_load_fonts(scene):
     
-    datas = refresh_fonts_json()[0]
+    datas, change = refresh_fonts_json()
     
     reload_font_collections(datas)
+    
+    relink_font_objects()
 
     
 ### REGISTER ---
