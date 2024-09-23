@@ -57,12 +57,6 @@ def get_folder_size(folderpath):
             
     return size
     
-    
-def get_font_name(filepath):
-    font = ttLib.TTFont(filepath)
-    # fontFamilyName = font['name'].getDebugName(1)
-    return font['name'].getDebugName(4) # FullName
-
 
 def get_font_list_from_folder(folderpath):
     
@@ -82,13 +76,15 @@ def get_font_list_from_folder(folderpath):
             
             if ext in font_formats:
                 filepath = os.path.join(root, file)
+                
+                font = ttLib.TTFont(filepath)
+                
                 font_list.append(
                     {
                         "filepath" : filepath,
-                        "name" : get_font_name(filepath),
-                        # TODO Retrieve family and type
-                        "family" : "family",
-                        "type" : "type",
+                        "name" : font['name'].getDebugName(4),
+                        "family" : font['name'].getDebugName(1),
+                        "type" : font['name'].getDebugName(2),
                     }
                 )
                 
