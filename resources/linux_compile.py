@@ -104,7 +104,6 @@ for filepath in file_list:
     if "r" in behavior and not dry:
         zipf.write(
             filepath,
-            # os.path.basename(filepath), # Remove dir structure in zip
             filepath.replace(rootpath, "") # Remove dir structure in zip
             )
 
