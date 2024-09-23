@@ -23,6 +23,10 @@ license = [
   "SPDX:GPL-3.0-or-later",
 ]
 
+wheels = [
+   "./wheels/fonttools-4.54.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+]
+
 [permissions]
 files = "Reading and writing json preset files in a user-defined location, Reading font files"
 # network = "Need to sync motion-capture data to server"

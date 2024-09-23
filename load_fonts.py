@@ -2,6 +2,7 @@ import bpy
 import os
 import platform
 import json
+from fontTools import ttLib
 
 from bpy.app.handlers import persistent
 
@@ -56,6 +57,12 @@ def get_folder_size(folderpath):
             
     return size
     
+    
+def get_font_name(filepath):
+    font = ttLib.TTFont(filepath)
+    # fontFamilyName = font['name'].getDebugName(1)
+    return font['name'].getDebugName(4) # FullName
+
 
 def get_font_list_from_folder(folderpath):
     
@@ -74,12 +81,12 @@ def get_font_list_from_folder(folderpath):
             filename, ext = os.path.splitext(file)
             
             if ext in font_formats:
-                
+                filepath = os.path.join(root, file)
                 font_list.append(
                     {
-                        "filepath" : os.path.join(root, file),
-                        # TODO Read properly font file content to retrieve name...
-                        "name" : filename,
+                        "filepath" : filepath,
+                        "name" : get_font_name(filepath),
+                        # TODO Retrieve family and type
                         "family" : "family",
                         "type" : "type",
                     }
