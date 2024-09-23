@@ -94,10 +94,16 @@ for dirname, subdirs, files in os.walk(rootpath):
 print("Files to treat :")
 print(file_list)
 
-# Create archive and deploy
+# Create archive
 if "r" in behavior and not dry:
     zipf = zipfile.ZipFile(release_path, "w")
 
+# Clean old deploy
+if "d" in behavior and not dry:
+    addon_deploy_path = os.path.join(deploy_path, addon_id)
+    shutil.rmtree(addon_deploy_path)
+
+# Zip and deploy
 for filepath in file_list:
     
     # Write to zip
@@ -110,7 +116,6 @@ for filepath in file_list:
     # Deploy
     if "d" in behavior and not dry:
         addon_deploy_path = os.path.join(deploy_path, addon_id)
-        
         if not os.path.isdir(addon_deploy_path):
             os.makedirs(addon_deploy_path, exist_ok=True)
             print(f"Folder created : {addon_deploy_path}")
