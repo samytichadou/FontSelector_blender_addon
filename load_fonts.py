@@ -123,6 +123,41 @@ def get_existing_datas():
     return read_json(filepath)
 
 
+def get_favorite_json_filepath():
+    return os.path.join(
+        get_preferences_folder(),
+        "favorite_datas.json",
+    )
+
+
+def get_existing_favorite_datas():
+    filepath = get_favorite_json_filepath()
+    if not os.path.isfile(filepath):
+        return {
+            "favorites" : []
+        }
+    return read_json(filepath)
+
+
+def reload_favorites():
+    
+    print("FONTSELECTOR --- Loading favorites")
+    
+    datas = get_existing_favorite_datas()
+    props = bpy.context.window_manager.fontselector_properties
+    
+    props.no_callback = True
+    
+    for f in datas["favorites"]:
+        
+        for font in props.fonts:
+            if font.name == f:
+                font.favorite = True
+                break
+            
+    props.no_callback = False
+        
+
 def refresh_fonts_json(force_refresh = False):
     
     size = 0
@@ -260,6 +295,8 @@ def startup_load_fonts(scene):
     reload_font_collections(datas)
     
     relink_font_objects()
+    
+    reload_favorites()
 
     
 ### REGISTER ---

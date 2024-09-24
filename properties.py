@@ -1,6 +1,39 @@
 import bpy
 import os
+
+from . import load_fonts as lf
+
+
+def favorite_callback(self, context):
     
+    font_props = context.window_manager.fontselector_properties
+    
+    if font_props.no_callback:
+        print("FONTSELECTOR --- Favorite update function cancelled")
+        return
+    
+    print(f"FONTSELECTOR --- Updating favorite : {self.name}")
+    
+    # Get favorite datas
+    datas = lf.get_existing_favorite_datas()
+
+    # Remove existing favorite entry
+    idx = 0
+    for font in datas["favorites"]:
+        if font == self.name:
+            datas["favorites"].pop(idx)
+        idx += 1
+        
+    # Add entry
+    if self.favorite:
+        datas["favorites"].append(
+            self.name,
+        )
+
+    # Write json
+    path = lf.get_favorite_json_filepath()
+    lf.write_json_file(datas, path)
+
     
 class FONTSELECTOR_PR_fonts_properties(bpy.types.PropertyGroup):
     
@@ -9,6 +42,7 @@ class FONTSELECTOR_PR_fonts_properties(bpy.types.PropertyGroup):
     )
     favorite: bpy.props.BoolProperty(
         name = "Favorite",
+        update = favorite_callback,
     )
     font_family: bpy.props.StringProperty(
         name = "Font Family",
@@ -41,7 +75,7 @@ def get_font(font_props):
         return bpy.data.fonts[font_props.name]
     
     except KeyError:
-        print(f"FONTSELECTOR --- Importing {font_props.name}")
+        print(f"FONTSELECTOR --- Importing : {font_props.name}")
         
     # Importing
     new_font = bpy.data.fonts.load(filepath=font_props.filepath)
@@ -159,9 +193,24 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         options = {"TEXTEDIT_UPDATE"},
     )
     font_index : bpy.props.IntProperty(
+        default = -1,
         update = font_selection_callback,
     )
     font_name : bpy.props.StringProperty()
+    
+    show_favorite : bpy.props.BoolProperty(
+        name = "Show Favorites",
+        description = "Show Favorites icon",
+        default=True,
+    )
+    favorite_filter : bpy.props.BoolProperty(
+        name = "Favorites Filter",
+        description = "Favorites Filter",
+    )
+    invert_filter : bpy.props.BoolProperty(
+        name = "Invert Filter",
+        description = "Invert Filters",
+    )
     
 
 ### REGISTER ---

@@ -4,6 +4,8 @@ from .addon_prefs import get_addon_preferences
 
 
 # TODO Fix search menu errors
+# TODO Font info panel (popup ?)
+# TODO Reveal font operator
 
 
 ### Fontselector common panel UI ###

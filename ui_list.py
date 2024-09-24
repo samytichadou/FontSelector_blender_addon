@@ -4,9 +4,7 @@ import bpy
 # Font selection UI List
 class FONTSELECTOR_uilist(bpy.types.UIList):
     
-    show_favorite : bpy.props.BoolProperty(name = "Show Favorites", description = "Show Favorites icon")
-    favorite_filter : bpy.props.BoolProperty(name = "Favorites Filter", description = "Favorites Filter")
-    invert_filter : bpy.props.BoolProperty(name = "Invert Filter", description = "Invert Filters")
+    obj = None
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         
@@ -14,7 +12,7 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         
         row.label(text = item.name)
         
-        if self.show_favorite:
+        if self.obj.fontselector_object_properties.show_favorite:
             if item.favorite:
                 icon = 'SOLO_ON'
             else:
@@ -24,13 +22,20 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
 
     def draw_filter(self, context, layout):
         
-        # TODO UI
+        obj_props = self.obj.fontselector_object_properties
+            
         row = layout.row(align=True)
-        
-        row.prop(self, "favorite_filter", text="", icon="SOLO_ON")
-        row.prop(self, "invert_filter", text="", icon="ARROW_LEFTRIGHT")
+        row.prop(obj_props, "favorite_filter", text="", icon="SOLO_ON")
+        row.prop(obj_props, "invert_filter", text="", icon="ARROW_LEFTRIGHT")
         row.separator()
-        row.prop(self, "show_favorite", text="", icon="SOLO_OFF")
+        row.prop(obj_props, "show_favorite", text="", icon="SOLO_OFF")
+        
+        props = context.window_manager.fontselector_properties
+        if obj_props.font_index > -1 and obj_props.font_index < len(props.fonts):
+            active = props.fonts[obj_props.font_index]
+            
+            row = layout.row(align=True)
+            row.label(text=active.filepath)
 
         
     def filter_items(self, context, data, propname):
@@ -44,6 +49,8 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         # If you do not make filtering and/or ordering, return empty list(s) (this will be more efficient than
         # returning full lists doing nothing!).
         
+        obj_props = self.obj.fontselector_object_properties
+        
         # Default return values.
         flt_flags = []
         flt_neworder = []
@@ -52,12 +59,12 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         
         col = getattr(data, propname)
         
-        if self.filter_name or self.favorite_filter or self.invert_filter:
+        if obj_props.font_search or obj_props.favorite_filter or obj_props.invert_filter:
             flt_flags = [self.bitflag_filter_item] * len(col)
             
             # Name search
-            if self.filter_name :
-                search = self.filter_name.lower()
+            if obj_props.font_search :
+                search = obj_props.font_search.lower()
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
                         if search not in font.name.lower()\
@@ -65,14 +72,14 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
                             flt_flags[idx] = 0
             
             # Favorites
-            if self.favorite_filter :
+            if obj_props.favorite_filter :
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
                         if font.favorite ==False :
                             flt_flags[idx] = 0
                             
             # invert filtering
-            if self.invert_filter :
+            if obj_props.invert_filter :
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
                         flt_flags[idx] = 0
@@ -86,17 +93,15 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
 class FONTSELECTOR_UL_uilist_object(FONTSELECTOR_uilist):
     
     def __init__(self):
-        obj = bpy.context.active_object.data
-        self.filter_name = obj.fontselector_object_properties.font_search
+        self.obj = bpy.context.active_object.data
         
 
 # Font selection Strip UI List
 class FONTSELECTOR_UL_uilist_strip(FONTSELECTOR_uilist):
     
     def __init__(self):
-        obj = bpy.context.active_sequence_strip
-        self.filter_name = obj.fontselector_object_properties.font_search
-    
+        self.obj = bpy.context.active_sequence_strip
+
     
 ### REGISTER ---
 def register():
