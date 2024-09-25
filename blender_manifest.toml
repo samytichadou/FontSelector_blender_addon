@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "font_selector"
-version = "3.0.1"
+version = "3.0.0"
 name = "Font Selector"
 tagline = "Browse available fonts directly from inside blender"
 maintainer = "tonton <samytichadou@gmail.com>"
