@@ -44,14 +44,14 @@ def get_os_folders():
         
         return [
             # r"C:\Windows\Fonts",
-            os.path.join(os.environ['windir'], "fonts"), # System wide install
-            os.path.join(os.environ['LOCALAPPDATA'], r"\Microsoft\Windows\Fonts"), # User install
+            os.path.join(user_path, "fonts"), # System wide install
+            os.path.join(user_path, r"Microsoft\Windows\Fonts"), # User install
         ]
     elif osys == "Darwin":
         print("FONTSELECTOR --- OS : Mac")
         
         return [
-            os.path.join(user_path, r"/Library/Fonts/"),
+            os.path.join(user_path, r"Library/Fonts/"),
             r"/Library/Fonts",
             r"/System/Library/Fonts",
             r"/System Folder/Fonts/",
