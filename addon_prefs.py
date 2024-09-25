@@ -18,7 +18,7 @@ class FONTSELECTOR_PF_addon_prefs(bpy.types.AddonPreferences) :
             ),
             "font_selector"
         ),
-        description="Where Font Selector store global preferences",
+        description="Where Font Selector store configuration files",
         subtype="DIR_PATH",
     )
     debug : bpy.props.BoolProperty(
