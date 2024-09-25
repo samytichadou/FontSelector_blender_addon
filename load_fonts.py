@@ -9,7 +9,6 @@ from bpy.app.handlers import persistent
 from .addon_prefs import get_addon_preferences
 
 
-# TODO Add mac extra font folders
 # TODO use /etc/fonts/font.conf on linux to get font dirs ?
 
 
@@ -25,25 +24,41 @@ def get_os_folders():
     # Windows: Windows
     # Mac: Darwin
     osys = platform.system()
+    user_path = os.path.expanduser( '~' )
+    # user_path = os.environ["HOME"]
+    
+    print("FONTSELECTOR --- Checking OS")
+    
     if osys == "Linux":
+        print("FONTSELECTOR --- OS : Linux")
+        
         return [
             r"/usr/share/fonts", # Debian Ubuntu
             r"/usr/local/share/fonts", # Debian Ubuntu
             r"/usr/X11R6/lib/X11/fonts", # RH
-            os.path.join(os.environ['HOME'], r".local/share/fonts"), # Fedora
-            os.path.join(os.environ['HOME'], ".fonts"), # Debian Ubuntu
+            os.path.join(user_path, r".local/share/fonts"), # Fedora
+            os.path.join(user_path, r".fonts"), # Debian Ubuntu
         ]
     elif osys == "Windows":
+        print("FONTSELECTOR --- OS : Windows")
+        
         return [
             # r"C:\Windows\Fonts",
             os.path.join(os.environ['windir'], "fonts"), # System wide install
             os.path.join(os.environ['LOCALAPPDATA'], r"\Microsoft\Windows\Fonts"), # User install
         ]
     elif osys == "Darwin":
+        print("FONTSELECTOR --- OS : Mac")
+        
         return [
+            os.path.join(user_path, r"/Library/Fonts/"),
             r"/Library/Fonts",
             r"/System/Library/Fonts",
+            r"/System Folder/Fonts/",
+            r"/Network/Library/Fonts/",
         ]
+    
+    print("FONTSELECTOR --- OS not supported")
     
 
 def get_folder_size(folderpath):
