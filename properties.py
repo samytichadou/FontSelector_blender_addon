@@ -2,6 +2,7 @@ import bpy
 import os
 
 from . import load_fonts as lf
+from .addon_prefs import get_addon_preferences
 
 
 def favorite_callback(self, context):
@@ -50,6 +51,15 @@ class FONTSELECTOR_PR_fonts_properties(bpy.types.PropertyGroup):
     font_type: bpy.props.StringProperty(
         name = "Font Type",
     )
+    bold_font_name: bpy.props.StringProperty(
+        name = "Bold",
+    )
+    italic_font_name: bpy.props.StringProperty(
+        name = "Italic",
+    )
+    bold_italic_font_name: bpy.props.StringProperty(
+        name = "Bold Italic",
+    )
 
 
 class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
@@ -61,30 +71,70 @@ class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
     no_callback : bpy.props.BoolProperty()
     
 
-def get_font(font_props):
+def get_font_datablock(font):
     
-    # Invalid font
-    if not os.path.isfile(font_props.filepath):
-        print(f"FONTSELECTOR --- Invalid font : {font_props.filepath}, please refresh")
-        return None
+    new_font = None
     
-    print(f"FONTSELECTOR --- Getting {font_props.filepath}")
+    print(f"FONTSELECTOR --- Getting {font.filepath}")
     
     # Local
     try:
-        return bpy.data.fonts[font_props.name]
+        return bpy.data.fonts[font.name]
     
     except KeyError:
-        print(f"FONTSELECTOR --- Importing : {font_props.name}")
+        print(f"FONTSELECTOR --- Importing : {font.name}")
         
     # Importing
-    new_font = bpy.data.fonts.load(filepath=font_props.filepath)
-    new_font.name = font_props.name
+    new_font = bpy.data.fonts.load(filepath=font.filepath)
+    new_font.name = font.name
     
     # Prevent double users
     new_font.user_clear()
     
     return new_font
+    
+    
+def get_font_family(font_entry):
+    
+    default_font =  bpy.data.fonts["Bfont Regular"]
+    new_font = new_bold_font = new_italic_font = new_bold_italic_font = default_font
+    
+    # Get font
+    font_collection = bpy.context.window_manager.fontselector_properties.fonts
+    
+    # Invalid font
+    if not os.path.isfile(font_entry.filepath):
+        print(f"FONTSELECTOR --- Invalid font : {font_entry.filepath}, please refresh")
+        return None, None, None, None
+    
+    # Get font
+    new_font = get_font_datablock(font_entry)
+    
+    # Get bold
+    if font_entry.bold_font_name:
+        try:
+            bold_entry = font_collection[font_entry.bold_font_name]
+            new_bold_font = get_font_datablock(bold_entry)
+        except KeyError:
+            print(f"FONTSELECTOR --- No bold : {font_entry.name}")
+            
+    # Get italic
+    if font_entry.italic_font_name:
+        try:
+            italic_entry = font_collection[font_entry.italic_font_name]
+            new_italic_font = get_font_datablock(italic_entry)
+        except KeyError:
+            print(f"FONTSELECTOR --- No italic : {font_entry.name}")
+            
+    # Get bold italic
+    if font_entry.bold_italic_font_name:
+        try:
+            bold_italic_entry = font_collection[font_entry.bold_italic_font_name]
+            new_bold_italic_font = get_font_datablock(bold_italic_entry)
+        except KeyError:
+            print(f"FONTSELECTOR --- No bold italic : {font_entry.name}")
+    
+    return new_font, new_bold_font, new_italic_font, new_bold_italic_font
 
 
 def clear_font_datas():
@@ -97,11 +147,22 @@ def change_objects_font(
     target_font,
     self,
     context,
+    bold_font = None,
+    italic_font = None,
+    bold_italic_font = None,
 ):
     
-    # Change active font
+    no_font_family = get_addon_preferences().no_font_family_load
+    
+    # Change active object font
     self.id_data.font = target_font
     self.font_name = target_font.name
+    
+    # Bold italic
+    if not no_font_family:
+        self.id_data.font_bold = bold_font
+        self.id_data.font_italic = italic_font
+        self.id_data.font_bold_italic = bold_italic_font
     
     # Change selected objects
     for obj in context.selected_objects:
@@ -115,6 +176,12 @@ def change_objects_font(
             props = obj.data.fontselector_object_properties
             props.font_index = self.font_index
             props.font_name = target_font.name
+            
+            # Bold italic
+            if not no_font_family:
+                obj.data.font_bold = bold_font
+                obj.data.font_italic = italic_font
+                obj.data.font_bold_italic = bold_italic_font
 
 
 def change_strips_font(
@@ -156,7 +223,9 @@ def font_selection_callback(self, context):
     target_font_props = font_props.fonts[self.font_index]
     
     # Import font
-    target_font = get_font(target_font_props)
+    target_font, bold_font, italic_font, bold_italic_font = get_font_family(
+        target_font_props,
+        )
     
     # Invalid font
     if target_font is None:
@@ -171,8 +240,11 @@ def font_selection_callback(self, context):
             target_font,
             self,
             context,
+            bold_font,
+            italic_font,
+            bold_italic_font,
         )
-        
+            
     else:
         
         change_strips_font(
@@ -208,8 +280,12 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         description = "Favorites Filter",
     )
     invert_filter : bpy.props.BoolProperty(
-        name = "Invert Filter",
+        name = "Invert Filters",
         description = "Invert Filters",
+    )
+    show_font_infos : bpy.props.BoolProperty(
+        name = "Show Infos",
+        description = "Show Font Infos",
     )
     
 

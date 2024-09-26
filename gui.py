@@ -4,9 +4,54 @@ from .addon_prefs import get_addon_preferences
 
 
 # TODO Fix search menu errors
-# TODO Font info panel (popup ?)
 # TODO Reveal font operator
+# TODO Copy font operator
 
+
+def draw_font_infos(container, active, font):
+    
+    row = container.row(align=True)
+    if active.show_font_infos:
+        icon = "DOWNARROW_HLT"
+    else:
+        icon = "RIGHTARROW"
+    row.prop(
+        active,
+        "show_font_infos",
+        text = "",
+        icon = icon,
+        emboss = False,
+    )
+    row.label(text = "Font Infos")
+    
+    if active.show_font_infos:
+    
+        split = container.split(factor=0.2)
+        col = split.column(align=True)
+        col2 = split.column(align=True)
+        col2.alignment = "RIGHT"
+        
+        col.label(text = "Name")
+        col2.label(text = font.name)
+
+        col.label(text = "Family")
+        col2.label(text = font.font_family)
+
+        col.label(text = "Type")
+        col2.label(text = font.font_type)
+
+        col.label(text = "Path")
+        col2.label(text = font.filepath)
+        
+        col.label(text = "Bold")
+        col2.label(text = font.bold_font_name)
+        
+        col.label(text = "Italic")
+        col2.label(text = font.italic_font_name)
+        
+        col.label(text = "Bold Italic")
+        col2.label(text = font.bold_italic_font_name)
+    
 
 ### Fontselector common panel UI ###
 def draw_font_selector(self, context):
@@ -32,6 +77,17 @@ def draw_font_selector(self, context):
         
     else:
         row.template_list("FONTSELECTOR_UL_uilist_object", "", props, "fonts", active_datas, "font_index", rows = 5)
+    
+    # Font infos
+    box = col.box()
+    draw_font_infos(
+        box,
+        active_datas,
+        props.fonts[active_datas.font_index],
+    )
+    
+    
+    
 
 class FONTSELECTOR_panel(bpy.types.Panel):
     bl_label = "Font Selection"

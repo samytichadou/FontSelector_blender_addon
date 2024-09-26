@@ -239,11 +239,30 @@ def reload_font_collections(font_datas):
     props.clear()
     
     for font in font_datas["fonts"]:
+        
+        bold = italic = bold_italic = ""
+        
+        # Get Bold-Italic if exists
+        for f in font_datas["fonts"]:
+            
+            if f["family"] == font["family"]:
+                if f["type"] == "Bold":
+                    bold = f["name"]
+                elif f["type"] == "Italic":
+                    italic = f["name"]
+                elif f["type"] == "Bold Italic":
+                    bold_italic = f["name"]
+        
+        # Store Properties
         new = props.add()
         new.filepath = font["filepath"]
         new.name = font["name"]
         new.font_family = font["family"]
         new.font_type = font["type"]
+        
+        new.bold_font_name = bold
+        new.italic_font_name = italic
+        new.bold_italic_font_name = bold_italic
 
 
 def get_font_from_name(font_name):

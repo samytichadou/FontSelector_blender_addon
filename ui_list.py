@@ -25,18 +25,18 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         obj_props = self.obj.fontselector_object_properties
             
         row = layout.row(align=True)
+        row.label(text = "", icon = "FILTER")
         row.prop(obj_props, "favorite_filter", text="", icon="SOLO_ON")
-        row.prop(obj_props, "invert_filter", text="", icon="ARROW_LEFTRIGHT")
         row.separator()
-        row.prop(obj_props, "show_favorite", text="", icon="SOLO_OFF")
+        row.prop(obj_props, "invert_filter", text="", icon="ARROW_LEFTRIGHT")
         
-        props = context.window_manager.fontselector_properties
-        if obj_props.font_index > -1 and obj_props.font_index < len(props.fonts):
-            active = props.fonts[obj_props.font_index]
-            
-            row = layout.row(align=True)
-            row.label(text=active.filepath)
-
+        row.separator()
+        
+        sub = row.row(align=True)
+        sub.alignment = "RIGHT"
+        sub.label(text = "", icon = "HIDE_OFF")
+        sub.prop(obj_props, "show_favorite", text="", icon="SOLO_OFF")
+        
         
     def filter_items(self, context, data, propname):
         # This function gets the collection property (as the usual tuple (data, propname)), and must return two lists:
@@ -75,7 +75,7 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
             if obj_props.favorite_filter :
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
-                        if font.favorite ==False :
+                        if font.favorite == False :
                             flt_flags[idx] = 0
                             
             # invert filtering

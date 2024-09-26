@@ -24,6 +24,9 @@ class FONTSELECTOR_PF_addon_prefs(bpy.types.AddonPreferences) :
     debug : bpy.props.BoolProperty(
         name = "Debug",
     )
+    no_font_family_load : bpy.props.BoolProperty(
+        name = "No Font Family Load",
+    )
     viewport_popover : bpy.props.BoolProperty(
         name = "3D Viewport Popover",
         default = True,
@@ -51,6 +54,9 @@ class FONTSELECTOR_PF_addon_prefs(bpy.types.AddonPreferences) :
         sub = row.row()
         sub.alignment = "RIGHT"
         sub.prop(self, "debug")
+        
+        row = layout.row()
+        row.prop(self, "no_font_family_load", text="Do not load available Font Family (Bold, Italic)")
         
         box = layout.box()
         box.label(text="UI")
