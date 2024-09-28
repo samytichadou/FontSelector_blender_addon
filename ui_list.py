@@ -1,5 +1,6 @@
 import bpy
 
+from .addon_prefs import get_addon_preferences
 
 # Font selection UI List
 class FONTSELECTOR_uilist(bpy.types.UIList):
@@ -9,9 +10,12 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         
         row = layout.row(align=True)
-        
+            
         row.label(text = item.name)
-        
+            
+        if item.multi_font and not get_addon_preferences().no_font_family_load:
+            row.label(text ="", icon = "FONTPREVIEW")
+            
         if self.obj.fontselector_object_properties.show_favorite:
             if item.favorite:
                 icon = 'SOLO_ON'

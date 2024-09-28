@@ -64,6 +64,9 @@ class FONTSELECTOR_PR_fonts_properties(bpy.types.PropertyGroup):
     bold_italic_font_name: bpy.props.StringProperty(
         name = "Bold Italic",
     )
+    multi_font : bpy.props.BoolProperty(
+        name = "Multi Font",
+    )
 
 
 class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
@@ -125,32 +128,34 @@ def get_font_family(
     # Get font
     new_font = get_font_datablock(font_entry, debug)
     
-    # Get bold
-    if font_entry.bold_font_name:
-        try:
-            bold_entry = font_collection[font_entry.bold_font_name]
-            new_bold_font = get_font_datablock(bold_entry, debug)
-        except KeyError:
-            if debug:
-                print(f"FONTSELECTOR --- No bold : {font_entry.name}")
-            
-    # Get italic
-    if font_entry.italic_font_name:
-        try:
-            italic_entry = font_collection[font_entry.italic_font_name]
-            new_italic_font = get_font_datablock(italic_entry, debug)
-        except KeyError:
-            if debug:
-                print(f"FONTSELECTOR --- No italic : {font_entry.name}")
-            
-    # Get bold italic
-    if font_entry.bold_italic_font_name:
-        try:
-            bold_italic_entry = font_collection[font_entry.bold_italic_font_name]
-            new_bold_italic_font = get_font_datablock(bold_italic_entry, debug)
-        except KeyError:
-            if debug:
-                print(f"FONTSELECTOR --- No bold italic : {font_entry.name}")
+    # Multi font
+    if font_entry.multi_font:
+        # Get bold
+        if font_entry.bold_font_name:
+            try:
+                bold_entry = font_collection[font_entry.bold_font_name]
+                new_bold_font = get_font_datablock(bold_entry, debug)
+            except KeyError:
+                if debug:
+                    print(f"FONTSELECTOR --- No bold : {font_entry.name}")
+                
+        # Get italic
+        if font_entry.italic_font_name:
+            try:
+                italic_entry = font_collection[font_entry.italic_font_name]
+                new_italic_font = get_font_datablock(italic_entry, debug)
+            except KeyError:
+                if debug:
+                    print(f"FONTSELECTOR --- No italic : {font_entry.name}")
+                
+        # Get bold italic
+        if font_entry.bold_italic_font_name:
+            try:
+                bold_italic_entry = font_collection[font_entry.bold_italic_font_name]
+                new_bold_italic_font = get_font_datablock(bold_italic_entry, debug)
+            except KeyError:
+                if debug:
+                    print(f"FONTSELECTOR --- No bold italic : {font_entry.name}")
     
     return new_font, new_bold_font, new_italic_font, new_bold_italic_font
 
