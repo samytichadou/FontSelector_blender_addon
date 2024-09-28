@@ -4,11 +4,12 @@ from .addon_prefs import get_addon_preferences
 
 
 # TODO Fix search menu errors
-# TODO Reveal font operator
-# TODO Copy font operator
 
 
-def draw_font_infos(container, active, font):
+def draw_font_infos(container, active, context):
+    
+    fonts = context.window_manager.fontselector_properties.fonts
+    font = fonts[active.font_index]
     
     row = container.row(align=True)
     if active.show_font_infos:
@@ -41,16 +42,42 @@ def draw_font_infos(container, active, font):
         col2.label(text = font.font_type)
 
         col.label(text = "Path")
-        col2.label(text = font.filepath)
+        op = col2.operator(
+            "fontselector.reveal_file",
+            text = font.filepath,
+            icon = "FILEBROWSER",
+        )
+        op.filepath = font.filepath
         
-        col.label(text = "Bold")
-        col2.label(text = font.bold_font_name)
+        if font.bold_font_name:
+            filepath = fonts[font.bold_font_name].filepath
+            col.label(text = "Bold")
+            op = col2.operator(
+                "fontselector.reveal_file",
+                text = filepath,
+                icon = "FILEBROWSER",
+            )
+            op.filepath = filepath
         
-        col.label(text = "Italic")
-        col2.label(text = font.italic_font_name)
+        if font.italic_font_name:
+            filepath = fonts[font.italic_font_name].filepath
+            col.label(text = "Italic")
+            op = col2.operator(
+                "fontselector.reveal_file",
+                text = filepath,
+                icon = "FILEBROWSER",
+            )
+            op.filepath = filepath
         
-        col.label(text = "Bold Italic")
-        col2.label(text = font.bold_italic_font_name)
+        if font.bold_italic_font_name:
+            filepath = fonts[font.bold_italic_font_name].filepath
+            col.label(text = "Bold Italic")
+            op = col2.operator(
+                "fontselector.reveal_file",
+                text = filepath,
+                icon = "FILEBROWSER",
+            )
+            op.filepath = filepath
     
 
 ### Fontselector common panel UI ###
@@ -83,7 +110,7 @@ def draw_font_selector(self, context):
     draw_font_infos(
         box,
         active_datas,
-        props.fonts[active_datas.font_index],
+        context,
     )
     
     
@@ -116,7 +143,7 @@ def viewport_popover_draw(self, context):
 class FONTSELECTOR_PT_viewport_popover(FONTSELECTOR_panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'HEADER'
-    bl_ui_units_x = 12
+    bl_ui_units_x = 14
     
     @classmethod
     def poll(cls, context):
@@ -155,7 +182,7 @@ def sequencer_popover_draw(self, context):
 class FONTSELECTOR_PT_sequencer_popover(FONTSELECTOR_panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'HEADER'
-    bl_ui_units_x = 12
+    bl_ui_units_x = 14
     
     strip = True
     

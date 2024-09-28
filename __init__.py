@@ -29,6 +29,7 @@ from . import   (
     ui_list,
     gui,
     reload_operator,
+    reveal_file_operator,
 )
 
 
@@ -42,6 +43,7 @@ def register():
     ui_list.register()
     gui.register()
     reload_operator.register()
+    reveal_file_operator.register()
 
 def unregister():
     properties.unregister()
@@ -50,4 +52,4 @@ def unregister():
     ui_list.unregister()
     gui.unregister()
     reload_operator.unregister()
-    
+    reveal_file_operator.unregister()

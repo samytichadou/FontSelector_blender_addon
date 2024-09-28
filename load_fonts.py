@@ -19,7 +19,7 @@ font_formats = [
 ]
 
 
-def get_os_folders():
+def get_os_folders(debug):
     # Linux: Linux
     # Windows: Windows
     # Mac: Darwin
@@ -27,10 +27,12 @@ def get_os_folders():
     user_path = os.path.expanduser( '~' )
     # user_path = os.environ["HOME"]
     
-    print("FONTSELECTOR --- Checking OS")
+    if debug:
+        print("FONTSELECTOR --- Checking OS")
     
     if osys == "Linux":
-        print("FONTSELECTOR --- OS : Linux")
+        if debug:
+            print("FONTSELECTOR --- OS : Linux")
         
         return [
             r"/usr/share/fonts", # Debian Ubuntu
@@ -40,7 +42,8 @@ def get_os_folders():
             os.path.join(user_path, r".fonts"), # Debian Ubuntu
         ]
     elif osys == "Windows":
-        print("FONTSELECTOR --- OS : Windows")
+        if debug:
+            print("FONTSELECTOR --- OS : Windows")
         
         return [
             # r"C:\Windows\Fonts",
@@ -48,7 +51,8 @@ def get_os_folders():
             os.path.join(user_path, r"Microsoft\Windows\Fonts"), # User install
         ]
     elif osys == "Darwin":
-        print("FONTSELECTOR --- OS : Mac")
+        if debug:
+            print("FONTSELECTOR --- OS : Mac")
         
         return [
             os.path.join(user_path, r"Library/Fonts/"),
@@ -73,13 +77,17 @@ def get_folder_size(folderpath):
     return size
     
 
-def get_font_list_from_folder(folderpath):
+def get_font_list_from_folder(
+    folderpath,
+    debug,
+):
     
     font_list = []
     
     # Invalid folder
     if not os.path.isdir(folderpath):
-        print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
+        if debug:
+            print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
         return font_list
     
     # Check for font files
@@ -154,9 +162,10 @@ def get_existing_favorite_datas():
     return read_json(filepath)
 
 
-def reload_favorites():
+def reload_favorites(debug):
     
-    print("FONTSELECTOR --- Loading favorites")
+    if debug:
+        print("FONTSELECTOR --- Loading favorites")
     
     datas = get_existing_favorite_datas()
     props = bpy.context.window_manager.fontselector_properties
@@ -173,16 +182,20 @@ def reload_favorites():
     props.no_callback = False
         
 
-def refresh_fonts_json(force_refresh = False):
+def refresh_fonts_json(
+    debug,
+    force_refresh = False,
+):
     
     size = 0
     folders = []
     
-    for folderpath in get_os_folders():
+    for folderpath in get_os_folders(debug):
         
         # Invalid folder
         if not os.path.isdir(folderpath):
-            print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
+            if debug:
+                print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
             continue
             
         size += get_folder_size(folderpath)
@@ -197,13 +210,15 @@ def refresh_fonts_json(force_refresh = False):
     or datas["size"] != size\
     or force_refresh:
         
-        print("FONTSELECTOR --- Refreshing fonts datas")
+        if debug:
+            print("FONTSELECTOR --- Refreshing fonts datas")
         
         fonts = []
         
         for folderpath in folders:
             
-            print(f"FONTSELECTOR --- Refreshing : {folderpath}")
+            if debug:
+                print(f"FONTSELECTOR --- Refreshing : {folderpath}")
             
             fonts.extend(
                 get_font_list_from_folder(folderpath)
@@ -225,14 +240,19 @@ def refresh_fonts_json(force_refresh = False):
         
         return datas, True
     
-    print("FONTSELECTOR --- Keeping fonts datas")
+    if debug:
+        print("FONTSELECTOR --- Keeping fonts datas")
     
     return datas, False
 
 
-def reload_font_collections(font_datas):
+def reload_font_collections(
+    font_datas,
+    debug,
+):
     
-    print("FONTSELECTOR --- Reloading collections")
+    if debug:
+        print("FONTSELECTOR --- Reloading collections")
     
     props = bpy.context.window_manager.fontselector_properties.fonts
     
@@ -274,9 +294,10 @@ def get_font_from_name(font_name):
     return None, None
 
 
-def relink_font_objects():
+def relink_font_objects(debug):
     
-    print("FONTSELECTOR --- Relinking font objects")
+    if debug:
+        print("FONTSELECTOR --- Relinking font objects")
     
     obj_list = []
     
@@ -304,7 +325,9 @@ def relink_font_objects():
         
         # Missing font
         if font is None:
-            print(f"FONTSELECTOR --- Unable to relink : {props.font_name}")
+            
+            if debug:
+                print(f"FONTSELECTOR --- Unable to relink : {props.font_name}")
             
             props.font_index = -1
             continue
@@ -314,7 +337,10 @@ def relink_font_objects():
             try:
                 bpy.data.fonts[font.name].filepath = font.filepath
             except KeyError:
-                print(f"FONTSELECTOR --- Unable to reload : {font.filepath}")
+                if debug:
+                    print(f"FONTSELECTOR --- Unable to reload : {font.filepath}")
+                else:
+                    pass
             
         props.font_index = index
     
@@ -324,13 +350,15 @@ def relink_font_objects():
 @persistent
 def startup_load_fonts(scene):
     
-    datas, change = refresh_fonts_json()
+    debug = get_addon_preferences().debug
     
-    reload_font_collections(datas)
+    datas, change = refresh_fonts_json(debug)
     
-    relink_font_objects()
+    reload_font_collections(datas, debug)
     
-    reload_favorites()
+    relink_font_objects(debug)
+    
+    reload_favorites(debug)
 
     
 ### REGISTER ---

@@ -2,7 +2,6 @@ import bpy
 import os
 
 
-# TODO Debug
 # TODO Custom paths
 
 

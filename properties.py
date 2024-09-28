@@ -7,13 +7,17 @@ from .addon_prefs import get_addon_preferences
 
 def favorite_callback(self, context):
     
+    debug = get_addon_preferences().debug
+    
     font_props = context.window_manager.fontselector_properties
     
     if font_props.no_callback:
-        print("FONTSELECTOR --- Favorite update function cancelled")
+        if debug:
+            print("FONTSELECTOR --- Favorite update function cancelled")
         return
     
-    print(f"FONTSELECTOR --- Updating favorite : {self.name}")
+    if debug:
+        print(f"FONTSELECTOR --- Updating favorite : {self.name}")
     
     # Get favorite datas
     datas = lf.get_existing_favorite_datas()
@@ -71,18 +75,25 @@ class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
     no_callback : bpy.props.BoolProperty()
     
 
-def get_font_datablock(font):
+def get_font_datablock(
+    font,
+    debug,
+):
     
     new_font = None
     
-    print(f"FONTSELECTOR --- Getting {font.filepath}")
+    if debug:
+        print(f"FONTSELECTOR --- Getting {font.filepath}")
     
     # Local
     try:
         return bpy.data.fonts[font.name]
     
     except KeyError:
-        print(f"FONTSELECTOR --- Importing : {font.name}")
+        if debug:
+            print(f"FONTSELECTOR --- Importing : {font.name}")
+        else:
+            pass
         
     # Importing
     new_font = bpy.data.fonts.load(filepath=font.filepath)
@@ -94,7 +105,10 @@ def get_font_datablock(font):
     return new_font
     
     
-def get_font_family(font_entry):
+def get_font_family(
+    font_entry,
+    debug,
+):
     
     default_font =  bpy.data.fonts["Bfont Regular"]
     new_font = new_bold_font = new_italic_font = new_bold_italic_font = default_font
@@ -104,35 +118,39 @@ def get_font_family(font_entry):
     
     # Invalid font
     if not os.path.isfile(font_entry.filepath):
-        print(f"FONTSELECTOR --- Invalid font : {font_entry.filepath}, please refresh")
+        if debug:
+            print(f"FONTSELECTOR --- Invalid font : {font_entry.filepath}, please refresh")
         return None, None, None, None
     
     # Get font
-    new_font = get_font_datablock(font_entry)
+    new_font = get_font_datablock(font_entry, debug)
     
     # Get bold
     if font_entry.bold_font_name:
         try:
             bold_entry = font_collection[font_entry.bold_font_name]
-            new_bold_font = get_font_datablock(bold_entry)
+            new_bold_font = get_font_datablock(bold_entry, debug)
         except KeyError:
-            print(f"FONTSELECTOR --- No bold : {font_entry.name}")
+            if debug:
+                print(f"FONTSELECTOR --- No bold : {font_entry.name}")
             
     # Get italic
     if font_entry.italic_font_name:
         try:
             italic_entry = font_collection[font_entry.italic_font_name]
-            new_italic_font = get_font_datablock(italic_entry)
+            new_italic_font = get_font_datablock(italic_entry, debug)
         except KeyError:
-            print(f"FONTSELECTOR --- No italic : {font_entry.name}")
+            if debug:
+                print(f"FONTSELECTOR --- No italic : {font_entry.name}")
             
     # Get bold italic
     if font_entry.bold_italic_font_name:
         try:
             bold_italic_entry = font_collection[font_entry.bold_italic_font_name]
-            new_bold_italic_font = get_font_datablock(bold_italic_entry)
+            new_bold_italic_font = get_font_datablock(bold_italic_entry, debug)
         except KeyError:
-            print(f"FONTSELECTOR --- No bold italic : {font_entry.name}")
+            if debug:
+                print(f"FONTSELECTOR --- No bold italic : {font_entry.name}")
     
     return new_font, new_bold_font, new_italic_font, new_bold_italic_font
 
@@ -212,19 +230,24 @@ def change_strips_font(
 
 def font_selection_callback(self, context):
     
+    debug = get_addon_preferences().debug
+    
     font_props = context.window_manager.fontselector_properties
     
     if font_props.no_callback:
-        print("FONTSELECTOR --- Update function cancelled")
+        if debug:
+            print("FONTSELECTOR --- Update function cancelled")
         return
     
-    print("FONTSELECTOR --- Update function")
+    if debug:
+        print("FONTSELECTOR --- Update function")
     
     target_font_props = font_props.fonts[self.font_index]
     
     # Import font
     target_font, bold_font, italic_font, bold_italic_font = get_font_family(
         target_font_props,
+        debug
         )
     
     # Invalid font
