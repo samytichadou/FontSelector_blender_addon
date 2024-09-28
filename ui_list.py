@@ -31,6 +31,8 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         row = layout.row(align=True)
         row.label(text = "", icon = "FILTER")
         row.prop(obj_props, "favorite_filter", text="", icon="SOLO_ON")
+        if not get_addon_preferences().no_font_family_load:
+            row.prop(obj_props, "multi_font_filter", text="", icon="FONTPREVIEW")
         row.separator()
         row.prop(obj_props, "invert_filter", text="", icon="ARROW_LEFTRIGHT")
         
@@ -63,7 +65,10 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         
         col = getattr(data, propname)
         
-        if obj_props.font_search or obj_props.favorite_filter or obj_props.invert_filter:
+        if obj_props.font_search\
+        or obj_props.favorite_filter\
+        or obj_props.multi_font_filter\
+        or obj_props.invert_filter:
             flt_flags = [self.bitflag_filter_item] * len(col)
             
             # Name search
@@ -80,6 +85,14 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
                         if font.favorite == False :
+                            flt_flags[idx] = 0
+                            
+            # Multi font
+            if obj_props.multi_font_filter\
+            and not get_addon_preferences().no_font_family_load:
+                for idx, font in enumerate(col) :
+                    if flt_flags[idx] != 0 :
+                        if font.multi_font == False :
                             flt_flags[idx] = 0
                             
             # invert filtering
