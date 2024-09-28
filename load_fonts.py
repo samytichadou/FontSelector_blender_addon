@@ -239,8 +239,7 @@ def refresh_fonts_json(
         
         return datas, True
     
-    if debug:
-        print("FONTSELECTOR --- Keeping fonts datas")
+    print("FONTSELECTOR --- No change, keeping fonts datas")
     
     return datas, False
 
