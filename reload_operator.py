@@ -1,6 +1,7 @@
 import bpy
 
 from . import load_fonts as lf
+from .addon_prefs import get_addon_preferences
 
 
 class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
@@ -15,13 +16,15 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
 
     def execute(self, context):
         
-        datas, change = lf.refresh_fonts_json(True)
+        debug = get_addon_preferences().debug
         
-        lf.reload_font_collections(datas)
+        datas, change = lf.refresh_fonts_json(debug, True)
         
-        lf.relink_font_objects()
+        lf.reload_font_collections(datas, debug)
         
-        lf.reload_favorites()
+        lf.relink_font_objects(debug)
+        
+        lf.reload_favorites(debug)
             
         self.report({'INFO'}, "Fonts reloaded")
             

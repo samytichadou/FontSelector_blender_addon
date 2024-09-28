@@ -210,8 +210,7 @@ def refresh_fonts_json(
     or datas["size"] != size\
     or force_refresh:
         
-        if debug:
-            print("FONTSELECTOR --- Refreshing fonts datas")
+        print("FONTSELECTOR --- Refreshing fonts datas")
         
         fonts = []
         
@@ -221,7 +220,7 @@ def refresh_fonts_json(
                 print(f"FONTSELECTOR --- Refreshing : {folderpath}")
             
             fonts.extend(
-                get_font_list_from_folder(folderpath)
+                get_font_list_from_folder(folderpath, debug)
             )
         
         # Alphabetical order

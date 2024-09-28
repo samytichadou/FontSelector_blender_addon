@@ -12,7 +12,7 @@ def open_explorer(filepath):
     
     if osys == "Windows":
         
-        cmd = f"explorer /select {filepath}"
+        cmd = f'explorer /select, "{filepath}"'
         
     elif osys == "Linux":
         
@@ -22,7 +22,7 @@ def open_explorer(filepath):
         
     elif osys == "Darwin":
         
-        cmd = f"open -R {filepath}"
+        cmd = f'open -R "{filepath}"'
         
     os.system(cmd)
 
