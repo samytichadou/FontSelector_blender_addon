@@ -9,9 +9,6 @@ from bpy.app.handlers import persistent
 from .addon_prefs import get_addon_preferences
 
 
-# TODO use /etc/fonts/font.conf on linux to get font dirs ?
-
-
 # Font format
 font_formats = [
     ".otf",
@@ -46,7 +43,7 @@ def get_os_folders(debug):
             print("FONTSELECTOR --- OS : Windows")
         
         return [
-            # r"C:\Windows\Fonts",
+            r"C:\Windows\Fonts",
             os.path.join(user_path, "fonts"), # System wide install
             os.path.join(user_path, r"Microsoft\Windows\Fonts"), # User install
         ]

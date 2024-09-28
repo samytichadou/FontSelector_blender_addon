@@ -3,6 +3,9 @@ import platform
 import os
 
 
+# TODO Do not work with windows C:\windows\Fonts
+
+
 def open_explorer(filepath):
     
     # Linux: Linux

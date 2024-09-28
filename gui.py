@@ -4,6 +4,7 @@ from .addon_prefs import get_addon_preferences
 
 
 # TODO Fix search menu errors
+# TODO Error if no fonts (index)
 
 
 def draw_font_infos(container, active, context):
