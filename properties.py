@@ -113,7 +113,10 @@ def get_font_family(
     debug,
 ):
     
-    default_font =  bpy.data.fonts["Bfont Regular"]
+    try:
+        default_font =  bpy.data.fonts["Bfont Regular"]
+    except KeyError:
+        default_font = None
     new_font = new_bold_font = new_italic_font = new_bold_italic_font = default_font
     
     # Get font
@@ -309,7 +312,7 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
     )
     multi_font_filter : bpy.props.BoolProperty(
         name = "Multi Font Filter",
-        description = "Show only Multi Font",
+        description = "Show only Multi Fonts",
     )
     invert_filter : bpy.props.BoolProperty(
         name = "Invert Filters",
