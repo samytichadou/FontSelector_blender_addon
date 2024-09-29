@@ -311,8 +311,8 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         description = "Show only Favorites",
     )
     multi_font_filter : bpy.props.BoolProperty(
-        name = "Multi Font Filter",
-        description = "Show only Multi Fonts",
+        name = "Multi Font Family Filter",
+        description = "Show only Multi Font Families",
     )
     invert_filter : bpy.props.BoolProperty(
         name = "Invert Filters",

@@ -4,7 +4,6 @@ from .addon_prefs import get_addon_preferences
 
 
 # TODO Fix search menu errors
-# TODO Error if no fonts (index)
 
 
 def draw_font_infos(container, active, context):
@@ -92,6 +91,13 @@ def draw_font_selector(self, context):
         active_datas = context.active_object.data.fontselector_object_properties
     
     props = context.window_manager.fontselector_properties
+    
+    # No available fonts
+    if not props.fonts:
+        row = layout.row(align=True)
+        row.label(text = "No Fonts, please reload", icon = "INFO")
+        row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
+        return
 
     col = layout.column(align=True)
     
@@ -107,12 +113,14 @@ def draw_font_selector(self, context):
         row.template_list("FONTSELECTOR_UL_uilist_object", "", props, "fonts", active_datas, "font_index", rows = 5)
     
     # Font infos
-    box = col.box()
-    draw_font_infos(
-        box,
-        active_datas,
-        context,
-    )
+    if active_datas.font_index >=0\
+    and active_datas.font_index < len(props.fonts):
+        box = col.box()
+        draw_font_infos(
+            box,
+            active_datas,
+            context,
+        )
     
     
     
