@@ -4,6 +4,7 @@ import os
 
 
 # TODO Do not work with windows C:\windows\Fonts
+# TODO Linux : if closed explorer, need to be clicked twice
 
 
 def open_explorer(filepath):
@@ -51,7 +52,7 @@ class FONTSELECTOR_OT_reveal_file(bpy.types.Operator):
         
         open_explorer(self.filepath)
             
-        self.report({'INFO'}, "File revealed")
+        self.report({'INFO'}, f"File revealed : {self.filepath}")
             
         return {'FINISHED'}
 
