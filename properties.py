@@ -133,6 +133,7 @@ def get_font_family(
     
     # Multi font
     if font_entry.multi_font:
+        
         # Get bold
         if font_entry.bold_font_name:
             try:
@@ -165,7 +166,8 @@ def get_font_family(
 
 def clear_font_datas():
     for font in bpy.data.fonts:
-        if font.users == 0:
+        if font.name != "Bfont Regular"\
+        and font.users == 0:
             bpy.data.fonts.remove(font)
 
 

@@ -30,6 +30,7 @@ from . import   (
     gui,
     reload_operator,
     reveal_file_operator,
+    load_font_family_operator,
 )
 
 
@@ -44,6 +45,7 @@ def register():
     gui.register()
     reload_operator.register()
     reveal_file_operator.register()
+    load_font_family_operator.register()
 
 def unregister():
     properties.unregister()
@@ -53,3 +55,4 @@ def unregister():
     gui.unregister()
     reload_operator.unregister()
     reveal_file_operator.unregister()
+    load_font_family_operator.unregister()

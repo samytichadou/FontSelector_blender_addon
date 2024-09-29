@@ -6,6 +6,7 @@ from .addon_prefs import get_addon_preferences
 class FONTSELECTOR_uilist(bpy.types.UIList):
     
     obj = None
+    strip = False
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
         
@@ -13,8 +14,15 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
             
         row.label(text = item.name)
             
-        if item.multi_font and not get_addon_preferences().no_font_family_load:
-            row.label(text ="", icon = "FONTPREVIEW")
+        if item.multi_font and not self.strip:
+            if get_addon_preferences().no_font_family_load:
+                row.operator(
+                    "fontselector.load_font_family",
+                    text ="",
+                    icon = "FONTPREVIEW",
+                ).font_name = item.name
+            else:
+                row.label(text ="", icon = "FONTPREVIEW")
             
         if self.obj.fontselector_object_properties.show_favorite:
             if item.favorite:
@@ -31,7 +39,7 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         row = layout.row(align=True)
         row.label(text = "", icon = "FILTER")
         row.prop(obj_props, "favorite_filter", text="", icon="SOLO_ON")
-        if not get_addon_preferences().no_font_family_load:
+        if not self.strip:
             row.prop(obj_props, "multi_font_filter", text="", icon="FONTPREVIEW")
         row.separator()
         row.prop(obj_props, "invert_filter", text="", icon="ARROW_LEFTRIGHT")
@@ -88,8 +96,7 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
                             flt_flags[idx] = 0
                             
             # Multi font
-            if obj_props.multi_font_filter\
-            and not get_addon_preferences().no_font_family_load:
+            if obj_props.multi_font_filter:
                 for idx, font in enumerate(col) :
                     if flt_flags[idx] != 0 :
                         if font.multi_font == False :
@@ -118,6 +125,7 @@ class FONTSELECTOR_UL_uilist_strip(FONTSELECTOR_uilist):
     
     def __init__(self):
         self.obj = bpy.context.active_sequence_strip
+        self.strip = True
 
     
 ### REGISTER ---
