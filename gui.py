@@ -4,6 +4,7 @@ from .addon_prefs import get_addon_preferences
 
 
 # TODO Fix search menu errors
+# TODO Add help for multi font 
 
 
 def draw_font_infos(container, active, context):
