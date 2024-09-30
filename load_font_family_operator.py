@@ -3,12 +3,11 @@ import bpy
 from . import properties as pr
 from .addon_prefs import get_addon_preferences
 
-# TODO Remove family operator
 
 class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
-    """Load entire font family (Bold, Italic...)"""
+    """Load/Remove entire font family (Bold, Italic...)"""
     bl_idname = "fontselector.load_font_family"
-    bl_label = "Load Font Family"
+    bl_label = "Load/Remove Font Family"
     bl_options = {'INTERNAL', 'UNDO'}
     
     font_name : bpy.props.StringProperty()
@@ -27,12 +26,22 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
     
         target_font = fonts[self.font_name]
         
-        if not target_font.multi_font:
-            self.report({'WARNING'}, "Invalid font")
-            return {'CANCELLED'}
-        
         # Change index
         active_datas.fontselector_object_properties.font_index = fonts.find(self.font_name)
+        
+        # Remove
+        if not target_font.multi_font:
+            
+            try:
+                default_font =  bpy.data.fonts["Bfont Regular"]
+            except KeyError:
+                default_font = None
+                
+            active_datas.font_bold = active_datas.font_italic =\
+            active_datas.font_bold_italic = default_font
+        
+            self.report({'INFO'}, "Font family removed")
+            return {'FINISHED'}
         
         # Bold
         if target_font.bold_font_name:

@@ -67,6 +67,9 @@ class FONTSELECTOR_PR_fonts_properties(bpy.types.PropertyGroup):
     multi_font : bpy.props.BoolProperty(
         name = "Multi Font",
     )
+    multi_font_component : bpy.props.BoolProperty(
+        name = "Multi Font Component",
+    )
 
 
 class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
@@ -308,6 +311,12 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         description = "Show Favorites icon",
         default=True,
     )
+    show_multi_font : bpy.props.BoolProperty(
+        name = "Show Multi Font Families",
+        description = "Show Multi Font Families icon",
+        default=True,
+    )
+    
     favorite_filter : bpy.props.BoolProperty(
         name = "Favorites Filter",
         description = "Show only Favorites",
@@ -316,10 +325,15 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         name = "Multi Font Family Filter",
         description = "Show only Multi Font Families",
     )
+    multi_font_component_hide : bpy.props.BoolProperty(
+        name = "Multi Font Component Hide",
+        description = "Hide Multi Font Components (Bold, Italic, Bold-Italic)",
+    )
     invert_filter : bpy.props.BoolProperty(
         name = "Invert Filters",
         description = "Invert Filters",
     )
+    
     show_font_infos : bpy.props.BoolProperty(
         name = "Show Infos",
         description = "Show Font Infos",

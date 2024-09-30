@@ -8,6 +8,8 @@ from .addon_prefs import get_addon_preferences
 
 def draw_font_infos(container, active, context):
     
+    debug = get_addon_preferences().debug
+    
     fonts = context.window_manager.fontselector_properties.fonts
     font = fonts[active.font_index]
     
@@ -40,6 +42,13 @@ def draw_font_infos(container, active, context):
 
         col.label(text = "Type")
         col2.label(text = font.font_type)
+        
+        if debug:
+            col.label(text = "Multi Font")
+            col2.label(text = str(font.multi_font))
+        
+            col.label(text = "Component")
+            col2.label(text = str(font.multi_font_component))
 
         col.label(text = "Path")
         op = col2.operator(

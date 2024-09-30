@@ -8,6 +8,7 @@ from bpy.app.handlers import persistent
 
 from .addon_prefs import get_addon_preferences
 
+# TODO Integrate book, oblique ?
 
 # Font format
 font_formats = [
@@ -257,24 +258,35 @@ def reload_font_collections(
         
         bold = italic = bold_italic = ""
         
-        multi_font = False
+        # Multi font family
+        multi_font = component = False
+        
+        # if font["type"] == "Regular":
+            
         # Get Bold-Italic if exists
         for f in font_datas["fonts"]:
             
-            if f["family"] == font["family"]:
-                if f["type"] == "Bold":
-                    bold = f["name"]
-                    multi_font = True
-                elif f["type"] == "Italic":
-                    italic = f["name"]
-                    multi_font = True
-                elif f["type"] == "Bold Italic":
-                    bold_italic = f["name"]
+            if f["family"] == font["family"]\
+            and f["type"] != font["type"]\
+            and font["type"] in ["Regular", "Bold", "Italic", "Bold Italic"]\
+            and f["type"] in ["Regular", "Bold", "Italic", "Bold Italic"]:
+                
+                if font["type"] == "Regular":
                     multi_font = True
                     
-        if not font["type"] == "Regular":
-            multi_font = False
-        
+                else:
+                    component = True
+                    break
+                
+                if f["type"] == "Bold":
+                    bold = f["name"]
+                    
+                elif f["type"] == "Italic":
+                    italic = f["name"]
+                    
+                elif f["type"] == "Bold Italic":
+                    bold_italic = f["name"]
+                    
         # Store Properties
         new = props.add()
         new.filepath = font["filepath"]
@@ -283,6 +295,7 @@ def reload_font_collections(
         new.font_type = font["type"]
         
         new.multi_font = multi_font
+        new.multi_font_component = component
         new.bold_font_name = bold
         new.italic_font_name = italic
         new.bold_italic_font_name = bold_italic

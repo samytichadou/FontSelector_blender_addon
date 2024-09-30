@@ -2,6 +2,7 @@ import bpy
 
 from .addon_prefs import get_addon_preferences
 
+
 # Font selection UI List
 class FONTSELECTOR_uilist(bpy.types.UIList):
     
@@ -14,16 +15,24 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
             
         row.label(text = item.name)
             
-        if item.multi_font and not self.strip:
+        # Multi font families
+        if not self.strip\
+        and self.obj.fontselector_object_properties.show_multi_font:
+            
             if get_addon_preferences().no_font_family_load:
+                if item.multi_font:
+                    icon = "FONTPREVIEW"
+                else:
+                    icon = "REMOVE"
                 row.operator(
                     "fontselector.load_font_family",
                     text ="",
-                    icon = "FONTPREVIEW",
+                    icon = icon,
                 ).font_name = item.name
-            else:
+            elif item.multi_font:
                 row.label(text ="", icon = "FONTPREVIEW")
-            
+        
+        # Favorites
         if self.obj.fontselector_object_properties.show_favorite:
             if item.favorite:
                 icon = 'SOLO_ON'
@@ -46,10 +55,20 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         
         row.separator()
         
+        if not self.strip:
+            sub = row.row(align=True)
+            sub.alignment = "CENTER"
+            sub.label(text = "", icon = "GHOST_ENABLED")
+            sub.prop(obj_props, "multi_font_component_hide", text="", icon="FONT_DATA")
+        
+        row.separator()
+        
         sub = row.row(align=True)
         sub.alignment = "RIGHT"
         sub.label(text = "", icon = "HIDE_OFF")
-        sub.prop(obj_props, "show_favorite", text="", icon="SOLO_OFF")
+        sub.prop(obj_props, "show_favorite", text="", icon="SOLO_ON")
+        if not self.strip:
+            sub.prop(obj_props, "show_multi_font", text="", icon="FONTPREVIEW")
         
         
     def filter_items(self, context, data, propname):
@@ -76,7 +95,8 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
         if obj_props.font_search\
         or obj_props.favorite_filter\
         or obj_props.multi_font_filter\
-        or obj_props.invert_filter:
+        or obj_props.invert_filter\
+        or obj_props.multi_font_component_hide:
             flt_flags = [self.bitflag_filter_item] * len(col)
             
             # Name search
@@ -96,11 +116,18 @@ class FONTSELECTOR_uilist(bpy.types.UIList):
                             flt_flags[idx] = 0
                             
             # Multi font
-            if obj_props.multi_font_filter:
-                for idx, font in enumerate(col) :
-                    if flt_flags[idx] != 0 :
-                        if font.multi_font == False :
-                            flt_flags[idx] = 0
+            if not self.strip:
+                if obj_props.multi_font_filter:
+                    for idx, font in enumerate(col) :
+                        if flt_flags[idx] != 0 :
+                            if font.multi_font == False:
+                                flt_flags[idx] = 0
+                                
+                if obj_props.multi_font_component_hide:
+                    for idx, font in enumerate(col) :
+                        if flt_flags[idx] != 0 :
+                            if font.multi_font_component:
+                                flt_flags[idx] = 0
                             
             # invert filtering
             if obj_props.invert_filter :
