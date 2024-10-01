@@ -110,7 +110,123 @@ def get_font_list_from_folder(
                 )
                 
     return font_list
+
+
+def get_font_families_from_folder(
+    datas,
+    folderpath,
+    debug,
+):
+    
+    # Invalid folder
+    if not os.path.isdir(folderpath):
+        if debug:
+            print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
+        return datas
+    
+    # Check for font files
+    for root, dirs, files in os.walk(folderpath):
+        
+        for file in files:
+        
+            filename, ext = os.path.splitext(file)
             
+            if ext in font_formats:
+                filepath = os.path.join(root, file)
+                font = ttLib.TTFont(filepath)
+                family = font['name'].getDebugName(1)
+                
+                font_datas = {
+                    "filepath" : filepath,
+                    "name" : font['name'].getDebugName(4),
+                    "family" : font['name'].getDebugName(1),
+                    "type" : font['name'].getDebugName(2),
+                }
+                
+                try:
+                    
+                    f = datas["families"][family]
+                    
+                    chk_dupe = False
+                    for font in f:
+                        if font["type"] == font_datas["type"]:
+                            chk_dupe = True
+                            if debug:
+                                print(f"FONTSELECTOR --- Similar Fonts : {font['filepath']} - {filepath}")
+                            break
+                    
+                    if not chk_dupe:
+                        f.append(font_datas)
+                        
+                except KeyError:
+                    
+                    datas["families"][family] = [
+                        font_datas,
+                    ]
+
+    return datas
+
+
+def refresh_font_families_json(
+    debug,
+    force_refresh = False,
+):
+    
+    size = 0
+    folders = []
+    
+    for folderpath in get_os_folders(debug):
+        
+        # Invalid folder
+        if not os.path.isdir(folderpath):
+            if debug:
+                print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
+            continue
+            
+        size += get_folder_size(folderpath)
+        folders.append(folderpath)
+        
+    datas = {
+            "size" : size,
+            "families" : {}
+        }
+    
+    # TODO Check if refresh needed
+    # Refresh
+        
+    print("FONTSELECTOR --- Refreshing fonts datas")
+    
+    for folderpath in folders:
+        
+        if debug:
+            print(f"FONTSELECTOR --- Refreshing : {folderpath}")
+        
+        datas = get_font_families_from_folder(
+            datas,
+            folderpath,
+            debug,
+        )
+    # print(datas)
+    
+    # Alphabetical order
+    datas["families"] = dict(sorted(datas["families"].items(), key=lambda item: item[0].lower()))
+    
+    # Write json file
+    fam_json = os.path.join(
+        get_preferences_folder(),
+        "families_datas.json",
+    )
+    write_json_file(
+        datas,
+        fam_json,
+    )
+    
+    return datas, True
+#     
+#     print("FONTSELECTOR --- No change, keeping fonts datas")
+#     
+#     return datas, False
+
 
 def read_json(filepath):
     with open(filepath, "r") as read_file:
@@ -220,7 +336,6 @@ def refresh_fonts_json(
             fonts.extend(
                 get_font_list_from_folder(folderpath, debug)
             )
-        
         # Alphabetical order
         fonts.sort(key=lambda x: x['name'].lower(), reverse=False)
         
@@ -367,6 +482,8 @@ def relink_font_objects(debug):
 def startup_load_fonts(scene):
     
     debug = get_addon_preferences().debug
+    
+    datas, change = refresh_font_families_json(debug)
     
     datas, change = refresh_fonts_json(debug)
     
