@@ -1,3 +1,15 @@
+### COMPILE SCRIPT ###
+    # Zip relevant files or deploy them into specified path
+
+    # Arguments :
+        # - r : Create release zip file
+        # - r : Deploy files in specified path
+        # - rd/dr : Create zip and deploy files
+
+        # - dry : (in second position) Dry run
+
+###
+
 addon_id = "font_selector"
 dirs_exclude = [
     ".git",
