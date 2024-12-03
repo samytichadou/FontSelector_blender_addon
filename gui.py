@@ -92,47 +92,63 @@ def draw_font_infos(container, active, context):
 
 ### Fontselector common panel UI ###
 def draw_font_selector(self, context):
-    
+
     layout = self.layout
-        
+
     if self.strip:
         active_datas = context.active_sequence_strip.fontselector_object_properties
     else:
         active_datas = context.active_object.data.fontselector_object_properties
-    
+
     props = context.window_manager.fontselector_properties
+
+    single = get_addon_preferences().single_font_mode
     
-    # No available fonts
-    if not props.fonts:
-        row = layout.row(align=True)
-        row.label(text = "No Fonts, please reload", icon = "INFO")
+    # Single font mode
+    if single:
+
+        # No available font
+        if not props.fonts:
+            row = layout.row(align=True)
+            row.label(text = "No Fonts, please reload", icon = "INFO")
+            row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
+            return
+
+        col = layout.column(align=True)
+
+        row = col.row(align=True)
+        row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
         row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
-        return
 
-    col = layout.column(align=True)
-    
-    row = col.row(align=True)
-    row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
-    row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
+        row = col.row()
+        if self.strip:
+            row.template_list("FONTSELECTOR_UL_uilist_strip", "", props, "fonts", active_datas, "font_index", rows = 5)
 
-    row = col.row()
-    if self.strip:
-        row.template_list("FONTSELECTOR_UL_uilist_strip", "", props, "fonts", active_datas, "font_index", rows = 5)
-        
+        else:
+            row.template_list("FONTSELECTOR_UL_uilist_object", "", props, "fonts", active_datas, "font_index", rows = 5)
+
+        # Font infos
+        if active_datas.font_index >=0\
+        and active_datas.font_index < len(props.fonts):
+            box = col.box()
+            draw_font_infos(
+                box,
+                active_datas,
+                context,
+            )
+
+    # Family font mode
     else:
-        row.template_list("FONTSELECTOR_UL_uilist_object", "", props, "fonts", active_datas, "font_index", rows = 5)
-    
-    # Font infos
-    if active_datas.font_index >=0\
-    and active_datas.font_index < len(props.fonts):
-        box = col.box()
-        draw_font_infos(
-            box,
-            active_datas,
-            context,
-        )
-    
-    
+
+        # No available family
+        if not props.font_families:
+            row = layout.row(align=True)
+            row.label(text = "No Fonts, please reload", icon = "INFO")
+            row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
+            return
+
+        layout.label(text="OK!")
+
     
 
 class FONTSELECTOR_panel(bpy.types.Panel):

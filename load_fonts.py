@@ -132,6 +132,7 @@ def get_font_families_from_folder(
             filename, ext = os.path.splitext(file)
             
             if ext in font_formats:
+
                 filepath = os.path.join(root, file)
                 font = ttLib.TTFont(filepath)
                 family = font['name'].getDebugName(1)
@@ -139,7 +140,6 @@ def get_font_families_from_folder(
                 font_datas = {
                     "filepath" : filepath,
                     "name" : font['name'].getDebugName(4),
-                    "family" : font['name'].getDebugName(1),
                     "type" : font['name'].getDebugName(2),
                 }
                 
@@ -185,47 +185,50 @@ def refresh_font_families_json(
             
         size += get_folder_size(folderpath)
         folders.append(folderpath)
-        
-    datas = {
+
+    datas = get_existing_families_datas()
+
+    # Refresh
+    if datas is None\
+    or datas["size"] != size\
+    or force_refresh:
+
+        print("FONTSELECTOR --- Refreshing families datas")
+
+        datas = {
             "size" : size,
             "families" : {}
         }
-    
-    # TODO Check if refresh needed
-    # Refresh
-        
-    print("FONTSELECTOR --- Refreshing fonts datas")
-    
-    for folderpath in folders:
-        
-        if debug:
-            print(f"FONTSELECTOR --- Refreshing : {folderpath}")
-        
-        datas = get_font_families_from_folder(
-            datas,
-            folderpath,
-            debug,
+
+        for folderpath in folders:
+
+            if debug:
+                print(f"FONTSELECTOR --- Refreshing : {folderpath}")
+
+            datas = get_font_families_from_folder(
+                datas,
+                folderpath,
+                debug,
+            )
+
+        # Alphabetical order
+        datas["families"] = dict(sorted(datas["families"].items(), key=lambda item: item[0].lower()))
+
+        # Write json file
+        fam_json = os.path.join(
+            get_preferences_folder(),
+            "families_datas.json",
         )
-    # print(datas)
-    
-    # Alphabetical order
-    datas["families"] = dict(sorted(datas["families"].items(), key=lambda item: item[0].lower()))
-    
-    # Write json file
-    fam_json = os.path.join(
-        get_preferences_folder(),
-        "families_datas.json",
-    )
-    write_json_file(
-        datas,
-        fam_json,
-    )
-    
-    return datas, True
-#     
-#     print("FONTSELECTOR --- No change, keeping fonts datas")
-#     
-#     return datas, False
+        write_json_file(
+            datas,
+            fam_json,
+        )
+
+        return datas, True
+
+    print("FONTSELECTOR --- No change, keeping families datas")
+
+    return datas, False
 
 
 def read_json(filepath):
@@ -252,6 +255,12 @@ def get_json_filepath():
         "fonts_datas.json",
     )
 
+def get_families_json_filepath():
+    return os.path.join(
+        get_preferences_folder(),
+        "families_datas.json",
+    )
+
 
 def get_existing_datas():
     filepath = get_json_filepath()
@@ -259,13 +268,17 @@ def get_existing_datas():
         return None
     return read_json(filepath)
 
+def get_existing_families_datas():
+    filepath = get_families_json_filepath()
+    if not os.path.isfile(filepath):
+        return None
+    return read_json(filepath)
 
 def get_favorite_json_filepath():
     return os.path.join(
         get_preferences_folder(),
         "favorite_datas.json",
     )
-
 
 def get_existing_favorite_datas():
     filepath = get_favorite_json_filepath()
@@ -355,6 +368,30 @@ def refresh_fonts_json(
     print("FONTSELECTOR --- No change, keeping fonts datas")
     
     return datas, False
+
+
+def reload_font_families_collections(
+    font_datas,
+    debug,
+):
+
+    if debug:
+        print("FONTSELECTOR --- Reloading families collections")
+
+    props = bpy.context.window_manager.fontselector_properties.font_families
+
+    props.clear()
+
+    for family in font_datas["families"]:
+
+        new_family = props.add()
+        new_family.name = family
+
+        for font in font_datas["families"][family]:
+            new_font = new_family.fonts.add()
+            new_font.name = font["name"]
+            new_font.filepath = font["filepath"]
+            new_font.font_type = font["type"]
 
 
 def reload_font_collections(
@@ -482,11 +519,13 @@ def relink_font_objects(debug):
 def startup_load_fonts(scene):
     
     debug = get_addon_preferences().debug
-    
+
+    # Reload families
     datas, change = refresh_font_families_json(debug)
-    
+    reload_font_families_collections(datas, debug)
+
+    # Reload single fonts
     datas, change = refresh_fonts_json(debug)
-    
     reload_font_collections(datas, debug)
     
     relink_font_objects(debug)

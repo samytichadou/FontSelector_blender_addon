@@ -23,6 +23,9 @@ class FONTSELECTOR_PF_addon_prefs(bpy.types.AddonPreferences) :
     debug : bpy.props.BoolProperty(
         name = "Debug",
     )
+    single_font_mode : bpy.props.BoolProperty(
+        name = "Single Font Mode",
+    )
     no_font_family_load : bpy.props.BoolProperty(
         name = "No Font Family Load",
     )
@@ -54,6 +57,9 @@ class FONTSELECTOR_PF_addon_prefs(bpy.types.AddonPreferences) :
         sub.alignment = "RIGHT"
         sub.prop(self, "debug")
         
+        row = layout.row()
+        row.prop(self, "single_font_mode")
+
         row = layout.row()
         row.prop(self, "no_font_family_load", text="Do not load available Font Family (Bold, Italic)")
         

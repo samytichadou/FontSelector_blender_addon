@@ -72,12 +72,35 @@ class FONTSELECTOR_PR_fonts_properties(bpy.types.PropertyGroup):
     )
 
 
+class FONTSELECTOR_PR_single_font_properties(bpy.types.PropertyGroup):
+
+    filepath: bpy.props.StringProperty(
+        name = "Filepath",
+    )
+    font_type: bpy.props.StringProperty(
+        name = "Font Type",
+    )
+
+
+class FONTSELECTOR_PR_font_family_properties(bpy.types.PropertyGroup):
+
+    favorite: bpy.props.BoolProperty(
+        name = "Favorite",
+        update = favorite_callback,
+    )
+    fonts : bpy.props.CollectionProperty(
+        type=FONTSELECTOR_PR_single_font_properties,
+    )
+
+
 class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
 
     fonts : bpy.props.CollectionProperty(
         type=FONTSELECTOR_PR_fonts_properties,
     )
-    
+    font_families : bpy.props.CollectionProperty(
+        type=FONTSELECTOR_PR_font_family_properties,
+    )
     no_callback : bpy.props.BoolProperty()
     
 
@@ -297,15 +320,21 @@ def font_selection_callback(self, context):
     
 class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
 
+    # Font
     font_search: bpy.props.StringProperty(
         options = {"TEXTEDIT_UPDATE"},
     )
+    family_index : bpy.props.IntProperty(
+        default = -1,
+    )
+    family_name : bpy.props.StringProperty()
     font_index : bpy.props.IntProperty(
         default = -1,
         update = font_selection_callback,
     )
     font_name : bpy.props.StringProperty()
     
+    # Display
     show_favorite : bpy.props.BoolProperty(
         name = "Show Favorites",
         description = "Show Favorites icon",
@@ -317,6 +346,7 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         default=True,
     )
     
+    # Filters
     favorite_filter : bpy.props.BoolProperty(
         name = "Favorites Filter",
         description = "Show only Favorites",
@@ -334,15 +364,18 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         description = "Invert Filters",
     )
     
+    # Show infos
     show_font_infos : bpy.props.BoolProperty(
         name = "Show Infos",
         description = "Show Font Infos",
     )
-    
+
 
 ### REGISTER ---
 def register():
     bpy.utils.register_class(FONTSELECTOR_PR_fonts_properties)
+    bpy.utils.register_class(FONTSELECTOR_PR_single_font_properties)
+    bpy.utils.register_class(FONTSELECTOR_PR_font_family_properties)
     bpy.utils.register_class(FONTSELECTOR_PR_properties)
     bpy.utils.register_class(FONTSELECTOR_PR_object_properties)
     
@@ -364,6 +397,8 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(FONTSELECTOR_PR_fonts_properties)
+    bpy.utils.unregister_class(FONTSELECTOR_PR_single_font_properties)
+    bpy.utils.unregister_class(FONTSELECTOR_PR_font_family_properties)
     bpy.utils.unregister_class(FONTSELECTOR_PR_properties)
     bpy.utils.unregister_class(FONTSELECTOR_PR_object_properties)
     

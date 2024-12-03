@@ -17,9 +17,13 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
     def execute(self, context):
         
         debug = get_addon_preferences().debug
-        
+
+        # Reload families
+        datas, change = lf.refresh_font_families_json(debug, True)
+        lf.reload_font_families_collections(datas, debug)
+
+        # Reload single fonts
         datas, change = lf.refresh_fonts_json(debug, True)
-        
         lf.reload_font_collections(datas, debug)
         
         lf.relink_font_objects(debug)
