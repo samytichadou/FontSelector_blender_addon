@@ -157,7 +157,7 @@ def poll_viewport(context):
 def viewport_popover_draw(self, context):
     if get_addon_preferences().viewport_popover\
     and poll_viewport(context):
-        self.layout.separator_spacer()
+        self.layout.separator()
         self.layout.popover(panel="FONTSELECTOR_PT_viewport_popover", text="", icon="FILE_FONT")
         
 class FONTSELECTOR_PT_viewport_popover(FONTSELECTOR_panel):
