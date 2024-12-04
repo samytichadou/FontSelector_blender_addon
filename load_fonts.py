@@ -555,15 +555,19 @@ def relink_font_objects(debug):
 @persistent
 def startup_load_fonts(scene):
     
-    debug = get_addon_preferences().debug
+    prefs = get_addon_preferences()
+    debug = prefs.debug
 
-    # Reload families
     datas, change = refresh_font_families_json(debug)
-    reload_font_families_collections(datas, debug)
 
     # Reload single fonts
-    datas, change = refresh_fonts_json(debug)
-    reload_font_collections(datas, debug)
+    if prefs.single_font_mode:
+        # datas, change = refresh_fonts_json(debug)
+        reload_font_collections(datas, debug)
+
+    # Reload families
+    else:
+        reload_font_families_collections(datas, debug)
     
     relink_font_objects(debug)
     
