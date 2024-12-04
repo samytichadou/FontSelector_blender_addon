@@ -26,7 +26,8 @@ from . import   (
     addon_prefs,
     properties,
     load_fonts,
-    ui_list,
+    ui_list_single_font,
+    ui_list_family_font,
     gui,
     reload_operator,
     reveal_file_operator,
@@ -41,7 +42,8 @@ def register():
     properties.register()
     addon_prefs.register()
     load_fonts.register()
-    ui_list.register()
+    ui_list_single_font.register()
+    ui_list_family_font.register()
     gui.register()
     reload_operator.register()
     reveal_file_operator.register()
@@ -51,7 +53,8 @@ def unregister():
     properties.unregister()
     addon_prefs.unregister()
     load_fonts.unregister()
-    ui_list.unregister()
+    ui_list_single_font.unregister()
+    ui_list_family_font.unregister()
     gui.unregister()
     reload_operator.unregister()
     reveal_file_operator.unregister()

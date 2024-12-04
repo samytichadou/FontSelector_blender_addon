@@ -317,22 +317,55 @@ def font_selection_callback(self, context):
     # Clear old fonts
     clear_font_datas()
     
-    
+
+def family_types_callback(self, context):
+    items = []
+
+    debug = get_addon_preferences().debug
+
+    font_props = context.window_manager.fontselector_properties
+
+    if font_props.no_callback:
+        if debug:
+            print("FONTSELECTOR --- Update function cancelled")
+        return
+
+    if debug:
+        print("FONTSELECTOR --- Update function")
+
+    target_family_props = font_props.font_families[self.family_index]
+
+    for font in target_family_props.fonts:
+        items.append(
+            (font.font_type, font.font_type, ""),
+        )
+
+    return items
+
+
 class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
 
-    # Font
+    # Search
     font_search: bpy.props.StringProperty(
         options = {"TEXTEDIT_UPDATE"},
     )
-    family_index : bpy.props.IntProperty(
-        default = -1,
-    )
-    family_name : bpy.props.StringProperty()
+
+    # Single Font
     font_index : bpy.props.IntProperty(
         default = -1,
         update = font_selection_callback,
     )
     font_name : bpy.props.StringProperty()
+
+    # Families
+    family_index : bpy.props.IntProperty(
+        default = -1,
+    )
+    family_name : bpy.props.StringProperty()
+    family_types : bpy.props.EnumProperty(
+        name = "Types",
+        items = family_types_callback,
+    )
     
     # Display
     show_favorite : bpy.props.BoolProperty(

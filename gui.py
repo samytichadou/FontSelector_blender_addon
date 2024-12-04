@@ -122,10 +122,18 @@ def draw_font_selector(self, context):
 
         row = col.row()
         if self.strip:
-            row.template_list("FONTSELECTOR_UL_uilist_strip", "", props, "fonts", active_datas, "font_index", rows = 5)
-
+            uilist = "FONTSELECTOR_UL_uilist_strip"
         else:
-            row.template_list("FONTSELECTOR_UL_uilist_object", "", props, "fonts", active_datas, "font_index", rows = 5)
+            uilist = "FONTSELECTOR_UL_uilist_object"
+        row.template_list(
+            ui_list,
+            "",
+            props,
+            "fonts",
+            active_datas,
+            "font_index",
+            rows = 5,
+        )
 
         # Font infos
         if active_datas.font_index >=0\
@@ -147,9 +155,30 @@ def draw_font_selector(self, context):
             row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
             return
 
-        layout.label(text="OK!")
+        col = layout.column(align=True)
 
-    
+        row = col.row(align=True)
+        row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
+        row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
+
+        row = col.row()
+        if self.strip:
+            uilist = "FONTSELECTOR_UL_family_uilist_strip"
+        else:
+            uilist = "FONTSELECTOR_UL_family_uilist_object"
+        row.template_list(
+            uilist,
+            "",
+            props,
+            "font_families",
+            active_datas,
+            "family_index",
+            rows = 5,
+        )
+
+        row = col.row()
+        row.prop(active_datas, "family_types", text="")
+
 
 class FONTSELECTOR_panel(bpy.types.Panel):
     bl_label = "Font Selection"
