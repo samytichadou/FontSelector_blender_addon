@@ -112,6 +112,35 @@ def get_font_list_from_folder(
     return font_list
 
 
+def reorder_dict_key(
+    dict,
+    key,
+    specific_order = [],
+):
+
+    # Alphabetical order
+    s = sorted(dict, key=lambda x: x[key])
+
+    if not specific_order:
+        return s
+
+    # Specific order
+    new_list = []
+    for font in s:
+        if font[key] not in specific_order:
+            new_list.append(font)
+            s.remove(font)
+
+    data = {x[key]: x for x in s}
+    for i in reversed(range(len(specific_order))):
+        try:
+            new_list.insert(0, data[specific_order[i]])
+        except KeyError:
+            pass
+
+    return new_list
+
+
 def get_font_families_from_folder(
     datas,
     folderpath,
@@ -164,6 +193,8 @@ def get_font_families_from_folder(
                         font_datas,
                     ]
 
+    # TODO Sort fonts
+
     return datas
 
 
@@ -211,8 +242,14 @@ def refresh_font_families_json(
                 debug,
             )
 
-        # Alphabetical order
-        datas["families"] = dict(sorted(datas["families"].items(), key=lambda item: item[0].lower()))
+        # Sort fonts inside families
+        # for fam in datas["families"]:
+        #     new_list = reorder_dict_key(
+        #         datas["families"][fam],
+        #         "type",
+        #         ["Regular", "Bold", "Italic", "Bold Italic"],
+        #     )
+        #     datas["families"][fam] = new_list
 
         # Write json file
         fam_json = os.path.join(
