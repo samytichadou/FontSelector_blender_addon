@@ -176,8 +176,12 @@ def draw_font_selector(self, context):
             rows = 5,
         )
 
+        font_nb = len(props.font_families[active_datas.family_index].fonts)
         row = col.row()
-        row.prop(active_datas, "family_types", text="")
+        if font_nb <= 4:
+            row.prop(active_datas, "family_types", expand = True)
+        else:
+            row.prop(active_datas, "family_types", text = "")
 
 
 class FONTSELECTOR_panel(bpy.types.Panel):
