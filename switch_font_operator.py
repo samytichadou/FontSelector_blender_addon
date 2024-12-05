@@ -42,16 +42,6 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
             "family_types",
         )
 
-        # DEBUG
-        print()
-        print(family)
-        print(current_type)
-        print(available_types)
-        print()
-        print(available_types.index(current_type))
-        print(len(available_types))
-        print()
-
         # Switch
 
         # Next

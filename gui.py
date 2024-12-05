@@ -4,7 +4,8 @@ from .addon_prefs import get_addon_preferences
 
 
 # TODO Fix search menu errors
-# TODO Add help for multi font 
+# TODO Add help for multi font
+# TODO Fix font infos subpanel
 
 
 def draw_font_infos(container, active, context):
@@ -102,105 +103,55 @@ def draw_font_selector(self, context):
 
     props = context.window_manager.fontselector_properties
 
-    single = get_addon_preferences().single_font_mode
-    
-    # Single font mode
-    if single:
-
-        # No available font
-        if not props.fonts:
-            row = layout.row(align=True)
-            row.label(text = "No Fonts, please reload", icon = "INFO")
-            row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
-            return
-
-        col = layout.column(align=True)
-
-        row = col.row(align=True)
-        row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
+    # No available family
+    if not props.font_families:
+        row = layout.row(align=True)
+        row.label(text = "No Fonts, please reload", icon = "INFO")
         row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
+        return
 
-        row = col.row()
-        if self.strip:
-            uilist = "FONTSELECTOR_UL_uilist_strip"
-        else:
-            uilist = "FONTSELECTOR_UL_uilist_object"
-        row.template_list(
-            uilist,
-            "",
-            props,
-            "fonts",
-            active_datas,
-            "font_index",
-            rows = 5,
-        )
+    col = layout.column(align=True)
 
-        # Font infos
-        if active_datas.font_index >=0\
-        and active_datas.font_index < len(props.fonts):
-            box = col.box()
-            draw_font_infos(
-                box,
-                active_datas,
-                context,
-            )
+    row = col.row(align=True)
+    row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
 
-    # Family font mode
+    row.separator()
+
+    row.operator(
+        "fontselector.switch_font",
+        text = "",
+        icon = "TRIA_LEFT",
+    ).previous = True
+    row.operator(
+        "fontselector.switch_font",
+        text = "",
+        icon = "TRIA_RIGHT",
+    ).previous = False
+
+    row.separator()
+    row.operator(
+        "fontselector.reload_fonts",
+        text="",
+        icon="FILE_REFRESH",
+    )
+
+    row = col.row()
+    if self.strip:
+        uilist = "FONTSELECTOR_UL_family_uilist_strip"
     else:
+        uilist = "FONTSELECTOR_UL_family_uilist_object"
+    row.template_list(
+        uilist,
+        "",
+        props,
+        "font_families",
+        active_datas,
+        "family_index",
+        rows = 5,
+    )
 
-        # No available family
-        if not props.font_families:
-            row = layout.row(align=True)
-            row.label(text = "No Fonts, please reload", icon = "INFO")
-            row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
-            return
-
-        col = layout.column(align=True)
-
-        row = col.row(align=True)
-        row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
-
-        row.separator()
-
-        row.operator(
-            "fontselector.switch_font",
-            text = "",
-            icon = "TRIA_LEFT",
-        ).previous = True
-        row.operator(
-            "fontselector.switch_font",
-            text = "",
-            icon = "TRIA_RIGHT",
-        ).previous = False
-
-        row.separator()
-        row.operator(
-            "fontselector.reload_fonts",
-            text="",
-            icon="FILE_REFRESH",
-        )
-
-        row = col.row()
-        if self.strip:
-            uilist = "FONTSELECTOR_UL_family_uilist_strip"
-        else:
-            uilist = "FONTSELECTOR_UL_family_uilist_object"
-        row.template_list(
-            uilist,
-            "",
-            props,
-            "font_families",
-            active_datas,
-            "family_index",
-            rows = 5,
-        )
-
-        row = col.row()
-        row.prop(active_datas, "family_types", text = "")
-        # font_nb = len(props.font_families[active_datas.family_index].fonts)
-        # if font_nb <= 4:
-        #     row.prop(active_datas, "family_types", expand = True)
-        # else:
+    row = col.row()
+    row.prop(active_datas, "family_types", text = "")
 
 
 class FONTSELECTOR_panel(bpy.types.Panel):

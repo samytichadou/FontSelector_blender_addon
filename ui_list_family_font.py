@@ -81,6 +81,8 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
                         if search not in font.name.lower():
                             flt_flags[idx] = 0
 
+            # TODO Special filter for type search
+
             # Favorites
             if obj_props.favorite_filter :
                 for idx, font in enumerate(col) :

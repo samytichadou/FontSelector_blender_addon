@@ -8,7 +8,8 @@ from bpy.app.handlers import persistent
 
 from .addon_prefs import get_addon_preferences
 
-# TODO Integrate book, oblique ?
+# TODO Relink fonts
+# TODO Favorites
 
 # Font format
 font_formats = [
@@ -571,13 +572,10 @@ def startup_load_fonts(scene):
     datas, change = refresh_font_families_json(debug)
     reload_font_families_collections(datas, debug)
 
-    # Reload single fonts
-    datas, change = refresh_fonts_json(debug)
-    reload_font_collections(datas, debug)
-    
-    relink_font_objects(debug)
-    
-    reload_favorites(debug)
+    # TODO Relink and Reload
+#     relink_font_objects(debug)
+#
+#     reload_favorites(debug)
 
     
 ### REGISTER ---

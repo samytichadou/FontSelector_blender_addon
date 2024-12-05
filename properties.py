@@ -40,38 +40,6 @@ def favorite_callback(self, context):
     path = lf.get_favorite_json_filepath()
     lf.write_json_file(datas, path)
 
-    
-class FONTSELECTOR_PR_fonts_properties(bpy.types.PropertyGroup):
-    
-    filepath: bpy.props.StringProperty(
-        name = "Filepath",
-    )
-    favorite: bpy.props.BoolProperty(
-        name = "Favorite",
-        update = favorite_callback,
-    )
-    font_family: bpy.props.StringProperty(
-        name = "Font Family",
-    )
-    font_type: bpy.props.StringProperty(
-        name = "Font Type",
-    )
-    bold_font_name: bpy.props.StringProperty(
-        name = "Bold",
-    )
-    italic_font_name: bpy.props.StringProperty(
-        name = "Italic",
-    )
-    bold_italic_font_name: bpy.props.StringProperty(
-        name = "Bold Italic",
-    )
-    multi_font : bpy.props.BoolProperty(
-        name = "Multi Font",
-    )
-    multi_font_component : bpy.props.BoolProperty(
-        name = "Multi Font Component",
-    )
-
 
 class FONTSELECTOR_PR_single_font_properties(bpy.types.PropertyGroup):
 
@@ -97,9 +65,6 @@ class FONTSELECTOR_PR_font_family_properties(bpy.types.PropertyGroup):
 
 class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
 
-    fonts : bpy.props.CollectionProperty(
-        type=FONTSELECTOR_PR_fonts_properties,
-    )
     font_families : bpy.props.CollectionProperty(
         type=FONTSELECTOR_PR_font_family_properties,
     )
@@ -134,62 +99,6 @@ def get_font_datablock(
     new_font.user_clear()
     
     return new_font
-    
-    
-def get_font_family(
-    font_entry,
-    debug,
-):
-    
-    try:
-        default_font =  bpy.data.fonts["Bfont Regular"]
-    except KeyError:
-        default_font = None
-    new_font = new_bold_font = new_italic_font = new_bold_italic_font = default_font
-    
-    # Get font
-    font_collection = bpy.context.window_manager.fontselector_properties.fonts
-    
-    # Invalid font
-    if not os.path.isfile(font_entry.filepath):
-        if debug:
-            print(f"FONTSELECTOR --- Invalid font : {font_entry.filepath}, please refresh")
-        return None, None, None, None
-    
-    # Get font
-    new_font = get_font_datablock(font_entry, debug)
-    
-    # Multi font
-    if font_entry.multi_font:
-        
-        # Get bold
-        if font_entry.bold_font_name:
-            try:
-                bold_entry = font_collection[font_entry.bold_font_name]
-                new_bold_font = get_font_datablock(bold_entry, debug)
-            except KeyError:
-                if debug:
-                    print(f"FONTSELECTOR --- No bold : {font_entry.name}")
-                
-        # Get italic
-        if font_entry.italic_font_name:
-            try:
-                italic_entry = font_collection[font_entry.italic_font_name]
-                new_italic_font = get_font_datablock(italic_entry, debug)
-            except KeyError:
-                if debug:
-                    print(f"FONTSELECTOR --- No italic : {font_entry.name}")
-                
-        # Get bold italic
-        if font_entry.bold_italic_font_name:
-            try:
-                bold_italic_entry = font_collection[font_entry.bold_italic_font_name]
-                new_bold_italic_font = get_font_datablock(bold_italic_entry, debug)
-            except KeyError:
-                if debug:
-                    print(f"FONTSELECTOR --- No bold italic : {font_entry.name}")
-    
-    return new_font, new_bold_font, new_italic_font, new_bold_italic_font
 
 
 def clear_font_datas():
@@ -203,22 +112,11 @@ def change_objects_font(
     target_font,
     self,
     context,
-    bold_font = None,
-    italic_font = None,
-    bold_italic_font = None,
 ):
-    
-    no_font_family = get_addon_preferences().no_font_family_load
     
     # Change active object font
     self.id_data.font = target_font
     self.font_name = target_font.name
-    
-    # Bold italic
-    if not no_font_family:
-        self.id_data.font_bold = bold_font
-        self.id_data.font_italic = italic_font
-        self.id_data.font_bold_italic = bold_italic_font
     
     # Change selected objects
     for obj in context.selected_objects:
@@ -230,15 +128,10 @@ def change_objects_font(
             obj.data.font = target_font
             
             props = obj.data.fontselector_object_properties
-            props.font_index = self.font_index
+            props.font_index = self.family_index
+            props.font_types = self.font_types
             props.font_name = target_font.name
             
-            # Bold italic
-            if not no_font_family:
-                obj.data.font_bold = bold_font
-                obj.data.font_italic = italic_font
-                obj.data.font_bold_italic = bold_italic_font
-
 
 def change_strips_font(
     target_font,
@@ -266,61 +159,72 @@ def change_strips_font(
             props.font_name = target_font.name
 
 
-def font_selection_callback(self, context):
-    
+def family_type_update(self, context):
+
     debug = get_addon_preferences().debug
-    
+
     font_props = context.window_manager.fontselector_properties
-    
+
     if font_props.no_callback:
         if debug:
             print("FONTSELECTOR --- Update function cancelled")
         return
-    
+
     if debug:
         print("FONTSELECTOR --- Update function")
-    
-    target_font_props = font_props.fonts[self.font_index]
-    
+
+    target_family = font_props.font_families[self.family_index]
+
+    target_font_props = None
+    for font in target_family.fonts:
+        if font.font_type == self.family_types:
+            target_font_props = font
+
+    # Unable to find font in collections
+    if target_font_props is None:
+        if debug:
+            invalid_font = f"{target_family.name} - {self.family_types}"
+            print(f"FONTSELECTOR --- Update cancelled, unable to get font properties : {invalid_font}")
+        return
+
     # Import font
-    target_font, bold_font, italic_font, bold_italic_font = get_font_family(
+    target_font = get_font_datablock(
         target_font_props,
-        debug
-        )
-    
+        debug,
+    )
+
     # Invalid font
     if target_font is None:
+        if debug:
+            print(f"FONTSELECTOR --- Update cancelled, unable to get font file : {target_font_props.name}")
         return
-    
+
     font_props.no_callback = True
-    
+
     # Find object or strip
     if isinstance(self.id_data, bpy.types.TextCurve):
-        
+
         change_objects_font(
             target_font,
             self,
             context,
-            bold_font,
-            italic_font,
-            bold_italic_font,
         )
-            
+
     else:
-        
+
         change_strips_font(
             target_font,
             self,
             context,
         )
-            
+
     font_props.no_callback = False
-    
+
     # Clear old fonts
     clear_font_datas()
 
 
-def family_selection_callback(self, context):
+def family_selection_update(self, context):
 
     debug = get_addon_preferences().debug
 
@@ -342,7 +246,7 @@ def family_selection_callback(self, context):
     self.family_types = first_type
     
 
-def family_types_callback(self, context):
+def family_type_callback(self, context):
     items = []
 
     debug = get_addon_preferences().debug
@@ -374,33 +278,25 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         options = {"TEXTEDIT_UPDATE"},
     )
 
-    # Single Font
-    font_index : bpy.props.IntProperty(
-        default = -1,
-        update = font_selection_callback,
-    )
+    # Relink Font
     font_name : bpy.props.StringProperty()
 
     # Families
     family_index : bpy.props.IntProperty(
         default = -1,
-        update = family_selection_callback,
+        update = family_selection_update,
     )
     family_name : bpy.props.StringProperty()
     family_types : bpy.props.EnumProperty(
         name = "Types",
-        items = family_types_callback,
+        items = family_type_callback,
+        update = family_type_update,
     )
     
     # Display
     show_favorite : bpy.props.BoolProperty(
         name = "Show Favorites",
         description = "Show Favorites icon",
-        default=True,
-    )
-    show_multi_font : bpy.props.BoolProperty(
-        name = "Show Multi Font Families",
-        description = "Show Multi Font Families icon",
         default=True,
     )
     show_multi_component : bpy.props.BoolProperty(
@@ -413,14 +309,6 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
     favorite_filter : bpy.props.BoolProperty(
         name = "Favorites Filter",
         description = "Show only Favorites",
-    )
-    multi_font_filter : bpy.props.BoolProperty(
-        name = "Multi Font Family Filter",
-        description = "Show only Multi Font Families",
-    )
-    multi_font_component_hide : bpy.props.BoolProperty(
-        name = "Multi Font Component Hide",
-        description = "Hide Multi Font Components (Bold, Italic, Bold-Italic)",
     )
     invert_filter : bpy.props.BoolProperty(
         name = "Invert Filters",
@@ -436,7 +324,6 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
 
 ### REGISTER ---
 def register():
-    bpy.utils.register_class(FONTSELECTOR_PR_fonts_properties)
     bpy.utils.register_class(FONTSELECTOR_PR_single_font_properties)
     bpy.utils.register_class(FONTSELECTOR_PR_font_family_properties)
     bpy.utils.register_class(FONTSELECTOR_PR_properties)
@@ -459,7 +346,6 @@ def register():
         )
 
 def unregister():
-    bpy.utils.unregister_class(FONTSELECTOR_PR_fonts_properties)
     bpy.utils.unregister_class(FONTSELECTOR_PR_single_font_properties)
     bpy.utils.unregister_class(FONTSELECTOR_PR_font_family_properties)
     bpy.utils.unregister_class(FONTSELECTOR_PR_properties)

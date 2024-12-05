@@ -37,6 +37,7 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
                 )
 
             # Set font
+            # TODO Remove font type if not available (if no regular...) with modifier key ?
             # Regular
             if font.font_type == "Regular":
                 active_datas.font = font_datablock
@@ -53,8 +54,27 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
             elif font.font_type == "Bold Italic":
                 active_datas.font_bold_italic = font_datablock
 
-        # TODO Change family index
-        # TODO Clear old fonts
+        # Change family index
+
+        # Prevent callback
+        font_props = context.window_manager.fontselector_properties
+        font_props.no_callback = True
+
+        # Find index (clumsy way)
+        idx = 0
+        for fam in families:
+            if fam.name == self.font_family_name:
+                break
+            idx += 1
+
+        # Set Index
+        active_datas.fontselector_object_properties.family_index = idx
+
+        # Reset callbacks
+        font_props.no_callback = False
+
+        # Clear old fonts
+        pr.clear_font_datas()
 
         self.report({'INFO'}, "Font family loaded")
             

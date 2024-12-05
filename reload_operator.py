@@ -3,6 +3,7 @@ import bpy
 from . import load_fonts as lf
 from .addon_prefs import get_addon_preferences
 
+# TODO Relink and Reload
 
 class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
     """Tooltip"""
@@ -16,22 +17,16 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
 
     def execute(self, context):
 
-        prefs = get_addon_preferences()
-        debug = prefs.debug
-
-        datas, change = lf.refresh_font_families_json(debug, True)
-
-        # Reload single fonts
-        if prefs.single_font_mode:
-            lf.reload_font_collections(datas, debug)
+        debug = get_addon_preferences().debug
 
         # Reload families
-        else:
-            lf.reload_font_families_collections(datas, debug)
+        datas, change = lf.refresh_font_families_json(debug, True)
+        lf.reload_font_families_collections(datas, debug)
 
-        lf.relink_font_objects(debug)
-        
-        lf.reload_favorites(debug)
+        # TODO Relink and Reload
+#         lf.relink_font_objects(debug)
+#
+#         lf.reload_favorites(debug)
             
         self.report({'INFO'}, "Fonts reloaded")
             
