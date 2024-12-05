@@ -10,17 +10,19 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
     strip = False
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag) :
+
+        obj_props = self.obj.fontselector_object_properties
         
         # Name
         row = layout.row(align=True)
         row.label(text = item.name)
 
         # Multi Component
-        if item.multi_component:
+        if obj_props.show_multi_component and item.multi_component:
             row.label(text="", icon="FONTPREVIEW")
 
         # Favorites
-        if self.obj.fontselector_object_properties.show_favorite:
+        if obj_props.show_favorite:
             if item.favorite:
                 icon = 'SOLO_ON'
             else:
@@ -43,7 +45,8 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
         sub = row.row(align=True)
         sub.alignment = "RIGHT"
         sub.label(text = "", icon = "HIDE_OFF")
-        row.separator()
+        sub.separator()
+        sub.prop(obj_props, "show_multi_component", text="", icon="FONTPREVIEW")
         sub.prop(obj_props, "show_favorite", text="", icon="SOLO_ON")
 
     def filter_items(self, context, data, propname):
