@@ -3,6 +3,7 @@ import os
 
 from . import load_fonts as lf
 from .addon_prefs import get_addon_preferences
+from . import switch_font_operator as sw
 
 
 def favorite_callback(self, context):
@@ -317,6 +318,28 @@ def font_selection_callback(self, context):
     
     # Clear old fonts
     clear_font_datas()
+
+
+def family_selection_callback(self, context):
+
+    debug = get_addon_preferences().debug
+
+    font_props = context.window_manager.fontselector_properties
+
+    if font_props.no_callback:
+        if debug:
+            print("FONTSELECTOR --- Update function cancelled")
+        return
+
+    if debug:
+        print("FONTSELECTOR --- Update function")
+
+    # Set first available type
+    first_type = sw.get_enum_values(
+                    self,
+                    "family_types",
+                )[0]
+    self.family_types = first_type
     
 
 def family_types_callback(self, context):
@@ -361,6 +384,7 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
     # Families
     family_index : bpy.props.IntProperty(
         default = -1,
+        update = family_selection_callback,
     )
     family_name : bpy.props.StringProperty()
     family_types : bpy.props.EnumProperty(
