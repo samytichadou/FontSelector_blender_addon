@@ -193,8 +193,6 @@ def get_font_families_from_folder(
                         font_datas,
                     ]
 
-    # TODO Sort fonts
-
     return datas
 
 
@@ -242,14 +240,17 @@ def refresh_font_families_json(
                 debug,
             )
 
+        # Alphabetical order
+        datas["families"] = dict(sorted(datas["families"].items(), key=lambda item: item[0].lower()))
+
         # Sort fonts inside families
-        # for fam in datas["families"]:
-        #     new_list = reorder_dict_key(
-        #         datas["families"][fam],
-        #         "type",
-        #         ["Regular", "Bold", "Italic", "Bold Italic"],
-        #     )
-        #     datas["families"][fam] = new_list
+        for fam in datas["families"]:
+            new_list = reorder_dict_key(
+                datas["families"][fam],
+                "type",
+                ["Regular", "Bold", "Italic", "Bold Italic"],
+            )
+            datas["families"][fam] = new_list
 
         # Write json file
         fam_json = os.path.join(
@@ -424,11 +425,20 @@ def reload_font_families_collections(
         new_family = props.add()
         new_family.name = family
 
+        multi_component = -1
+
         for font in font_datas["families"][family]:
             new_font = new_family.fonts.add()
             new_font.name = font["name"]
             new_font.filepath = font["filepath"]
             new_font.font_type = font["type"]
+
+            if font["type"] in ["Regular", "Bold", "Italic", "Bold Italic"]:
+                multi_component += 1
+
+            if multi_component > 0:
+                new_family.multi_component = True
+
 
 
 def reload_font_collections(
@@ -555,19 +565,15 @@ def relink_font_objects(debug):
 @persistent
 def startup_load_fonts(scene):
     
-    prefs = get_addon_preferences()
-    debug = prefs.debug
-
-    datas, change = refresh_font_families_json(debug)
-
-    # Reload single fonts
-    if prefs.single_font_mode:
-        # datas, change = refresh_fonts_json(debug)
-        reload_font_collections(datas, debug)
+    debug = get_addon_preferences().debug
 
     # Reload families
-    else:
-        reload_font_families_collections(datas, debug)
+    datas, change = refresh_font_families_json(debug)
+    reload_font_families_collections(datas, debug)
+
+    # Reload single fonts
+    datas, change = refresh_fonts_json(debug)
+    reload_font_collections(datas, debug)
     
     relink_font_objects(debug)
     

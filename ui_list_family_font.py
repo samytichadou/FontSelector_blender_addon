@@ -15,6 +15,10 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
         row = layout.row(align=True)
         row.label(text = item.name)
 
+        # Multi Component
+        if item.multi_component:
+            row.label(text="", icon="FONTPREVIEW")
+
         # Favorites
         if self.obj.fontselector_object_properties.show_favorite:
             if item.favorite:
@@ -22,6 +26,7 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
             else:
                 icon = 'SOLO_OFF'
             row.prop(item, "favorite", text = "", icon = icon, emboss = True)
+
 
     def draw_filter(self, context, layout):
 
@@ -60,6 +65,7 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
             flt_flags = [self.bitflag_filter_item] * len(col)
 
             # Name search
+            # TODO Search in fonts name and fonts filepath
             if obj_props.font_search :
                 search = obj_props.font_search.lower()
                 for idx, font in enumerate(col) :

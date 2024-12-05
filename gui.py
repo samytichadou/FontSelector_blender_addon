@@ -126,7 +126,7 @@ def draw_font_selector(self, context):
         else:
             uilist = "FONTSELECTOR_UL_uilist_object"
         row.template_list(
-            ui_list,
+            uilist,
             "",
             props,
             "fonts",
@@ -176,12 +176,12 @@ def draw_font_selector(self, context):
             rows = 5,
         )
 
-        font_nb = len(props.font_families[active_datas.family_index].fonts)
         row = col.row()
-        if font_nb <= 4:
-            row.prop(active_datas, "family_types", expand = True)
-        else:
-            row.prop(active_datas, "family_types", text = "")
+        row.prop(active_datas, "family_types", text = "")
+        # font_nb = len(props.font_families[active_datas.family_index].fonts)
+        # if font_nb <= 4:
+        #     row.prop(active_datas, "family_types", expand = True)
+        # else:
 
 
 class FONTSELECTOR_panel(bpy.types.Panel):

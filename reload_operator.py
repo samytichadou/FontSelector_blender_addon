@@ -23,7 +23,6 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
 
         # Reload single fonts
         if prefs.single_font_mode:
-            # datas, change = lf.refresh_fonts_json(debug, True)
             lf.reload_font_collections(datas, debug)
 
         # Reload families

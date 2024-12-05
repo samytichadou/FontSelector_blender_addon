@@ -91,6 +91,7 @@ class FONTSELECTOR_PR_font_family_properties(bpy.types.PropertyGroup):
     fonts : bpy.props.CollectionProperty(
         type=FONTSELECTOR_PR_single_font_properties,
     )
+    multi_component: bpy.props.BoolProperty()
 
 
 class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
@@ -327,11 +328,11 @@ def family_types_callback(self, context):
 
     if font_props.no_callback:
         if debug:
-            print("FONTSELECTOR --- Update function cancelled")
+            print("FONTSELECTOR --- Enum Callback function cancelled")
         return
 
     if debug:
-        print("FONTSELECTOR --- Update function")
+        print("FONTSELECTOR --- Enum Callback  function")
 
     target_family_props = font_props.font_families[self.family_index]
 
