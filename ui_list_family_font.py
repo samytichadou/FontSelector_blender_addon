@@ -18,8 +18,13 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
         row.label(text = item.name)
 
         # Multi Component
-        if obj_props.show_multi_component and item.multi_component:
-            row.label(text="", icon="FONTPREVIEW")
+        if not self.strip and obj_props.show_multi_component and item.multi_component:
+            row.operator(
+                "fontselector.load_font_family",
+                text="",
+                icon="FONTPREVIEW",
+            ).font_family_name = item.name
+            # row.label(text="", icon="FONTPREVIEW")
 
         # Favorites
         if obj_props.show_favorite:

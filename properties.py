@@ -379,6 +379,11 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
         description = "Show Multi Font Families icon",
         default=True,
     )
+    show_multi_component : bpy.props.BoolProperty(
+        name = "Show Multi Component Families",
+        description = "Show Multi Component Families icon",
+        default=True,
+    )
     
     # Filters
     favorite_filter : bpy.props.BoolProperty(

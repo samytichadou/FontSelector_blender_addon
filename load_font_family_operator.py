@@ -10,7 +10,7 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
     bl_label = "Load/Remove Font Family"
     bl_options = {'INTERNAL', 'UNDO'}
     
-    font_name : bpy.props.StringProperty()
+    font_family_name : bpy.props.StringProperty()
     
     @classmethod
     def poll(cls, context):
@@ -20,53 +20,42 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
         
         debug = get_addon_preferences().debug
         
-        fonts = context.window_manager.fontselector_properties.fonts
+        families = context.window_manager.fontselector_properties.font_families
         
         active_datas = bpy.context.active_object.data
     
-        target_font = fonts[self.font_name]
-        
-        # Change index
-        active_datas.fontselector_object_properties.font_index = fonts.find(self.font_name)
-        
-        # Remove
-        if not target_font.multi_font:
-            
-            try:
-                default_font =  bpy.data.fonts["Bfont Regular"]
-            except KeyError:
-                default_font = None
-                
-            active_datas.font_bold = active_datas.font_italic =\
-            active_datas.font_bold_italic = default_font
-        
-            self.report({'INFO'}, "Font family removed")
-            return {'FINISHED'}
-        
-        # Bold
-        if target_font.bold_font_name:
-            bold_font = pr.get_font_datablock(
-                fonts[target_font.bold_font_name],
-                debug,
-            )
-            active_datas.font_bold = bold_font
-            
-        # Italic_font
-        if target_font.italic_font_name:
-            italic_font = pr.get_font_datablock(
-                fonts[target_font.italic_font_name],
-                debug,
-            )
-            active_datas.font_italic = italic_font
-            
-        # Bold Italic font
-        if target_font.bold_italic_font_name:
-            bold_italic_font = pr.get_font_datablock(
-                fonts[target_font.bold_italic_font_name],
-                debug,
-            )
-            active_datas.font_bold_italic = bold_italic_font
-        
+        family = families[self.font_family_name]
+
+        # Set fonts
+        for font in family.fonts:
+
+            # Get specific datablock, import if necessary
+            if font.font_type in ["Regular", "Bold", "Italic", "Bold Italic"]:
+                font_datablock = pr.get_font_datablock(
+                    font,
+                    debug,
+                )
+
+            # Set font
+            # Regular
+            if font.font_type == "Regular":
+                active_datas.font = font_datablock
+
+            # Bold
+            elif font.font_type == "Bold":
+                active_datas.font_bold = font_datablock
+
+            # Italic
+            elif font.font_type == "Italic":
+                active_datas.font_italic = font_datablock
+
+            # Bold Italic
+            elif font.font_type == "Bold Italic":
+                active_datas.font_bold_italic = font_datablock
+
+        # TODO Change family index
+        # TODO Clear old fonts
+
         self.report({'INFO'}, "Font family loaded")
             
         return {'FINISHED'}
