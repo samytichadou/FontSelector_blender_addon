@@ -32,6 +32,7 @@ from . import   (
     reload_operator,
     reveal_file_operator,
     load_font_family_operator,
+    switch_font_operator,
 )
 
 
@@ -48,6 +49,7 @@ def register():
     reload_operator.register()
     reveal_file_operator.register()
     load_font_family_operator.register()
+    switch_font_operator.register()
 
 def unregister():
     properties.unregister()
@@ -59,3 +61,4 @@ def unregister():
     reload_operator.unregister()
     reveal_file_operator.unregister()
     load_font_family_operator.unregister()
+    switch_font_operator.unregister()
