@@ -159,7 +159,14 @@ def draw_font_selector(self, context):
 
         row = col.row(align=True)
         row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
-        row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
+        row.operator(
+            "fontselector.reload_fonts",
+            text="",
+            icon="FILE_REFRESH",
+        )
+        row.separator()
+        row.label(text="", icon="TRIA_LEFT") # TODO Placeholder global change down
+        row.label(text="", icon="TRIA_RIGHT") # TODO Placeholder global change up
 
         row = col.row()
         if self.strip:
