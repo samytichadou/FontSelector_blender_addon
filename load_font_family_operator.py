@@ -3,6 +3,7 @@ import bpy
 from . import properties as pr
 from .addon_prefs import get_addon_preferences
 
+# TODO Remove font type if not available (if no regular...) with modifier key ?
 
 class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
     """Load/Remove entire font family (Bold, Italic...)"""
@@ -30,7 +31,7 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
         for font in family.fonts:
 
             # Get specific datablock, import if necessary
-            if font.font_type in ["Regular", "Bold", "Italic", "Bold Italic"]:
+            if font.name in ["Regular", "Bold", "Italic", "Bold Italic"]:
                 font_datablock = pr.get_font_datablock(
                     font,
                     debug,
@@ -39,19 +40,19 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
             # Set font
             # TODO Remove font type if not available (if no regular...) with modifier key ?
             # Regular
-            if font.font_type == "Regular":
+            if font.name == "Regular":
                 active_datas.font = font_datablock
 
             # Bold
-            elif font.font_type == "Bold":
+            elif font.name == "Bold":
                 active_datas.font_bold = font_datablock
 
             # Italic
-            elif font.font_type == "Italic":
+            elif font.name == "Italic":
                 active_datas.font_italic = font_datablock
 
             # Bold Italic
-            elif font.font_type == "Bold Italic":
+            elif font.name == "Bold Italic":
                 active_datas.font_bold_italic = font_datablock
 
         # Change family index

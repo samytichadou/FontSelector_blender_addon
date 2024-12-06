@@ -8,14 +8,7 @@ from .addon_prefs import get_addon_preferences
 
 
 def draw_font_infos(container, active, context):
-    
-    debug = get_addon_preferences().debug
-    
-    families = context.window_manager.fontselector_properties.font_families
-    family = families[active.family_index]
 
-    font = family.fonts[active.family_types]
-    
     row = container.row(align=True)
     if active.show_font_infos:
         icon = "DOWNARROW_HLT"
@@ -31,6 +24,11 @@ def draw_font_infos(container, active, context):
     row.label(text = "Font Infos")
     
     if active.show_font_infos:
+
+        families = context.window_manager.fontselector_properties.font_families
+        family = families[active.family_index]
+
+        font = family.fonts[active.family_types]
     
         split = container.split(factor=0.2)
         col = split.column(align=True)
@@ -39,6 +37,9 @@ def draw_font_infos(container, active, context):
         
         col.label(text = "Name")
         col2.label(text = font.font_name)
+
+        col.label(text = "Type")
+        col2.label(text = font.name)
 
         col.label(text = "Path")
         op = col2.operator(

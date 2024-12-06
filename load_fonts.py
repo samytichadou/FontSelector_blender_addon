@@ -432,7 +432,6 @@ def reload_font_families_collections(
         for font in font_datas["families"][family]:
             new_font = new_family.fonts.add()
             new_font.name = font["type"]
-            new_font.font_type = font["type"]
             new_font.filepath = font["filepath"]
             new_font.font_name = font["name"]
 
@@ -444,6 +443,7 @@ def reload_font_families_collections(
 
 
 
+# TODO Remove old code
 def reload_font_collections(
     font_datas,
     debug,

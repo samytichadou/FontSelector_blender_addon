@@ -46,9 +46,6 @@ class FONTSELECTOR_PR_single_font_properties(bpy.types.PropertyGroup):
     filepath: bpy.props.StringProperty(
         name = "Filepath",
     )
-    font_type: bpy.props.StringProperty(
-        name = "Font Type",
-    )
     font_name: bpy.props.StringProperty(
         name = "Font Type",
     )
@@ -86,17 +83,17 @@ def get_font_datablock(
     
     # Local
     try:
-        return bpy.data.fonts[font.name]
+        return bpy.data.fonts[font.font_name]
     
     except KeyError:
         if debug:
-            print(f"FONTSELECTOR --- Importing : {font.name}")
+            print(f"FONTSELECTOR --- Importing : {font.font_name}")
         else:
             pass
         
     # Importing
     new_font = bpy.data.fonts.load(filepath=font.filepath)
-    new_font.name = font.name
+    new_font.name = font.font_name
     
     # Prevent double users
     new_font.user_clear()
@@ -177,18 +174,7 @@ def family_type_update(self, context):
         print("FONTSELECTOR --- Update function")
 
     target_family = font_props.font_families[self.family_index]
-
-    target_font_props = None
-    for font in target_family.fonts:
-        if font.font_type == self.family_types:
-            target_font_props = font
-
-    # Unable to find font in collections
-    if target_font_props is None:
-        if debug:
-            invalid_font = f"{target_family.name} - {self.family_types}"
-            print(f"FONTSELECTOR --- Update cancelled, unable to get font properties : {invalid_font}")
-        return
+    target_font_props = target_family.fonts[self.family_types]
 
     # Import font
     target_font = get_font_datablock(
@@ -268,7 +254,7 @@ def family_type_callback(self, context):
 
     for font in target_family_props.fonts:
         items.append(
-            (font.font_type, font.font_type, ""),
+            (font.name, font.name, ""),
         )
 
     return items
