@@ -69,6 +69,17 @@ def draw_font_selector(self, context):
         row.operator("fontselector.reload_fonts", text="", icon="FILE_REFRESH")
         return
 
+    if active_datas.family_index == -1\
+    and active_datas.relink_family_name\
+    and active_datas.relink_type_name:
+        sub = layout.row()
+        sub.alert = True
+        missing_font = f"{active_datas.relink_family_name} - {active_datas.relink_type_name}"
+        sub.label(
+            text = f"Missing font : {missing_font}",
+            icon = "ERROR",
+        )
+
     col = layout.column(align=True)
 
     row = col.row(align=True)

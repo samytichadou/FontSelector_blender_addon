@@ -9,7 +9,6 @@ from bpy.app.handlers import persistent
 from .addon_prefs import get_addon_preferences
 
 # TODO Relink fonts
-# TODO Favorites
 
 # Font format
 font_formats = [
@@ -64,16 +63,16 @@ def get_os_folders(debug):
     print("FONTSELECTOR --- OS not supported")
     
 
-def get_folder_size(folderpath):
+def get_folder_size(start_path):
     
-    size = 0
-    
-    for file in os.listdir(folderpath):
-        size += os.path.getsize(
-            os.path.join(folderpath, file)
-        )
-            
-    return size
+    total_size = 0
+
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+
+    return total_size
     
 
 def get_font_list_from_folder(
@@ -217,7 +216,7 @@ def refresh_font_families_json(
             if debug:
                 print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
             continue
-            
+
         size += get_folder_size(folderpath)
         folders.append(folderpath)
 
@@ -385,13 +384,15 @@ def reload_font_families_collections(
                 new_family.multi_component = True
 
 
-def get_font_from_name(font_name):
+def get_family_index_from_name(family_name):
+
     idx = 0
-    for font in bpy.context.window_manager.fontselector_properties.fonts:
-        if font.name == font_name:
-            return font, idx
+    for family in bpy.context.window_manager.fontselector_properties.font_families:
+        if family.name == family_name:
+            return idx
         idx += 1
-    return None, None
+
+    return None
 
 
 def relink_font_objects(debug):
@@ -414,37 +415,37 @@ def relink_font_objects(debug):
     
     # Prevent index callback
     font_props = bpy.context.window_manager.fontselector_properties
-    font_props.no_callback = True
+    # font_props.no_callback = True
         
     # Relink
     for obj in obj_list:
         
         props = obj.fontselector_object_properties
         
-        font, index = get_font_from_name(props.font_name)
+        index = get_family_index_from_name(props.relink_family_name)
         
-        # Missing font
-        if font is None:
+        # Missing family
+        if index is None:
             
             if debug:
-                print(f"FONTSELECTOR --- Unable to relink : {props.font_name}")
+                print(f"FONTSELECTOR --- Unable to relink : {props.relink_family_name} - {props.relink_type_name}")
             
-            props.font_index = -1
+            # TODO Remove font datablock
+            props.family_index = -1
             continue
-        
-        # Reload old missing font
-        if props.font_index == -1:
-            try:
-                bpy.data.fonts[font.name].filepath = font.filepath
-            except KeyError:
-                if debug:
-                    print(f"FONTSELECTOR --- Unable to reload : {font.filepath}")
-                else:
-                    pass
             
-        props.font_index = index
+        # Relink
+        props.family_index = index
+
+        try:
+            props.family_types = props.relink_type_name
+        except TypeError:
+            if debug:
+                print(f"FONTSELECTOR --- Unable to relink : {props.relink_family_name} - {props.relink_type_name}")
+            # TODO Remove font datablock
+            props.family_index = -1
     
-    font_props.no_callback = False
+    # font_props.no_callback = False
                     
     
 @persistent
@@ -457,7 +458,7 @@ def startup_load_fonts(scene):
     reload_font_families_collections(datas, debug)
 
     # TODO Relink
-#     relink_font_objects(debug)
+    relink_font_objects(debug)
 
     # Reload favorites
     reload_favorites(debug)

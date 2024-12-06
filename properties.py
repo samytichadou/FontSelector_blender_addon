@@ -83,7 +83,16 @@ def get_font_datablock(
     
     # Local
     try:
-        return bpy.data.fonts[font.font_name]
+        # Existing datablock
+        font_datablock = bpy.data.fonts[font.font_name]
+
+        # Correct datablock
+        if os.path.isfile(font_datablock.filepath):
+            return font_datablock
+
+        # Missing font file
+        else:
+            bpy.data.fonts.remove(font_datablock)
     
     except KeyError:
         if debug:
@@ -113,10 +122,19 @@ def change_objects_font(
     self,
     context,
 ):
+
+    font_props = context.window_manager.fontselector_properties
+
+    # Prevent callback
+    font_props.no_callback = True
     
     # Change active object font
     self.id_data.font = target_font
-    self.font_name = target_font.name
+
+    # Properties to store font in case of index change
+    family_name = font_props.font_families[self.family_index].name
+    self.relink_family_name = family_name
+    self.relink_type_name = self.family_types
     
     # Change selected objects
     for obj in context.selected_objects:
@@ -128,22 +146,36 @@ def change_objects_font(
             obj.data.font = target_font
             
             props = obj.data.fontselector_object_properties
-            props.font_index = self.family_index
-            props.font_types = self.font_types
-            props.font_name = target_font.name
+            props.family_index = self.family_index
+            props.family_types = self.family_types
+
+            props.relink_family_name = family_name
+            props.relink_type_name = self.family_types
+
+    font_props.no_callback = False
             
 
 def change_strips_font(
     target_font,
-    active_data,
+    self,
     context,
 ):
     
     active_strip = context.active_sequence_strip
+
+    font_props = context.window_manager.fontselector_properties
+
+    # Prevent callback
+    font_props.no_callback = True
     
     # Change active font
     active_strip.font = target_font
-    active_strip.fontselector_object_properties.font_name = target_font.name
+
+    # Properties to store font in case of index change
+    family_name = font_props.font_families[self.family_index].name
+    # active_strip.fontselector_object_properties.relink_family_name = family_name
+    self.relink_family_name = family_name
+    self.relink_type_name = self.family_types
     
     # Change selected objects
     for strip in context.selected_sequences:
@@ -155,8 +187,13 @@ def change_strips_font(
             strip.font = target_font
             
             props = strip.fontselector_object_properties
-            props.font_index = active_strip.fontselector_object_properties.font_index
-            props.font_name = target_font.name
+            props.family_index = self.family_index
+            props.family_types = self.family_types
+
+            props.relink_family_name = family_name
+            props.relink_type_name = self.family_types
+
+    font_props.no_callback = False
 
 
 def family_type_update(self, context):
@@ -188,8 +225,6 @@ def family_type_update(self, context):
             print(f"FONTSELECTOR --- Update cancelled, unable to get font file : {target_font_props.name}")
         return
 
-    font_props.no_callback = True
-
     # Find object or strip
     if isinstance(self.id_data, bpy.types.TextCurve):
 
@@ -207,8 +242,6 @@ def family_type_update(self, context):
             context,
         )
 
-    font_props.no_callback = False
-
     # Clear old fonts
     clear_font_datas()
 
@@ -219,7 +252,8 @@ def family_selection_update(self, context):
 
     font_props = context.window_manager.fontselector_properties
 
-    if font_props.no_callback:
+    if font_props.no_callback\
+    or self.family_index == -1:
         if debug:
             print("FONTSELECTOR --- Update function cancelled")
         return
@@ -232,23 +266,14 @@ def family_selection_update(self, context):
                     self,
                     "family_types",
                 )[0]
+
     self.family_types = first_type
     
 
 def family_type_callback(self, context):
     items = []
 
-    # debug = get_addon_preferences().debug
-
     font_props = context.window_manager.fontselector_properties
-
-    if font_props.no_callback:
-        # if debug:
-        #     print("FONTSELECTOR --- Enum Callback function cancelled")
-        return
-
-    # if debug:
-    #     print("FONTSELECTOR --- Enum Callback  function")
 
     target_family_props = font_props.font_families[self.family_index]
 
@@ -268,7 +293,8 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
     )
 
     # Relink Font
-    font_name : bpy.props.StringProperty()
+    relink_family_name : bpy.props.StringProperty()
+    relink_type_name : bpy.props.StringProperty()
 
     # Families
     family_index : bpy.props.IntProperty(

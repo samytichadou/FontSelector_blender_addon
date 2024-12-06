@@ -2,9 +2,6 @@ import bpy
 import os
 
 
-# TODO Custom paths
-
-
 class FONTSELECTOR_PF_addon_prefs(bpy.types.AddonPreferences) :
     bl_idname = __package__
     

@@ -4,6 +4,7 @@ from . import properties as pr
 from .addon_prefs import get_addon_preferences
 
 # TODO Remove font type if not available (if no regular...) with modifier key ?
+# TODO Relink informations if needed (regular slot only)
 
 class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
     """Load/Remove entire font family (Bold, Italic...)"""
