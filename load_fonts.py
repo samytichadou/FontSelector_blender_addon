@@ -340,9 +340,9 @@ def reload_favorites(debug):
     
     for f in datas["favorites"]:
         
-        for font in props.fonts:
-            if font.name == f:
-                font.favorite = True
+        for family in props.font_families:
+            if family.name == f:
+                family.favorite = True
                 break
             
     props.no_callback = False
@@ -451,10 +451,11 @@ def startup_load_fonts(scene):
     datas, change = refresh_font_families_json(debug)
     reload_font_families_collections(datas, debug)
 
-    # TODO Relink and Reload
+    # TODO Relink
 #     relink_font_objects(debug)
-#
-#     reload_favorites(debug)
+
+    # Reload favorites
+    reload_favorites(debug)
 
     
 ### REGISTER ---
