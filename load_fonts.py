@@ -176,6 +176,11 @@ def get_font_families_from_folder(
                 try:
                     
                     f = datas["families"][family]
+
+                    if debug:
+                        print(f"FONTSELECTOR --- Font family found : {family}")
+                        print(f"FONTSELECTOR --- Adding font : {font_datas['name']}")
+
                     
                     chk_dupe = False
                     for font in f:
