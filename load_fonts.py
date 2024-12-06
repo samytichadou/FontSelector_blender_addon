@@ -348,68 +348,6 @@ def reload_favorites(debug):
     props.no_callback = False
         
 
-# TODO Remove old method
-def refresh_fonts_json(
-    debug,
-    force_refresh = False,
-):
-    
-    size = 0
-    folders = []
-    
-    for folderpath in get_os_folders(debug):
-        
-        # Invalid folder
-        if not os.path.isdir(folderpath):
-            if debug:
-                print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
-            continue
-            
-        size += get_folder_size(folderpath)
-        folders.append(folderpath)
-        
-    # TODO Add custom folders
-        
-    datas = get_existing_datas()
-    
-    # Refresh
-    if datas is None\
-    or datas["size"] != size\
-    or force_refresh:
-        
-        print("FONTSELECTOR --- Refreshing fonts datas")
-        
-        fonts = []
-        
-        for folderpath in folders:
-            
-            if debug:
-                print(f"FONTSELECTOR --- Refreshing : {folderpath}")
-            
-            fonts.extend(
-                get_font_list_from_folder(folderpath, debug)
-            )
-        # Alphabetical order
-        fonts.sort(key=lambda x: x['name'].lower(), reverse=False)
-        
-        datas = {
-            "size" : size,
-            "fonts" : fonts
-        }
-        
-        # Write json file
-        write_json_file(
-            datas,
-            get_json_filepath(),
-        )
-        
-        return datas, True
-    
-    print("FONTSELECTOR --- No change, keeping fonts datas")
-    
-    return datas, False
-
-
 def reload_font_families_collections(
     font_datas,
     debug,
@@ -440,67 +378,6 @@ def reload_font_families_collections(
 
             if multi_component > 0:
                 new_family.multi_component = True
-
-
-
-# TODO Remove old code
-def reload_font_collections(
-    font_datas,
-    debug,
-):
-    
-    if debug:
-        print("FONTSELECTOR --- Reloading collections")
-    
-    props = bpy.context.window_manager.fontselector_properties.fonts
-    
-    props.clear()
-    
-    for font in font_datas["fonts"]:
-        
-        bold = italic = bold_italic = ""
-        
-        # Multi font family
-        multi_font = component = False
-        
-        # if font["type"] == "Regular":
-            
-        # Get Bold-Italic if exists
-        for f in font_datas["fonts"]:
-            
-            if f["family"] == font["family"]\
-            and f["type"] != font["type"]\
-            and font["type"] in ["Regular", "Bold", "Italic", "Bold Italic"]\
-            and f["type"] in ["Regular", "Bold", "Italic", "Bold Italic"]:
-                
-                if font["type"] == "Regular":
-                    multi_font = True
-                    
-                else:
-                    component = True
-                    break
-                
-                if f["type"] == "Bold":
-                    bold = f["name"]
-                    
-                elif f["type"] == "Italic":
-                    italic = f["name"]
-                    
-                elif f["type"] == "Bold Italic":
-                    bold_italic = f["name"]
-                    
-        # Store Properties
-        new = props.add()
-        new.filepath = font["filepath"]
-        new.name = font["name"]
-        new.font_family = font["family"]
-        new.font_type = font["type"]
-        
-        new.multi_font = multi_font
-        new.multi_font_component = component
-        new.bold_font_name = bold
-        new.italic_font_name = italic
-        new.bold_italic_font_name = bold_italic
 
 
 def get_font_from_name(font_name):
