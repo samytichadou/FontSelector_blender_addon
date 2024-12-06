@@ -57,6 +57,8 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
     def filter_items(self, context, data, propname):
 
         obj_props = self.obj.fontselector_object_properties
+        families = context.window_manager.fontselector_properties.font_families
+        family = families[obj_props.family_index]
 
         # Default return values.
         flt_flags = []
@@ -73,26 +75,36 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
             flt_flags = [self.bitflag_filter_item] * len(col)
 
             # Name search
-            # TODO Search in fonts name and fonts filepath
             if obj_props.font_search :
                 search = obj_props.font_search.lower()
-                for idx, font in enumerate(col) :
-                    if flt_flags[idx] != 0 :
-                        if search not in font.name.lower():
-                            flt_flags[idx] = 0
+                for idx, family in enumerate(col) :
 
-            # TODO Special filter for type search
+                    if flt_flags[idx] != 0 :
+
+                        chk_visible = search in family.name.lower()
+
+                        if not chk_visible:
+                            for f in family.fonts:
+
+                                if obj_props.search_font_names and search in f.font_name.lower():
+                                    chk_visible = True
+
+                                if obj_props.search_filepath and search in f.filepath.lower():
+                                    chk_visible = True
+
+                        if not chk_visible:
+                            flt_flags[idx] = 0
 
             # Favorites
             if obj_props.favorite_filter :
-                for idx, font in enumerate(col) :
+                for idx, family in enumerate(col) :
                     if flt_flags[idx] != 0 :
-                        if font.favorite == False :
+                        if family.favorite == False :
                             flt_flags[idx] = 0
 
             # invert filtering
             if obj_props.invert_filter :
-                for idx, font in enumerate(col) :
+                for idx, family in enumerate(col) :
                     if flt_flags[idx] != 0 :
                         flt_flags[idx] = 0
                     else :

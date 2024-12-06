@@ -73,26 +73,10 @@ def draw_font_selector(self, context):
 
     row = col.row(align=True)
     row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
+    row.prop(active_datas, "search_font_names", text="", icon="OUTLINER_OB_FONT")
+    row.prop(active_datas, "search_filepath", text="", icon="FILE_CACHE")
 
-    row.separator()
-
-    row.operator(
-        "fontselector.switch_font",
-        text = "",
-        icon = "TRIA_LEFT",
-    ).previous = True
-    row.operator(
-        "fontselector.switch_font",
-        text = "",
-        icon = "TRIA_RIGHT",
-    ).previous = False
-
-    row.separator()
-    row.operator(
-        "fontselector.reload_fonts",
-        text="",
-        icon="FILE_REFRESH",
-    )
+    col.separator()
 
     row = col.row()
     if self.strip:
@@ -109,7 +93,26 @@ def draw_font_selector(self, context):
         rows = 5,
     )
 
-    col.separator()
+    scol = row.column(align=True)
+
+    scol.operator(
+        "fontselector.switch_font",
+        text = "",
+        icon = "TRIA_UP_BAR",
+    ).previous = True
+    scol.operator(
+        "fontselector.switch_font",
+        text = "",
+        icon = "TRIA_DOWN_BAR",
+    ).previous = False
+    scol.separator()
+    scol.operator(
+        "fontselector.reload_fonts",
+        text="",
+        icon="FILE_REFRESH",
+    )
+
+    # col.separator()
 
     row = col.row()
     row.prop(active_datas, "family_types", text = "")

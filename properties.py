@@ -47,7 +47,7 @@ class FONTSELECTOR_PR_single_font_properties(bpy.types.PropertyGroup):
         name = "Filepath",
     )
     font_name: bpy.props.StringProperty(
-        name = "Font Type",
+        name = "Font Name",
     )
 
 
@@ -308,6 +308,16 @@ class FONTSELECTOR_PR_object_properties(bpy.types.PropertyGroup):
     show_font_infos : bpy.props.BoolProperty(
         name = "Show Infos",
         description = "Show Font Infos",
+    )
+
+    # Search filters
+    search_filepath : bpy.props.BoolProperty(
+        name = "Search Font Filepath",
+        description = "Search individual fonts filepath",
+    )
+    search_font_names: bpy.props.BoolProperty(
+        name = "Search Font Names",
+        description = "Search individual fonts names",
     )
 
 
