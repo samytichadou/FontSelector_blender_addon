@@ -78,7 +78,7 @@ def draw_font_selector(self, context):
 
     col.separator()
 
-    row = col.row()
+    row = col.row(align=True)
     if self.strip:
         uilist = "FONTSELECTOR_UL_family_uilist_strip"
     else:
