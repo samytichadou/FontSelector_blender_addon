@@ -348,6 +348,7 @@ def reload_favorites(debug):
     props.no_callback = False
         
 
+# TODO Remove old method
 def refresh_fonts_json(
     debug,
     force_refresh = False,
@@ -430,9 +431,10 @@ def reload_font_families_collections(
 
         for font in font_datas["families"][family]:
             new_font = new_family.fonts.add()
-            new_font.name = font["name"]
-            new_font.filepath = font["filepath"]
+            new_font.name = font["type"]
             new_font.font_type = font["type"]
+            new_font.filepath = font["filepath"]
+            new_font.font_name = font["name"]
 
             if font["type"] in ["Regular", "Bold", "Italic", "Bold Italic"]:
                 multi_component += 1

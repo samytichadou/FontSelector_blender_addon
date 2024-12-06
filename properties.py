@@ -49,6 +49,9 @@ class FONTSELECTOR_PR_single_font_properties(bpy.types.PropertyGroup):
     font_type: bpy.props.StringProperty(
         name = "Font Type",
     )
+    font_name: bpy.props.StringProperty(
+        name = "Font Type",
+    )
 
 
 class FONTSELECTOR_PR_font_family_properties(bpy.types.PropertyGroup):

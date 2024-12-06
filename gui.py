@@ -5,15 +5,16 @@ from .addon_prefs import get_addon_preferences
 
 # TODO Fix search menu errors
 # TODO Add help for multi font
-# TODO Fix font infos subpanel
 
 
 def draw_font_infos(container, active, context):
     
     debug = get_addon_preferences().debug
     
-    fonts = context.window_manager.fontselector_properties.fonts
-    font = fonts[active.font_index]
+    families = context.window_manager.fontselector_properties.font_families
+    family = families[active.family_index]
+
+    font = family.fonts[active.family_types]
     
     row = container.row(align=True)
     if active.show_font_infos:
@@ -37,20 +38,7 @@ def draw_font_infos(container, active, context):
         col2.alignment = "RIGHT"
         
         col.label(text = "Name")
-        col2.label(text = font.name)
-
-        col.label(text = "Family")
-        col2.label(text = font.font_family)
-
-        col.label(text = "Type")
-        col2.label(text = font.font_type)
-        
-        if debug:
-            col.label(text = "Multi Font")
-            col2.label(text = str(font.multi_font))
-        
-            col.label(text = "Component")
-            col2.label(text = str(font.multi_font_component))
+        col2.label(text = font.font_name)
 
         col.label(text = "Path")
         op = col2.operator(
@@ -59,37 +47,7 @@ def draw_font_infos(container, active, context):
             icon = "FILEBROWSER",
         )
         op.filepath = font.filepath
-        
-        if font.bold_font_name:
-            filepath = fonts[font.bold_font_name].filepath
-            col.label(text = "Bold")
-            op = col2.operator(
-                "fontselector.reveal_file",
-                text = filepath,
-                icon = "FILEBROWSER",
-            )
-            op.filepath = filepath
-        
-        if font.italic_font_name:
-            filepath = fonts[font.italic_font_name].filepath
-            col.label(text = "Italic")
-            op = col2.operator(
-                "fontselector.reveal_file",
-                text = filepath,
-                icon = "FILEBROWSER",
-            )
-            op.filepath = filepath
-        
-        if font.bold_italic_font_name:
-            filepath = fonts[font.bold_italic_font_name].filepath
-            col.label(text = "Bold Italic")
-            op = col2.operator(
-                "fontselector.reveal_file",
-                text = filepath,
-                icon = "FILEBROWSER",
-            )
-            op.filepath = filepath
-    
+
 
 ### Fontselector common panel UI ###
 def draw_font_selector(self, context):
@@ -152,6 +110,16 @@ def draw_font_selector(self, context):
 
     row = col.row()
     row.prop(active_datas, "family_types", text = "")
+
+    # Font infos
+    if active_datas.family_index >=0\
+    and active_datas.family_index < len(props.font_families):
+        box = col.box()
+        draw_font_infos(
+            box,
+            active_datas,
+            context,
+        )
 
 
 class FONTSELECTOR_panel(bpy.types.Panel):
