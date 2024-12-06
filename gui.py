@@ -109,8 +109,12 @@ def draw_font_selector(self, context):
         rows = 5,
     )
 
+    col.separator()
+
     row = col.row()
     row.prop(active_datas, "family_types", text = "")
+
+    col.separator()
 
     # Font infos
     if active_datas.family_index >=0\
