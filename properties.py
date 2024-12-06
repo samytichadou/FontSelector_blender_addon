@@ -238,17 +238,17 @@ def family_selection_update(self, context):
 def family_type_callback(self, context):
     items = []
 
-    debug = get_addon_preferences().debug
+    # debug = get_addon_preferences().debug
 
     font_props = context.window_manager.fontselector_properties
 
     if font_props.no_callback:
-        if debug:
-            print("FONTSELECTOR --- Enum Callback function cancelled")
+        # if debug:
+        #     print("FONTSELECTOR --- Enum Callback function cancelled")
         return
 
-    if debug:
-        print("FONTSELECTOR --- Enum Callback  function")
+    # if debug:
+    #     print("FONTSELECTOR --- Enum Callback  function")
 
     target_family_props = font_props.font_families[self.family_index]
 
