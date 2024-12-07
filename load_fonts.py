@@ -430,7 +430,6 @@ def relink_font_objects(debug):
             if debug:
                 print(f"FONTSELECTOR --- Unable to relink : {props.relink_family_name} - {props.relink_type_name}")
             
-            # TODO Remove font datablock
             props.family_index = -1
             continue
             
@@ -442,7 +441,6 @@ def relink_font_objects(debug):
         except TypeError:
             if debug:
                 print(f"FONTSELECTOR --- Unable to relink : {props.relink_family_name} - {props.relink_type_name}")
-            # TODO Remove font datablock
             props.family_index = -1
     
     # font_props.no_callback = False
@@ -457,7 +455,7 @@ def startup_load_fonts(scene):
     datas, change = refresh_font_families_json(debug)
     reload_font_families_collections(datas, debug)
 
-    # TODO Relink
+    # Relink
     relink_font_objects(debug)
 
     # Reload favorites
