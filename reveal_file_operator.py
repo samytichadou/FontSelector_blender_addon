@@ -4,7 +4,6 @@ import os
 
 
 # TODO Do not work with windows C:\windows\Fonts
-# TODO Linux : if closed explorer, need to be clicked twice
 
 
 def open_explorer(filepath):
@@ -19,11 +18,13 @@ def open_explorer(filepath):
         cmd = f'explorer /select, "{filepath}"'
         
     elif osys == "Linux":
-        
-        cmd = 'dbus-send --session --dest=org.freedesktop.FileManager1 '
+        # --print-reply argument ensures the explorer opens
+        # Seems when explorer closed, it would only open if called twice
+        # Printing the reply would called it again i guess
+        cmd = 'dbus-send --session --print-reply --dest=org.freedesktop.FileManager1 '
         cmd += '--type=method_call /org/freedesktop/FileManager1 '
         cmd += f'org.freedesktop.FileManager1.ShowItems array:string:"{filepath}" string:""'
-        
+
     elif osys == "Darwin":
         
         cmd = f'open -R "{filepath}"'
