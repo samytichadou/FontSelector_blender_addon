@@ -1,8 +1,8 @@
 ### Version 3
 
 #### V3 TO DO 
-- [ ] Fix global search menu random entries  
-- [ ] Bug report for `INTERNAL` `bl_options`
+- [ ] Fix global search menu random entries from popover  
+- [ ] Bug report for `INTERNAL` `bl_options` with popover (properties and INTERNAL operators)
 
 - [ ] Reveal file operator does not work with windows on C:\windows\Fonts  
 

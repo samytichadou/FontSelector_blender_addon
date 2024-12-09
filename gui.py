@@ -3,7 +3,7 @@ import bpy
 from .addon_prefs import get_addon_preferences
 
 
-# TODO Fix search menu errors
+# TODO Fix search menu errors with popovers
 
 
 def draw_font_infos(container, active, context):
