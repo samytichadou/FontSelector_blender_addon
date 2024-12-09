@@ -51,7 +51,8 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
         sub.alignment = "RIGHT"
         sub.label(text = "", icon = "HIDE_OFF")
         sub.separator()
-        sub.prop(obj_props, "show_multi_component", text="", icon="FONTPREVIEW")
+        if not self.strip:
+            sub.prop(obj_props, "show_multi_component", text="", icon="FONTPREVIEW")
         sub.prop(obj_props, "show_favorite", text="", icon="SOLO_ON")
 
     def filter_items(self, context, data, propname):
