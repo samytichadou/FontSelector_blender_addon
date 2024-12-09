@@ -18,6 +18,10 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
 
         debug = get_addon_preferences().debug
 
+        # Prevent callback
+        font_props = context.window_manager.fontselector_properties
+        font_props.no_callback = True
+
         # Reload families
         datas, change = lf.refresh_font_families_json(debug, True)
         lf.reload_font_families_collections(datas, debug)
@@ -27,6 +31,9 @@ class FONTSELECTOR_OT_reload_fonts(bpy.types.Operator):
 
         # Reload favorites
         lf.reload_favorites(debug)
+
+        # Restore callback
+        font_props.no_callback = False
             
         self.report({'INFO'}, "Fonts reloaded")
             

@@ -1,7 +1,7 @@
 ### Version 3
 
 #### V3 TO DO 
-- [ ] Relink error
+- [x] Relink error
 
 - [ ] Fix global search menu random entries  
 
