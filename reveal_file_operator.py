@@ -3,9 +3,6 @@ import platform
 import os
 
 
-# TODO Do not work with windows C:\windows\Fonts
-
-
 def open_explorer(filepath):
     
     # Linux: Linux
@@ -15,7 +12,10 @@ def open_explorer(filepath):
     
     if osys == "Windows":
         
-        cmd = f'explorer /select, "{filepath}"'
+        # Does not work with font folders (explorer issue)
+        # cmd = f'explorer /select, "{filepath}"'
+        parent_path = os.path.dirname(filepath)
+        cmd = f'explorer /select, "{parent_path}"'
         
     elif osys == "Linux":
         # --print-reply argument ensures the explorer opens
@@ -27,6 +27,7 @@ def open_explorer(filepath):
 
     elif osys == "Darwin":
         
+        # -R argument for reveal --reveal should also work
         cmd = f'open -R "{filepath}"'
         
     os.system(cmd)
