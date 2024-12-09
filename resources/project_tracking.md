@@ -1,8 +1,6 @@
 ### Version 3
 
 #### V3 TO DO 
-- [x] Relink error
-
 - [ ] Fix global search menu random entries  
 
 - [ ] Reveal file operator does not work with windows on C:\windows\Fonts  
@@ -12,6 +10,7 @@
 - [ ] Video tutorial
 
 #### V3 DONE
+- [x] Relink error
 - [x] no multi component filter if strip
 - [x] Switch font op : Video strip
 - [x] Switch font op : All selected objects
