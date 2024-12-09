@@ -1,7 +1,6 @@
 ### Version 3
 
 #### V3 TO DO 
-- [ ] Load family : Remove font type if not available (no regular) with modifier key ?  
 - [ ] Load family : Store relink infos if needed (regular only)  
 - [ ] Load family : Apply to all selected objects  
 - [ ] Remove or not blender bold ital... slots if font change (mode, bool in prefs ?)  
@@ -11,6 +10,8 @@
 - [ ] Update readme  
 
 #### V3 DONE
+- [x] Remove blender font type if not needed
+- [x] Load family : Remove font type if not available (no regular) with modifier key ?  
 - [x] Family logic  
 - [x] Remove loading (and loading bar)  
 - [x] Code rewrite  
