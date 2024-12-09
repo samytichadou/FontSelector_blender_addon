@@ -3,7 +3,6 @@ import bpy
 from . import properties as pr
 from .addon_prefs import get_addon_preferences
 
-# TODO Relink informations if needed (regular slot only)
 
 class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
     """Load/Remove entire font family (Bold, Italic...)"""

@@ -2,7 +2,6 @@ import bpy
 
 from .addon_prefs import get_addon_preferences
 
-# TODO Active datas from strip if needed
 
 def get_enum_values(object, identifier):
     # Hacky way
