@@ -3,8 +3,8 @@ import bpy
 from . import properties as pr
 from .addon_prefs import get_addon_preferences
 
-# TODO Remove font type if not available (if no regular...) with modifier key ?
 # TODO Relink informations if needed (regular slot only)
+# TODO All selected object
 
 class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
     """Load/Remove entire font family (Bold, Italic...)"""
@@ -22,11 +22,16 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
         
         debug = get_addon_preferences().debug
         
-        families = context.window_manager.fontselector_properties.font_families
+        props = context.window_manager.fontselector_properties
+        families = props.font_families
         
         active_datas = bpy.context.active_object.data
     
         family = families[self.font_family_name]
+
+        # Remove font type if needed
+        if props.remove_existing_type_fonts:
+            pr.clear_obj_type_fonts(active_datas)
 
         # Set fonts
         for font in family.fonts:
@@ -39,7 +44,7 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
                 )
 
             # Set font
-            # TODO Remove font type if not available (if no regular...) with modifier key ?
+
             # Regular
             if font.name == "Regular":
                 active_datas.font = font_datablock

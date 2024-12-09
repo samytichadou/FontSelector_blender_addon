@@ -66,7 +66,12 @@ class FONTSELECTOR_PR_font_family_properties(bpy.types.PropertyGroup):
 class FONTSELECTOR_PR_properties(bpy.types.PropertyGroup):
 
     font_families : bpy.props.CollectionProperty(
-        type=FONTSELECTOR_PR_font_family_properties,
+        type = FONTSELECTOR_PR_font_family_properties,
+    )
+    remove_existing_type_fonts : bpy.props.BoolProperty(
+        name = "Remove Blender Type Fonts",
+        description = "Remove blender type fonts (bold, italic, bold italic) slots on font change",
+        default = True,
     )
     no_callback : bpy.props.BoolProperty()
     
@@ -117,6 +122,20 @@ def clear_font_datas():
             bpy.data.fonts.remove(font)
 
 
+def clear_obj_type_fonts(font_obj):
+
+    # Get blender default font if available
+    try:
+        blank_font = bpy.data.fonts["Bfont Regular"]
+    except KeyError:
+        blank_font = None
+
+    font_obj.font = blank_font
+    font_obj.font_bold = blank_font
+    font_obj.font_bold_italic = blank_font
+    font_obj.font_italic = blank_font
+
+
 def change_objects_font(
     target_font,
     self,
@@ -127,7 +146,11 @@ def change_objects_font(
 
     # Prevent callback
     font_props.no_callback = True
-    
+
+    # Remove type fonts if needed
+    if font_props.remove_existing_type_fonts:
+        clear_obj_type_fonts(self.id_data)
+
     # Change active object font
     self.id_data.font = target_font
 
@@ -135,22 +158,27 @@ def change_objects_font(
     family_name = font_props.font_families[self.family_index].name
     self.relink_family_name = family_name
     self.relink_type_name = self.family_types
-    
+
     # Change selected objects
     for obj in context.selected_objects:
         if obj.type == "FONT":
-            
+
             if obj.data == self.id_data:
                 continue
-            
+
+            # Remove type fonts if needed
+            if font_props.remove_existing_type_fonts:
+                clear_obj_type_fonts(obj.data)
+
             obj.data.font = target_font
-            
+
             props = obj.data.fontselector_object_properties
             props.family_index = self.family_index
             props.family_types = self.family_types
 
             props.relink_family_name = family_name
             props.relink_type_name = self.family_types
+
 
     font_props.no_callback = False
             

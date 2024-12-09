@@ -4,7 +4,6 @@ from .addon_prefs import get_addon_preferences
 
 
 # TODO Fix search menu errors
-# TODO Add help for multi font
 
 
 def draw_font_infos(container, active, context):
@@ -86,6 +85,10 @@ def draw_font_selector(self, context):
     row.prop(active_datas, "font_search", text="", icon='VIEWZOOM')
     row.prop(active_datas, "search_font_names", text="", icon="OUTLINER_OB_FONT")
     row.prop(active_datas, "search_filepath", text="", icon="FILE_CACHE")
+
+    row.separator()
+
+    row.prop(props, "remove_existing_type_fonts", text = "", icon = "FILE_FONT")
 
     col.separator()
 
