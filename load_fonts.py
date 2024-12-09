@@ -8,7 +8,6 @@ from bpy.app.handlers import persistent
 
 from .addon_prefs import get_addon_preferences
 
-# TODO Relink fonts
 
 # Font format
 font_formats = [
