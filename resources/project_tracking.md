@@ -5,12 +5,13 @@
 - [ ] Load family : Apply to all selected objects  
 - [ ] Remove or not blender bold ital... slots if font change (mode, bool in prefs ?)  
 - [ ] Fix global search menu random entries  
-- [ ] Add help for multi font  
 - [ ] Reveal file operator does not work with windows on C:\windows\Fonts  
 - [ ] Update readme  
 
 #### V3 DONE
-- [x] Remove blender font type if not needed
+- [x] Add help for multi font  
+- [x] Remove multi_component family if not regular  
+- [x] Remove blender font type if not needed  
 - [x] Load family : Remove font type if not available (no regular) with modifier key ?  
 - [x] Family logic  
 - [x] Remove loading (and loading bar)  

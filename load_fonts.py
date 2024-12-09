@@ -368,7 +368,8 @@ def reload_font_families_collections(
         new_family = props.add()
         new_family.name = family
 
-        multi_component = -1
+        multi_component = 0
+        regular = 0
 
         for font in font_datas["families"][family]:
             new_font = new_family.fonts.add()
@@ -376,10 +377,13 @@ def reload_font_families_collections(
             new_font.filepath = font["filepath"]
             new_font.font_name = font["name"]
 
-            if font["type"] in ["Regular", "Bold", "Italic", "Bold Italic"]:
-                multi_component += 1
+            if font["type"] == "Regular":
+                regular = 1
 
-            if multi_component > 0:
+            if font["type"] in ["Bold", "Italic", "Bold Italic"]:
+                multi_component = 1
+
+            if regular and multi_component:
                 new_family.multi_component = True
 
 
