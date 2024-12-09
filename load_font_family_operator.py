@@ -74,6 +74,11 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
                 if font.name == "Regular":
                     obj_data.font = font_datablock
 
+                    # Store relink infos
+                    obj_props = obj_data.fontselector_object_properties
+                    obj_props.relink_family_name = family.name
+                    obj_props.relink_type_name = "Regular"
+
                 # Bold
                 elif font.name == "Bold":
                     obj_data.font_bold = font_datablock
