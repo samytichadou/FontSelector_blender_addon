@@ -24,7 +24,10 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.active_object
+        if context.area.type == "SEQUENCE_EDITOR":
+            return context.active_sequence_strip
+        else:
+            return context.active_object
 
     def execute(self, context):
 
@@ -32,7 +35,12 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
 
         families = context.window_manager.fontselector_properties.font_families
 
-        active_object_props = context.active_object.data.fontselector_object_properties
+        # 3D Object or Video strip
+        if context.area.type == "SEQUENCE_EDITOR":
+            active_object_props = context.active_sequence_strip.fontselector_object_properties
+        else:
+            active_object_props = context.active_object.data.fontselector_object_properties
+
         family = families[active_object_props.family_index]
         current_type = active_object_props.family_types
         available_types = get_enum_values(
@@ -86,7 +94,8 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
                 previous_type = available_types[available_types.index(current_type)-1]
                 active_object_props.family_types = previous_type
 
-        self.report({'INFO'}, "Font switched")
+        if debug:
+            print("FONT SELECTOR --- Font switched")
 
         return {'FINISHED'}
 

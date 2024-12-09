@@ -1,7 +1,9 @@
 ### Version 3
 
 #### V3 TO DO 
-- [ ] Switch font op : Video strip
+- [ ] Relink error
+
+- [ ] no multi component filter if strip
 
 - [ ] Fix global search menu random entries  
 
@@ -12,6 +14,7 @@
 - [ ] Video tutorial
 
 #### V3 DONE
+- [x] Switch font op : Video strip
 - [x] Switch font op : All selected objects
 - [x] Load family : Store relink infos if needed (regular only)  
 - [x] Load family : Apply to all selected objects  
