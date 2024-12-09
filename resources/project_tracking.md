@@ -2,7 +2,6 @@
 
 #### V3 TO DO 
 - [ ] Load family : Store relink infos if needed (regular only)  
-- [ ] Load family : Apply to all selected objects  
 
 - [ ] Fix global search menu random entries  
 
@@ -11,6 +10,7 @@
 - [ ] Update readme  
 
 #### V3 DONE
+- [x] Load family : Apply to all selected objects  
 - [x] Remove or not blender bold ital... slots if font change (mode, bool in prefs ?)  
 - [x] Add help for multi font  
 - [x] Remove multi_component family if not regular  

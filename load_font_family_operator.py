@@ -4,7 +4,6 @@ from . import properties as pr
 from .addon_prefs import get_addon_preferences
 
 # TODO Relink informations if needed (regular slot only)
-# TODO All selected object
 
 class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
     """Load/Remove entire font family (Bold, Italic...)"""
@@ -24,58 +23,71 @@ class FONTSELECTOR_OT_load_font_family(bpy.types.Operator):
         
         props = context.window_manager.fontselector_properties
         families = props.font_families
-        
-        active_datas = bpy.context.active_object.data
-    
+
         family = families[self.font_family_name]
 
-        # Remove font type if needed
-        if props.remove_existing_type_fonts:
-            pr.clear_obj_type_fonts(active_datas)
+        datas_list = []
 
-        # Set fonts
-        for font in family.fonts:
+        # Get active object
+        datas_list.append(context.active_object.data)
 
-            # Get specific datablock, import if necessary
-            if font.name in ["Regular", "Bold", "Italic", "Bold Italic"]:
-                font_datablock = pr.get_font_datablock(
-                    font,
-                    debug,
-                )
+        # Get selected objects
+        for obj in context.selected_objects:
+            if obj.type == "FONT":
+                if obj.data == context.active_object.data:
+                    continue
+                datas_list.append(obj.data)
 
-            # Set font
+        # active_datas = context.active_object.data
 
-            # Regular
-            if font.name == "Regular":
-                active_datas.font = font_datablock
-
-            # Bold
-            elif font.name == "Bold":
-                active_datas.font_bold = font_datablock
-
-            # Italic
-            elif font.name == "Italic":
-                active_datas.font_italic = font_datablock
-
-            # Bold Italic
-            elif font.name == "Bold Italic":
-                active_datas.font_bold_italic = font_datablock
-
-        # Change family index
+        # Find index (clumsy way)
+        family_idx = 0
+        for fam in families:
+            if fam.name == self.font_family_name:
+                break
+            family_idx += 1
 
         # Prevent callback
         font_props = context.window_manager.fontselector_properties
         font_props.no_callback = True
 
-        # Find index (clumsy way)
-        idx = 0
-        for fam in families:
-            if fam.name == self.font_family_name:
-                break
-            idx += 1
+        # Iterate through object datas
+        for obj_data in datas_list:
 
-        # Set Index
-        active_datas.fontselector_object_properties.family_index = idx
+            # Remove font type if needed
+            if props.remove_existing_type_fonts:
+                pr.clear_obj_type_fonts(obj_data)
+
+            # Set fonts
+            for font in family.fonts:
+
+                # Set font
+
+                # Get specific datablock, import if necessary
+                if font.name in ["Regular", "Bold", "Italic", "Bold Italic"]:
+                    font_datablock = pr.get_font_datablock(
+                        font,
+                        debug,
+                    )
+
+                # Regular
+                if font.name == "Regular":
+                    obj_data.font = font_datablock
+
+                # Bold
+                elif font.name == "Bold":
+                    obj_data.font_bold = font_datablock
+
+                # Italic
+                elif font.name == "Italic":
+                    obj_data.font_italic = font_datablock
+
+                # Bold Italic
+                elif font.name == "Bold Italic":
+                    obj_data.font_bold_italic = font_datablock
+
+            # Change family index
+            obj_data.fontselector_object_properties.family_index = family_idx
 
         # Reset callbacks
         font_props.no_callback = False
