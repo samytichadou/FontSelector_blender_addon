@@ -2,6 +2,7 @@ import bpy
 
 from .addon_prefs import get_addon_preferences
 
+# TODO Active datas from strip if needed
 
 def get_enum_values(object, identifier):
     # Hacky way
@@ -23,7 +24,7 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return True
+        return context.active_object
 
     def execute(self, context):
 
@@ -31,36 +32,32 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
 
         families = context.window_manager.fontselector_properties.font_families
 
-        object_props = bpy.context.active_object.data.fontselector_object_properties
-        # TODO Active datas from strip if needed
-        # TODO Multiple selected objects
-
-        family = families[object_props.family_index]
-        current_type = object_props.family_types
+        active_object_props = context.active_object.data.fontselector_object_properties
+        family = families[active_object_props.family_index]
+        current_type = active_object_props.family_types
         available_types = get_enum_values(
-            object_props,
+            active_object_props,
             "family_types",
         )
 
-        # Switch
-
+        # Switch active object, selected objects will follow automatically
         # Next
         if not self.previous:
 
             # End of available types
             if available_types.index(current_type) >= len(available_types) - 1:
                 # Set family
-                if object_props.family_index == len(families)-1:
+                if active_object_props.family_index == len(families)-1:
                     # Last family, set first family
-                    object_props.family_index = 0
+                    active_object_props.family_index = 0
                 else:
                     # Set next family
-                    object_props.family_index += 1
+                    active_object_props.family_index += 1
 
             # Next type
             else:
                 next_type = available_types[available_types.index(current_type)+1]
-                object_props.family_types = next_type
+                active_object_props.family_types = next_type
 
         # Previous
         else:
@@ -68,28 +65,26 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
             # End of available types
             if available_types.index(current_type) == 0:
                 # Set family
-                if object_props.family_index == 0:
+                if active_object_props.family_index == 0:
                     # First family, set last family
-                    object_props.family_index = len(families)-1
+                    active_object_props.family_index = len(families)-1
                 else:
                     # Set previous family
-                    object_props.family_index -= 1
+                    active_object_props.family_index -= 1
                 # Set last type
                 available_types = get_enum_values(
-                    object_props,
+                    active_object_props,
                     "family_types",
                 )
                 previous_type = available_types[len(available_types)-1]
-                object_props.family_types = previous_type
+                active_object_props.family_types = previous_type
 
 
             # Next type
             else:
                 # Set previous type
                 previous_type = available_types[available_types.index(current_type)-1]
-                object_props.family_types = previous_type
-
-
+                active_object_props.family_types = previous_type
 
         self.report({'INFO'}, "Font switched")
 
