@@ -22,17 +22,19 @@ class FONTSELECTOR_PF_addon_prefs(bpy.types.AddonPreferences) :
     )
     viewport_popover : bpy.props.BoolProperty(
         name = "3D Viewport Popover",
-        default = True,
+        # default = True,
     )
     properties_panel : bpy.props.BoolProperty(
         name = "Font Properties Panel",
+        default = True,
     )
     sequencer_popover : bpy.props.BoolProperty(
         name = "Sequencer Popover",
-        default = True,
+        # default = True,
     )
     sequencer_panel : bpy.props.BoolProperty(
         name = "Sequencer Properties Panel",
+        default = True,
     )
     popup_operator : bpy.props.BoolProperty(
         name = "Pop Up Operator",
