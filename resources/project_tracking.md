@@ -1,14 +1,10 @@
 ### Version 3
 
 #### V3 TO DO 
-- [ ] Fix global search menu random entries from popover  
-- [ ] Bug report for `INTERNAL` `bl_options` with popover (properties and INTERNAL operators)
-
-- [ ] Reveal file operator does not work with windows on C:\windows\Fonts  
-
 - [ ] Video tutorial
 
 #### V3 DONE
+- [x] Reveal file operator does not work with windows on C:\windows\Fonts  
 - [x] Update readme  
 - [x] Relink error
 - [x] no multi component filter if strip
@@ -31,5 +27,7 @@
 - [x] Operator to load a font family into specific blender font slot (bold ita...)  
 
 ### Long run
+- [ ] Bug report for `INTERNAL` `bl_options` with popover (properties and INTERNAL operators)
+- [ ] Fix global search menu random entries from popover  
 - [ ] Export favorite fonts operator  
 - [ ] Copy selected fonts in clipboard (python wheels ?)  

@@ -32,4 +32,8 @@ Three other font slots (bold, italic, bold italic) are user by blender to mix in
 
 **Warning :**
 
-The "master" branch of font selector is the experimental one, to get stable version manually, download latest release from this page : https://github.com/samytichadou/FontSelector_blender_addon/releases
+The "master" branch of font selector is the experimental one, to get stable version manually, download latest release from this page : https://github.com/samytichadou/FontSelector_blender_addon/releases  
+
+**Known issues :**
+- On windows, `Reveal file` operator does not select specific font file. This an issue from windows explorer cli arguments.
+- When using Popovers panels, the F3 search menu will populate with unnamed elements from them. This seems to be a blender bug.
