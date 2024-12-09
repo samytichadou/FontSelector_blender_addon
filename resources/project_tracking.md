@@ -5,11 +5,10 @@
 
 - [ ] Reveal file operator does not work with windows on C:\windows\Fonts  
 
-- [ ] Update readme  
-
 - [ ] Video tutorial
 
 #### V3 DONE
+- [x] Update readme  
 - [x] Relink error
 - [x] no multi component filter if strip
 - [x] Switch font op : Video strip
