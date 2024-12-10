@@ -32,11 +32,12 @@ def get_os_folders(debug):
             print("FONTSELECTOR --- OS : Linux")
         
         return [
-            r"/usr/share/fonts", # Debian Ubuntu
-            r"/usr/local/share/fonts", # Debian Ubuntu
-            r"/usr/X11R6/lib/X11/fonts", # RH
-            os.path.join(user_path, r".local/share/fonts"), # Fedora
-            os.path.join(user_path, r".fonts"), # Debian Ubuntu
+            r"/home/tonton/Desktop/sandbox/braille/", #debug
+            # r"/usr/share/fonts", # Debian Ubuntu
+            # r"/usr/local/share/fonts", # Debian Ubuntu
+            # r"/usr/X11R6/lib/X11/fonts", # RH
+            # os.path.join(user_path, r".local/share/fonts"), # Fedora
+            # os.path.join(user_path, r".fonts"), # Debian Ubuntu
         ]
     elif osys == "Windows":
         if debug:
@@ -73,43 +74,6 @@ def get_folder_size(start_path):
 
     return total_size
     
-
-def get_font_list_from_folder(
-    folderpath,
-    debug,
-):
-    
-    font_list = []
-    
-    # Invalid folder
-    if not os.path.isdir(folderpath):
-        if debug:
-            print(f"FONTSELECTOR --- Invalid folder - {folderpath}")
-        return font_list
-    
-    # Check for font files
-    for root, dirs, files in os.walk(folderpath):
-        
-        for file in files:
-        
-            filename, ext = os.path.splitext(file)
-            
-            if ext in font_formats:
-                filepath = os.path.join(root, file)
-                
-                font = ttLib.TTFont(filepath)
-                
-                font_list.append(
-                    {
-                        "filepath" : filepath,
-                        "name" : font['name'].getDebugName(4),
-                        "family" : font['name'].getDebugName(1),
-                        "type" : font['name'].getDebugName(2),
-                    }
-                )
-                
-    return font_list
-
 
 def reorder_dict_key(
     dict,
@@ -156,30 +120,33 @@ def get_font_families_from_folder(
     for root, dirs, files in os.walk(folderpath):
         
         for file in files:
-        
+
             filename, ext = os.path.splitext(file)
+
+            print() #debug
+            print(file) #debug
             
             if ext in font_formats:
 
                 filepath = os.path.join(root, file)
                 font = ttLib.TTFont(filepath)
                 family = font['name'].getDebugName(1)
-                
+
                 font_datas = {
                     "filepath" : filepath,
                     "name" : font['name'].getDebugName(4),
                     "type" : font['name'].getDebugName(2),
                 }
-                
-                try:
-                    
-                    f = datas["families"][family]
 
+                print(font_datas) #debug
+                
+                # Get family and add font
+                try:
+                    f = datas["families"][family]
                     if debug:
                         print(f"FONTSELECTOR --- Font family found : {family}")
-                        print(f"FONTSELECTOR --- Adding font : {font_datas['name']}")
 
-                    
+                    # Add font
                     chk_dupe = False
                     for font in f:
                         if font["type"] == font_datas["type"]:
@@ -187,15 +154,25 @@ def get_font_families_from_folder(
                             if debug:
                                 print(f"FONTSELECTOR --- Similar Fonts : {font['filepath']} - {filepath}")
                             break
-                    
+
                     if not chk_dupe:
                         f.append(font_datas)
-                        
+                        if debug:
+                            print(f"FONTSELECTOR --- Font added : {font_datas['name']}")
+
+                # Add family and add font
                 except KeyError:
-                    
                     datas["families"][family] = [
                         font_datas,
                     ]
+                    f = datas["families"][family]
+                    if debug:
+                        print(f"FONTSELECTOR --- Font family added : {family}")
+                        print(f"FONTSELECTOR --- Font added : {font_datas['name']}")
+
+    print()
+    print(datas)
+    print()
 
     return datas
 
