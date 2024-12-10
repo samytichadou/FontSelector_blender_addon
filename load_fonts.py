@@ -32,12 +32,11 @@ def get_os_folders(debug):
             print("FONTSELECTOR --- OS : Linux")
         
         return [
-            r"/home/tonton/Desktop/sandbox/braille/", #debug
-            # r"/usr/share/fonts", # Debian Ubuntu
-            # r"/usr/local/share/fonts", # Debian Ubuntu
-            # r"/usr/X11R6/lib/X11/fonts", # RH
-            # os.path.join(user_path, r".local/share/fonts"), # Fedora
-            # os.path.join(user_path, r".fonts"), # Debian Ubuntu
+            r"/usr/share/fonts", # Debian Ubuntu
+            r"/usr/local/share/fonts", # Debian Ubuntu
+            r"/usr/X11R6/lib/X11/fonts", # RH
+            os.path.join(user_path, r".local/share/fonts"), # Fedora
+            os.path.join(user_path, r".fonts"), # Debian Ubuntu
         ]
     elif osys == "Windows":
         if debug:
@@ -89,12 +88,14 @@ def reorder_dict_key(
 
     # Specific order
     new_list = []
+    specific_list = []
     for font in s:
         if font[key] not in specific_order:
             new_list.append(font)
-            s.remove(font)
+        else:
+            specific_list.append(font)
 
-    data = {x[key]: x for x in s}
+    data = {x[key]: x for x in specific_list}
     for i in reversed(range(len(specific_order))):
         try:
             new_list.insert(0, data[specific_order[i]])
@@ -123,9 +124,6 @@ def get_font_families_from_folder(
 
             filename, ext = os.path.splitext(file)
 
-            print() #debug
-            print(file) #debug
-            
             if ext in font_formats:
 
                 filepath = os.path.join(root, file)
@@ -138,8 +136,6 @@ def get_font_families_from_folder(
                     "type" : font['name'].getDebugName(2),
                 }
 
-                print(font_datas) #debug
-                
                 # Get family and add font
                 try:
                     f = datas["families"][family]
@@ -169,10 +165,6 @@ def get_font_families_from_folder(
                     if debug:
                         print(f"FONTSELECTOR --- Font family added : {family}")
                         print(f"FONTSELECTOR --- Font added : {font_datas['name']}")
-
-    print()
-    print(datas)
-    print()
 
     return datas
 
