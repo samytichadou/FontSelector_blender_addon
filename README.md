@@ -1,29 +1,41 @@
-# FontSelector - easy font management inside Blender
+# FontSelector - Easy font management inside Blender
 
-Font Selector is a simple addon to add font functionality to blender.
+**Font Selector is an addon to add font functionalities to blender.**
 
-It allows you to dynamically visualize available fonts applied to a text object without the painful process of importing a font through filebrowser.
+It allows user to **dynamically visualize available fonts** applied to a text object without the painful process of importing a font through filebrowser.
 
-WARNING : 
-The "master" branch of font selector is the experimental one, to get stable version of it, please download latest release from this page : https://github.com/samytichadou/FontSelector_blender_addon/releases
+[You can see the addon in action here.](https://makertube.net/w/2sxbKKHV8QWL8p5EACGn8T)
 
+Since version 3.0 of the addon, **it is now distributed as a blender extension**, user will have to install it accordingly, or download it through Blender extension platform : https://extensions.blender.org/
 
-Here are Font Selector's features :
+### Font Selector's features :
 
-- Font Folders configuration : the addon allows you to setup several font folder on your computer through the addon user preferences. Sudirectories of the font folders will also be scanned for fonts. If you have uninstalled fonts on this computer, you can use them aside installed fonts, just create several font folders. You can save this configuration in an external file, in case you uninstall the addon, and want to keep track of your font folders. The external file is in a simple txt file, stored in a custom folder (by default in config folder of blender, you can change this through user preferences of the addon). This means you can load a previous font folder configuration in one click, in case you uninstalled your addon...
+- **Automatic detection** of the font folders according to the host OS (if some folders are missing, please report an issue)
 
-- Browse dynamically through fonts without leaving the 3D view and with direct visualisation of the font on active text object, like in any other compositing and editing software
+- Support for **3D text objects** and **video text strips**
 
-- Refresh operator checks for you all available fonts in your font folders and subdirectories. It may take some time, but the result will be externally stored in your prefs folder. You don't have to do it again, except if you installed (or add) or uninstalled (or remove) fonts in your font folders
+- **Dynamic browsing through fonts** without leaving the 3D view/sequencer and with direct visualisation of the font on active text object, like in any other compositing and editing software
 
-- Favorites font system : because browsing through hundred of fonts can be painful, you can mark fonts as favorites, these favorites fonts can be easily access by turning on the favorite filter !
+- **Font list stored externally in cache files**, to prevent a re run on every startup. Font Selector will automatically check for new/removed fonts and update the list accordingly on every startup
 
-- Export Favorites Fonts : If you have to go work somewhere else and want to bring your favorites fonts with you, go to export (under File in the Info Panel) and export them in a zip file !
+- **Favorites font system :** because browsing through hundred of fonts can be slow, you can mark fonts as favorites, these favorites fonts can be easily access by turning on the favorite filter
 
-- Remove unused Fonts : To work, the addon has to create an extra vector font datablock (extra font imported) and replace it when you browse from font to font. This leads to an unused datablock at the end of the day. A simple Operator allows you to remove it quickly !
+- Font are stored in **families**, browsable quickly, user can then choose available type (Regular, Bold, Condensed...)
 
-- Choose the default size of the Font List (number of row) in the addon preferences. If you use only a few favorite fonts, no need for a huge panel !
+- **Reveal file operator** allows user to open an explorer to the selected font
 
-- Origin directories and subdirectories of the font are stored, you can display them in the classic list, or toggle with the subdirectory Mode, organising the fonts by these directories !
+- Load Font Family operator to **load all "blender specific" font types of a family in one click**. Blender handles multiple font types on a single text object with the limitation of 4 of them (Regular, Bold, Italic, Bold Italic). Font Selector, if available, allows user to set them up for the selected font family
 
-- The addon now filtered the corrupted font file out, and store their name in a file in order to not try to import them again ! You can manually add some font to filter through the addon preferences !
+### Disclaimer :
+
+Font Selector, except for the Load Font Family operator, **uses only the regular font slot blender text object**, in order to be clearer to the user, and show him instantly the change. For example, **a bold font will be apply by filling the text object regular's slot**.  
+Three other font slots (bold, italic, bold italic) are user by blender to mix in a single text object different font types.  
+**For this specific usecase, please use the Load Font Family operator.**
+
+**Warning :**
+
+The "master" branch of font selector is the experimental one, to get stable version manually, download latest release from this page : https://github.com/samytichadou/FontSelector_blender_addon/releases  
+
+### Known issues :
+- On windows, `Reveal file` operator does not select specific font file. This an issue from windows explorer cli arguments.
+- When using Popovers panels, the F3 search menu will populate with unnamed elements from them. This seems to be a blender bug.

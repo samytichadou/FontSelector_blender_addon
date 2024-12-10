@@ -1,0 +1,34 @@
+schema_version = "1.0.0"
+
+id = "font_selector"
+version = "3.0.0"
+name = "Font Selector"
+tagline = "Browse available fonts from blender"
+maintainer = "tonton <samytichadou@gmail.com>"
+# Supported types: "add-on", "theme"
+type = "add-on"
+
+# Optional link to documentation, support, source files, etc
+website = "https://github.com/samytichadou/FontSelector_blender_addon"
+
+# Optional list defined by Blender and server, see:
+# https://docs.blender.org/manual/en/dev/advanced/extensions/tags.html
+tags = ["Import-Export", "Pipeline", "3D View", "System"]
+
+blender_version_min = "4.2.0"
+
+# License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
+# https://docs.blender.org/manual/en/dev/advanced/extensions/licenses.html
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+
+wheels = [
+   "./wheels/fonttools-4.54.0-py3-none-any.whl",
+]
+
+[permissions]
+files = "Reading and writing json preset files, Reading font files"
+# network = "Need to sync motion-capture data to server"
+# files = "Import/export FBX from/to disk"
+# clipboard = "Copy and paste bone transforms"
