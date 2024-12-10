@@ -6,6 +6,8 @@ It allows user to **dynamically visualize available fonts** applied to a text ob
 
 [You can see the addon in action here.](https://makertube.net/w/2sxbKKHV8QWL8p5EACGn8T)
 
+If you like this addon, you can help me [here](https://ko-fi.com/tonton_blender) through Donation, to buy me a coffee and allow me to continue to develop free tools.
+
 Since version 3.0 of the addon, **it is now distributed as a blender extension**, user will have to install it accordingly, or download it through Blender extension platform : https://extensions.blender.org/
 
 ### Font Selector's features :
