@@ -6,7 +6,7 @@ It allows user to **dynamically visualize available fonts** applied to a text ob
 
 Since version 3.0 of the addon, **it is now distributed as a blender extension**, user will have to install it accordingly, or download it through Blender extension platform : https://extensions.blender.org/
 
-## Font Selector's features :
+### Font Selector's features :
 
 - **Automatic detection** of the font folders according to the host OS (if some folders are missing, please report an issue)
 
@@ -24,7 +24,7 @@ Since version 3.0 of the addon, **it is now distributed as a blender extension**
 
 - Load Font Family operator to **load all "blender specific" font types of a family in one click**. Blender handles multiple font types on a single text object with the limitation of 4 of them (Regular, Bold, Italic, Bold Italic). Font Selector, if available, allows user to set them up for the selected font family
 
-**Disclaimer :** 
+### Disclaimer :
 
 Font Selector, except for the Load Font Family operator, **uses only the regular font slot blender text object**, in order to be clearer to the user, and show him instantly the change. For example, **a bold font will be apply by filling the text object regular's slot**.  
 Three other font slots (bold, italic, bold italic) are user by blender to mix in a single text object different font types.  
@@ -34,6 +34,6 @@ Three other font slots (bold, italic, bold italic) are user by blender to mix in
 
 The "master" branch of font selector is the experimental one, to get stable version manually, download latest release from this page : https://github.com/samytichadou/FontSelector_blender_addon/releases  
 
-**Known issues :**
+### Known issues :
 - On windows, `Reveal file` operator does not select specific font file. This an issue from windows explorer cli arguments.
 - When using Popovers panels, the F3 search menu will populate with unnamed elements from them. This seems to be a blender bug.
