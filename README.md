@@ -40,4 +40,4 @@ The "master" branch of font selector is the experimental one, to get stable vers
 
 ### Known issues :
 - On windows, `Reveal file` operator does not select specific font file. This an issue from windows explorer cli arguments.
-- When using Popovers panels, the F3 search menu will populate with unnamed elements from them. This seems to be a blender bug.
+- When using Popover panels, the F3 search menu will populate with unnamed elements from these panels. This seems to be a blender bug.
