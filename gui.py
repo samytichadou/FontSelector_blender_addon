@@ -5,48 +5,31 @@ from .addon_prefs import get_addon_preferences
 
 # TODO Fix search menu errors with popovers
 
-
 def draw_font_infos(container, active, context):
 
-    row = container.row(align=True)
-    if active.show_font_infos:
-        icon = "DOWNARROW_HLT"
-    else:
-        icon = "RIGHTARROW"
-    row.prop(
-        active,
-        "show_font_infos",
-        text = "",
-        icon = icon,
-        emboss = False,
+    families = context.window_manager.fontselector_properties.font_families
+    family = families[active.family_index]
+
+    font = family.fonts[active.family_types]
+
+    split = container.split(factor=0.2)
+    col = split.column(align=True)
+    col2 = split.column(align=True)
+    col2.alignment = "RIGHT"
+
+    col.label(text = "Name")
+    col2.label(text = font.font_name)
+
+    col.label(text = "Type")
+    col2.label(text = font.name)
+
+    col.label(text = "Path")
+    op = col2.operator(
+        "fontselector.reveal_file",
+        text = font.filepath,
+        icon = "FILEBROWSER",
     )
-    row.label(text = "Font Infos")
-    
-    if active.show_font_infos:
-
-        families = context.window_manager.fontselector_properties.font_families
-        family = families[active.family_index]
-
-        font = family.fonts[active.family_types]
-    
-        split = container.split(factor=0.2)
-        col = split.column(align=True)
-        col2 = split.column(align=True)
-        col2.alignment = "RIGHT"
-        
-        col.label(text = "Name")
-        col2.label(text = font.font_name)
-
-        col.label(text = "Type")
-        col2.label(text = font.name)
-
-        col.label(text = "Path")
-        op = col2.operator(
-            "fontselector.reveal_file",
-            text = font.filepath,
-            icon = "FILEBROWSER",
-        )
-        op.filepath = font.filepath
+    op.filepath = font.filepath
 
 
 ### Fontselector common panel UI ###
@@ -136,12 +119,15 @@ def draw_font_selector(self, context):
     # Font infos
     if active_datas.family_index >=0\
     and active_datas.family_index < len(props.font_families):
-        box = col.box()
-        draw_font_infos(
-            box,
-            active_datas,
-            context,
-        )
+
+        header, panel = col.panel("infos", default_closed=True)
+        header.label(text="Font Infos")
+        if panel:
+            draw_font_infos(
+                panel,
+                active_datas,
+                context,
+            )
 
 
 class FONTSELECTOR_panel(bpy.types.Panel):
