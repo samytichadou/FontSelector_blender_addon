@@ -13,7 +13,7 @@ website = "https://github.com/samytichadou/FontSelector_blender_addon"
 
 # Optional list defined by Blender and server, see:
 # https://docs.blender.org/manual/en/dev/advanced/extensions/tags.html
-tags = ["Import-Export", "Pipeline", "3D View", "System"]
+tags = ["Import-Export", "System"]
 
 blender_version_min = "4.2.0"
 
