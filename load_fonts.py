@@ -44,6 +44,7 @@ def get_os_folders(debug):
         
         return [
             r"C:\Windows\Fonts",
+            r" C:\Program Files\WindowsApps",
             os.path.join(user_path, "fonts"), # System wide install
             os.path.join(user_path, r"Microsoft\Windows\Fonts"), # User install
         ]
