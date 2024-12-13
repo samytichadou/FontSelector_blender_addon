@@ -7,13 +7,7 @@ class FONTSELECTOR_PF_addon_prefs(bpy.types.AddonPreferences) :
     
     preferences_folder: bpy.props.StringProperty(
         name = "Preferences folder",
-        default = os.path.join(
-            os.path.join(
-                bpy.utils.resource_path("USER"),
-                "datafiles"
-            ),
-            "font_selector"
-        ),
+        default = bpy.utils.extension_path_user(str(__package__)),
         description="Where Font Selector store configuration files",
         subtype="DIR_PATH",
     )
