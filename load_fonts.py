@@ -44,7 +44,7 @@ def get_os_folders(debug):
         
         return [
             r"C:\Windows\Fonts",
-            r" C:\Program Files\WindowsApps",
+            r"C:\Program Files\WindowsApps",
             os.path.join(user_path, "fonts"), # System wide install
             os.path.join(user_path, r"Microsoft\Windows\Fonts"), # User install
         ]
@@ -376,8 +376,8 @@ def relink_font_objects(debug):
     obj_list = []
     
     # Get text curves
-    for obj in bpy.data.curves:
-        obj_list.append(obj)
+    #for obj in bpy.data.curves:
+        #obj_list.append(obj)
     
     # Get text strips
     for scn in bpy.data.scenes:
