@@ -125,7 +125,7 @@ def get_font_families_from_folder(
 
             filename, ext = os.path.splitext(file)
 
-            if ext in font_formats:
+            if ext.lower() in [f.lower() for f in font_formats]::
 
                 filepath = os.path.join(root, file)
                 font = ttLib.TTFont(filepath)
