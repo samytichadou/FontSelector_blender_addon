@@ -5,7 +5,7 @@ from .addon_prefs import get_addon_preferences
 
 # Font selection UI List
 class FONTSELECTOR_family_uilist(bpy.types.UIList):
-    
+
     obj = None
     strip = False
     
@@ -117,15 +117,17 @@ class FONTSELECTOR_family_uilist(bpy.types.UIList):
 # Font selection Object UI List
 class FONTSELECTOR_UL_family_uilist_object(FONTSELECTOR_family_uilist):
     
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.obj = bpy.context.active_object.data
         
 
 # Font selection Strip UI List
 class FONTSELECTOR_UL_family_uilist_strip(FONTSELECTOR_family_uilist):
     
-    def __init__(self):
-        self.obj = bpy.context.active_sequence_strip
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.obj = bpy.context.active_strip
         self.strip = True
 
     

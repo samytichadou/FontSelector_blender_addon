@@ -382,7 +382,7 @@ def relink_font_objects(debug):
     # Get text strips
     for scn in bpy.data.scenes:
         if scn.sequence_editor:
-            for strip in scn.sequence_editor.sequences_all:
+            for strip in scn.sequence_editor.strips_all:
                 if strip.type == "TEXT":
                     obj_list.append(strip)
     

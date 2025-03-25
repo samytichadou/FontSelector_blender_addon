@@ -190,7 +190,7 @@ def change_strips_font(
     context,
 ):
     
-    active_strip = context.active_sequence_strip
+    active_strip = context.active_strip
 
     font_props = context.window_manager.fontselector_properties
 
@@ -387,7 +387,7 @@ def register():
             type = FONTSELECTOR_PR_object_properties,
             name="Font Selector Properties",
         )
-    bpy.types.TextSequence.fontselector_object_properties = \
+    bpy.types.TextStrip.fontselector_object_properties = \
         bpy.props.PointerProperty(
             type = FONTSELECTOR_PR_object_properties,
             name="Font Selector Properties",
@@ -401,4 +401,4 @@ def unregister():
     
     del bpy.types.WindowManager.fontselector_properties
     del bpy.types.TextCurve.fontselector_object_properties
-    del bpy.types.TextSequence.fontselector_object_properties
+    del bpy.types.TextStrip.fontselector_object_properties

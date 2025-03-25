@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "font_selector"
-version = "3.0.2"
+version = "3.1.0"
 name = "Font Selector"
 tagline = "Browse available fonts from blender"
 maintainer = "tonton <samytichadou@gmail.com>"
@@ -15,7 +15,7 @@ website = "https://github.com/samytichadou/FontSelector_blender_addon"
 # https://docs.blender.org/manual/en/dev/advanced/extensions/tags.html
 tags = ["Import-Export", "System"]
 
-blender_version_min = "4.2.0"
+blender_version_min = "4.4.0"
 
 # License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
 # https://docs.blender.org/manual/en/dev/advanced/extensions/licenses.html

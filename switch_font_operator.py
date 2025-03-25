@@ -24,7 +24,7 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         if context.area.type == "SEQUENCE_EDITOR":
-            return context.active_sequence_strip
+            return context.active_strip
         else:
             return context.active_object
 
@@ -36,7 +36,7 @@ class FONTSELECTOR_OT_switch_font(bpy.types.Operator):
 
         # 3D Object or Video strip
         if context.area.type == "SEQUENCE_EDITOR":
-            active_object_props = context.active_sequence_strip.fontselector_object_properties
+            active_object_props = context.active_strip.fontselector_object_properties
         else:
             active_object_props = context.active_object.data.fontselector_object_properties
 

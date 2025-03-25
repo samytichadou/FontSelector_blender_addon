@@ -38,7 +38,7 @@ def draw_font_selector(self, context):
     layout = self.layout
 
     if self.strip:
-        active_datas = context.active_sequence_strip.fontselector_object_properties
+        active_datas = context.active_strip.fontselector_object_properties
     else:
         active_datas = context.active_object.data.fontselector_object_properties
 
@@ -183,7 +183,7 @@ class FONTSELECTOR_PT_properties_panel(FONTSELECTOR_panel):
 ### Sequencer ###
 
 def poll_sequencer(context):
-    active = context.active_sequence_strip
+    active = context.active_strip
     if active is not None:
         return active.type == 'TEXT'
     return False
