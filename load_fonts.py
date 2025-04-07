@@ -128,7 +128,18 @@ def get_font_families_from_folder(
             if ext in font_formats:
 
                 filepath = os.path.join(root, file)
-                font = ttLib.TTFont(filepath)
+                # This might cause an exception due to a corrupt font file,
+                # so catch it and continue to the next file
+                if debug:
+                    print(f"FONTSELECTOR --- Checking font : {filepath}")
+                
+                font = None
+                try:
+                    font = ttLib.TTFont(filepath)
+                except Exception as e:
+                    if debug:
+                        print(f"FONTSELECTOR --- Unable to read font : {filepath} - {e}")
+                    continue
                 family = font['name'].getDebugName(1)
 
                 font_datas = {
