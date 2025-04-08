@@ -386,8 +386,12 @@ def relink_font_objects(debug):
     
     obj_list = []
     
-    # Get text curves
+    # Get text curves, not curves
     for obj in bpy.data.curves:
+        try:
+            obj.font
+        except AttributeError:
+            continue
         obj_list.append(obj)
     
     # Get text strips
