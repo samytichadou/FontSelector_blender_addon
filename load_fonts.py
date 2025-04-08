@@ -410,10 +410,13 @@ def relink_font_objects(debug):
         
         # Missing family
         if index is None:
-            
+
             if debug:
-                print(f"FONTSELECTOR --- Unable to relink : {props.relink_family_name} - {props.relink_type_name}")
-            
+                if props.relink_family_name:
+                    print(f"FONTSELECTOR --- Unable to relink : {props.relink_family_name} - {props.relink_type_name}")
+                else:
+                    print(f"FONTSELECTOR --- Unable to relink : {obj.name}")
+
             props.family_index = -1
             continue
             
