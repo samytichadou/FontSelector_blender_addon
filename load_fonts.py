@@ -63,6 +63,37 @@ def get_os_folders(debug):
     print("FONTSELECTOR --- OS not supported")
     
 
+
+
+# --- Custom wrapper to append custom_font_folder (added, non-destructive) ---
+try:
+    _original_get_os_folders = get_os_folders
+    def get_os_folders(debug):
+        folders = _original_get_os_folders(debug) or []
+        try:
+            from .addon_prefs import get_addon_preferences
+            prefs = get_addon_preferences()
+            if prefs:
+                # Hier iterieren wir jetzt durch alle eingetragenen Ordner
+                for custom_folder in prefs.custom_font_folders:
+                    custom_path = custom_folder.path
+                    
+                    if custom_path:
+                        try:
+                            custom_path = bpy.path.abspath(custom_path)
+                        except Exception:
+                            pass
+                        
+                        if isinstance(custom_path, str) and os.path.isdir(custom_path):
+                            folders.append(custom_path)
+        except Exception as e:
+            # non-fatal
+            pass
+        return folders
+except Exception:
+    # If anything goes wrong, we keep the original behavior
+    pass
+
 def get_folder_size(start_path):
     
     total_size = 0
@@ -354,7 +385,9 @@ def reload_font_families_collections(
 
         for font in font_datas["families"][family]:
             new_font = new_family.fonts.add()
-            new_font.name = font["type"]
+            if not font.get("type"):
+                print(f"[FontSelector] Missing 'type' in font: {font}")
+            new_font.name = font.get("type") or "Unknown"
             new_font.filepath = font["filepath"]
             new_font.font_name = font["name"]
 
